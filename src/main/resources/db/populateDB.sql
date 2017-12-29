@@ -1,6 +1,7 @@
 DELETE FROM pomos;
 DELETE FROM users;
-ALTER SEQUENCE global_seq RESTART WITH 100000;
+ALTER SEQUENCE global_seq
+RESTART WITH 100000;
 
 INSERT INTO users (email) VALUES
   ('user1@yandex.ru'),
