@@ -19,6 +19,8 @@
 *.rar
 
 .idea
+*.iml
+
 
 target
 
