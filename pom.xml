@@ -5,7 +5,7 @@
 
     <artifactId>pomodoreApp</artifactId>
     <groupId>ru.javawebinar</groupId>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <version>1.0-SNAPSHOT</version>
 
@@ -19,7 +19,7 @@
 
     <build>
         <finalName>pomodoreApp</finalName>
-        <defaultGoal>install</defaultGoal>
+        <defaultGoal>package</defaultGoal>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
