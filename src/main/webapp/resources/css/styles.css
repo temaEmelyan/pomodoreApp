@@ -1,12 +1,12 @@
+body {
+    background-color: #333333 !important;
+}
+
 #container {
     width: 400px;
     margin: 20px auto;
     padding: 20px;
     text-align: center;
-}
-
-body {
-    background: #333;
 }
 
 #timer {
@@ -62,5 +62,27 @@ body {
 }
 
 #buttons button#stop {
+    background: #f00;
+}
+
+#start-page-container {
+    padding-top: 100px;
+}
+
+.link-like-button {
+    font-family: "Source Code Pro", monospace;
+    font-size: 24px;
+    text-decoration: none;
+    background: #4da6ff;
+    border: none;
+    color: #fff;
+    padding: 5px;
+    width: 90px;
+    margin: 10px auto;
+    height: 75px;
+    border-radius: 50px;
+}
+
+.rred {
     background: #f00;
 }
