@@ -24,4 +24,10 @@ public class RootController {
         logger.info("redirect from root to index.jsp");
         return "index";
     }
+
+    @GetMapping("/work")
+    public String work() {
+        logger.info("redirect from root to work.jsp");
+        return "pomo";
+    }
 }
