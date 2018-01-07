@@ -1,9 +1,6 @@
 package com.temelyan.pomoapp.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
@@ -14,13 +11,20 @@ public class User extends AbstractEntity {
 
     @Email
     @NotBlank
-    @Column(name = "email")
-    private
-    String email;
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private
     List<Pomo> pomos;
+
+    public User() {
+    }
+
+    public User(Integer id, @Email @NotBlank String email) {
+        this.id = id;
+        this.email = email;
+    }
 
     public String getEmail() {
         return email;

@@ -4,7 +4,7 @@ import com.temelyan.pomoapp.model.AbstractEntity;
 
 public class AuthorisedUser {
 
-    public int getId() {
+    public static int getId() {
         return AbstractEntity.START_SEQ;
     }
 }

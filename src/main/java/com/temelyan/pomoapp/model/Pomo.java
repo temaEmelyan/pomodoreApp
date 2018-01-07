@@ -1,33 +1,49 @@
 package com.temelyan.pomoapp.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "POMOS")
+@Table(name = "POMOS", uniqueConstraints = {@UniqueConstraint(columnNames = {"finish", "user_id"}, name = "pomos_unique_user_datetime_idx")})
 public class Pomo extends AbstractEntity {
 
-    @Column(name = "start")
+    @Column(name = "duration", nullable = false)
     private
-    LocalDateTime start;
+    Integer duration;
 
-    @Column(name = "finish")
+    @Column(name = "finish", nullable = false)
     private
     LocalDateTime finish;
 
-    @ManyToOne
-    private
-    User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull
+    private User user;
 
-    public LocalDateTime getStart() {
-        return start;
+    public Pomo() {
     }
 
-    public void setStart(LocalDateTime start) {
-        this.start = start;
+    public Pomo(LocalDateTime finish, Integer duration) {
+        this(null, finish, duration);
+    }
+
+    public Pomo(Integer id, LocalDateTime finish, int duration) {
+        this.id = id;
+        this.duration = duration;
+        this.finish = finish;
+    }
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer start) {
+        this.duration = start;
     }
 
     public LocalDateTime getFinish() {
