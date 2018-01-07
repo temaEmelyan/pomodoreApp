@@ -9,6 +9,9 @@ var pomodoro = {
     secondsDom: null,
     fillerDom: null,
 
+    originalMin: 0,
+    originalSec: 0,
+
     init: function () {
         var self = this;
         this.minutesDom = document.querySelector('#minutes');
@@ -33,7 +36,9 @@ var pomodoro = {
 
     resetVariables: function (mins, secs, started) {
         this.minutes = mins;
+        this.originalMin = mins;
         this.seconds = secs;
+        this.originalSec = secs;
         this.started = started;
         this.fillerIncrement = 200 / (this.minutes * 60);
         this.fillerHeight = 0;
@@ -88,6 +93,10 @@ var pomodoro = {
     timerComplete: function () {
         this.started = false;
         this.fillerHeight = 0;
+        jQuery.ajax({
+            url: 'ajax/add/' + this.originalMin * 60 + this.originalSec,
+            type: "POST"
+        });
     }
 };
 

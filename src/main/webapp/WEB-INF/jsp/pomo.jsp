@@ -1,9 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Pomodoro</title>
+
+    <base href="${pageContext.request.contextPath}/"/>
+
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/styles.css">
+
+    <script type="text/javascript" src="webjars/jquery/3.2.1/dist/jquery.min.js" defer></script>
+    <script type="text/javascript" src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js" defer></script>
+    <script src="${pageContext.request.contextPath}/resources/js/app.js"></script>
 </head>
 <body>
 <div id="pomodoro-app">
@@ -26,5 +33,4 @@
     </div>
 </div>
 </body>
-<script src="${pageContext.request.contextPath}/resources/js/app.js"></script>
 </html>
