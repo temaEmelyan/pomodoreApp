@@ -9,29 +9,41 @@ var pomodoro = {
     secondsDom: null,
     fillerDom: null,
 
-    originalMin: 0,
+    originalMin: 25,
     originalSec: 0,
 
     init: function () {
         var self = this;
-        this.minutesDom = document.querySelector('#minutes');
-        this.secondsDom = document.querySelector('#seconds');
-        this.fillerDom = document.querySelector('#filler');
+        this.minutesDom = $('#minutes');
+        this.secondsDom = $('#seconds');
+        this.fillerDom = $('#filler');
         this.interval = setInterval(function () {
             self.intervalCallback.apply(self);
-        }, 1000);
-        document.querySelector('#work').onclick = function () {
+        }, 100);
+        $('#work').click(function () {
             self.startWork.apply(self);
-        };
-        document.querySelector('#shortBreak').onclick = function () {
+        });
+        $('#shortBreak').click(function () {
             self.startShortBreak.apply(self);
-        };
-        document.querySelector('#longBreak').onclick = function () {
+        });
+        $('#longBreak').click(function () {
             self.startLongBreak.apply(self);
-        };
-        document.querySelector('#stop').onclick = function () {
+        });
+        $('#stop').click(function () {
             self.stopTimer.apply(self);
-        };
+        });
+        $('#decreaseDuration').click(function () {
+            if (pomodoro.originalMin > 0) {
+                pomodoro.originalMin--;
+            }
+            $('#duration').html(pomodoro.originalMin);
+            $('#minutes').html(pomodoro.originalMin);
+        });
+        $('#increaseDuration').click(function () {
+            pomodoro.originalMin++;
+            $('#duration').html(pomodoro.originalMin);
+            $('#minutes').html(pomodoro.originalMin);
+        });
     },
 
     resetVariables: function (mins, secs, started) {
@@ -44,8 +56,12 @@ var pomodoro = {
         this.fillerHeight = 0;
     },
 
+    resetVariablesDefault: function (started) {
+        this.resetVariables(this.originalMin, this.originalSec, started)
+    },
+
     startWork: function () {
-        this.resetVariables(25, 0, true);
+        this.resetVariablesDefault(true);
     },
 
     startShortBreak: function () {
@@ -57,7 +73,7 @@ var pomodoro = {
     },
 
     stopTimer: function () {
-        this.resetVariables(25, 0, false);
+        this.resetVariablesDefault(false);
         this.updateDom();
     },
 
@@ -69,10 +85,10 @@ var pomodoro = {
     },
 
     updateDom: function () {
-        this.minutesDom.innerHTML = this.toDoubleDigit(this.minutes);
-        this.secondsDom.innerHTML = this.toDoubleDigit(this.seconds);
+        this.minutesDom.text(this.toDoubleDigit(this.minutes));
+        this.secondsDom.text(this.toDoubleDigit(this.seconds));
         this.fillerHeight = this.fillerHeight + this.fillerIncrement;
-        this.fillerDom.style.height = this.fillerHeight + 'px';
+        this.fillerDom.css('height', this.fillerHeight + 'px');
     },
 
     intervalCallback: function () {
@@ -93,9 +109,13 @@ var pomodoro = {
     timerComplete: function () {
         this.started = false;
         this.fillerHeight = 0;
-        jQuery.ajax({
-            url: 'ajax/add/' + this.originalMin * 60 + this.originalSec,
-            type: "POST"
+        this.addPomo(this.originalMin * 60 + this.originalSec);
+    },
+
+    addPomo: function (duration) {
+        $.post({
+            url: 'ajax/add/' + duration + '/',
+            type: 'POST'
         });
     }
 };
