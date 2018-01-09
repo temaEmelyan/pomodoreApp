@@ -23,7 +23,7 @@ public class PomoController {
     private PomoService pomoService;
 
     @PostMapping("/add/{length}")
-    public void test(@PathVariable("length") int length) {
+    public void add(@PathVariable("length") int length) {
         logger.info("adding pomodoro");
         pomoService.add(new Pomo(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS), length), AuthorisedUser.getId());
     }

@@ -6,6 +6,8 @@ import com.temelyan.pomoapp.repository.PomoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class DataJpaPomoRepositoryImpl implements PomoRepository {
 
@@ -20,5 +22,10 @@ public class DataJpaPomoRepositoryImpl implements PomoRepository {
         User one = crudUserRepository.getOne(userId);
         pomo.setUser(one);
         return crudPomoRepository.save(pomo);
+    }
+
+    @Override
+    public List<Pomo> getAll(int userId) {
+        return crudPomoRepository.getAll(userId);
     }
 }
