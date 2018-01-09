@@ -3,6 +3,7 @@ package com.temelyan.pomoapp.model;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -13,6 +14,11 @@ public class User extends AbstractEntity {
     @NotBlank
     @Column(name = "email", nullable = false, unique = true)
     private String email;
+
+    @Column(name = "password", nullable = false)
+    @NotBlank
+    @Size(min = 5)
+    private String password;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private
@@ -40,5 +46,13 @@ public class User extends AbstractEntity {
 
     public void setPomos(List<Pomo> pomos) {
         this.pomos = pomos;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

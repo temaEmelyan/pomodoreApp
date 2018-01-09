@@ -3,9 +3,9 @@ DELETE FROM users;
 ALTER SEQUENCE global_seq
 RESTART WITH 100000;
 
-INSERT INTO users (email) VALUES
-  ('user1@yandex.ru'),
-  ('user2@gmail.com');
+INSERT INTO users (email, password) VALUES
+  ('user1@yandex.ru', 'password1'),
+  ('user2@gmail.com', 'password1');
 
 INSERT INTO POMOS (DURATION, FINISH, user_id) VALUES
   ('600', '2015-05-30 9:25:00', 100000),

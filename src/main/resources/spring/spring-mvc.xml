@@ -7,6 +7,9 @@
 
     <mvc:annotation-driven/>
 
+    <!-- serve static resources (*.html, ...) from src/main/webapp/ -->
+    <mvc:default-servlet-handler/>
+
     <context:component-scan base-package="com.temelyan.**.web"/>
 
     <!--  all resources inside folder src/main/webapp/resources are mapped so they can be referred to inside JSP files -->
