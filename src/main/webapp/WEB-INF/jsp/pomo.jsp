@@ -2,8 +2,9 @@
 <html lang="en">
 <jsp:include page="fragments/header.jsp"/>
 <body>
+<jsp:include page="fragments/bodyHeader.jsp"/>
 <div id="pomodoro-app">
-    <div class="container-fluid" id="container">
+    <div class="container-fluid myContainer">
         <div class="row" style="text-align: center;">
             <div class="col">
                 <div class="row">
@@ -40,7 +41,6 @@
             <button id="longBreak">Long Break</button>
             <button id="stop">Stop</button>
         </div>
-        <a href="pomos"><h3>see log</h3></a>
     </div>
 </div>
 </body>

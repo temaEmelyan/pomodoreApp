@@ -13,12 +13,12 @@ public class RootController {
     @GetMapping("/")
     public String root() {
         logger.info("redirect from root to index.jsp");
-        return "index";
+        return "pomo";
     }
 
-    @GetMapping("/work")
-    public String work() {
-        logger.info("redirect from root to work.jsp");
-        return "pomo";
+    @GetMapping("/log")
+    public String openLog() {
+        logger.info("redirecting to log page");
+        return "pomos";
     }
 }

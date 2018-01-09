@@ -7,17 +7,18 @@ body {
     background-color: #008800;
 }
 
-#container {
+.myContainer {
+@include: container-fluid;
     width: 600px;
     margin: 20px auto;
     text-align: center;
 }
 
 #timer {
-    color: #f00;
+    color: #080;
     font-size: 50px;
     margin: 10px auto;
-    border: 5px solid red;
+    border: 5px solid #080;
     border-radius: 50%;
     width: 200px;
     height: 200px;
@@ -58,7 +59,7 @@ body {
 }
 
 #buttons button#shortBreak {
-    background: #0c0;
+    background: #080;
 }
 
 #buttons button#longBreak {
@@ -70,14 +71,15 @@ body {
 }
 
 #start-page-container {
-    padding-top: 100px;
+    padding-top: 1px;
+    text-align: center;
 }
 
 .link-like-button {
     font-family: "Source Code Pro", monospace;
-    font-size: 24px;
+    font-size: 16px;
     text-decoration: none;
-    background: #4da6ff;
+    background: #080;
     border: none;
     color: #fff;
     padding: 5px;
@@ -85,8 +87,9 @@ body {
     margin: 10px auto;
     height: 75px;
     border-radius: 50px;
+    white-space: nowrap;
 }
 
 .rred {
-    background: #f00;
+    background: #080;
 }

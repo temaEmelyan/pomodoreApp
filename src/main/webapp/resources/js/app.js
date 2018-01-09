@@ -1,3 +1,6 @@
+var ajaxUrl = 'ajax/';
+var timerSpeed = 10000;
+
 var pomodoro = {
     started: false,
     minutes: 0,
@@ -19,7 +22,7 @@ var pomodoro = {
         this.fillerDom = $('#filler');
         this.interval = setInterval(function () {
             self.intervalCallback.apply(self);
-        }, 100);
+        }, 1000 / timerSpeed);
         $('#work').click(function () {
             self.startWork.apply(self);
         });
@@ -113,8 +116,8 @@ var pomodoro = {
     },
 
     addPomo: function (duration) {
-        $.post({
-            url: 'ajax/add/' + duration + '/',
+        $.ajax({
+            url: ajaxUrl + 'add/' + duration + '/',
             type: 'POST',
             error: function (xhr, desc, err) {
                 console.log(xhr);

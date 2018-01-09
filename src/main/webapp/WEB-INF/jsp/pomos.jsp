@@ -2,6 +2,6 @@
 <html>
 <jsp:include page="fragments/header.jsp"/>
 <body>
-
+<jsp:include page="fragments/bodyHeader.jsp"/>
 </body>
 </html>
