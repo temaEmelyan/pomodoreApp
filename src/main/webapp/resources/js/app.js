@@ -115,7 +115,11 @@ var pomodoro = {
     addPomo: function (duration) {
         $.post({
             url: 'ajax/add/' + duration + '/',
-            type: 'POST'
+            type: 'POST',
+            error: function (xhr, desc, err) {
+                console.log(xhr);
+                console.log("Details0: " + desc + "\nError:" + err);
+            }
         });
     }
 };
