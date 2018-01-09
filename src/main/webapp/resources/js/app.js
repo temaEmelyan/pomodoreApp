@@ -1,5 +1,5 @@
-var ajaxUrl = 'ajax/';
-var timerSpeed = 10000;
+const ajaxUrl = 'ajax/';
+const timerSpeed = 1;
 
 var pomodoro = {
     started: false,
@@ -35,17 +35,25 @@ var pomodoro = {
         $('#stop').click(function () {
             self.stopTimer.apply(self);
         });
+
+
         $('#decreaseDuration').click(function () {
-            if (pomodoro.originalMin > 0) {
-                pomodoro.originalMin--;
+            if (!pomodoro.started) {
+                if (pomodoro.originalMin > 0) {
+                    pomodoro.originalMin--;
+                }
+                $('#duration').html(pomodoro.originalMin);
+                $('#minutes').html(pomodoro.originalMin);
             }
-            $('#duration').html(pomodoro.originalMin);
-            $('#minutes').html(pomodoro.originalMin);
         });
+
+
         $('#increaseDuration').click(function () {
-            pomodoro.originalMin++;
-            $('#duration').html(pomodoro.originalMin);
-            $('#minutes').html(pomodoro.originalMin);
+            if (!pomodoro.started) {
+                pomodoro.originalMin++;
+                $('#duration').html(pomodoro.originalMin);
+                $('#minutes').html(pomodoro.originalMin);
+            }
         });
     },
 
@@ -82,7 +90,7 @@ var pomodoro = {
 
     toDoubleDigit: function (num) {
         if (num < 10) {
-            return "0" + parseInt(num, 10);
+            return '0' + parseInt(num, 10);
         }
         return num;
     },
@@ -121,12 +129,19 @@ var pomodoro = {
             type: 'POST',
             error: function (xhr, desc, err) {
                 console.log(xhr);
-                console.log("Details0: " + desc + "\nError:" + err);
+                console.log('Details0: ' + desc + '\nError:' + err);
             }
         });
     }
 };
 
-window.onload = function () {
+$(window).on('load', function () {
     pomodoro.init();
-};
+});
+
+$(window).on('beforeunload', function (e) {
+    if (pomodoro.started) {
+        pomodoro.addPomo(pomodoro.originalMin * 60 + pomodoro.originalSec - pomodoro.minutes * 60 - pomodoro.seconds);
+        this.resetVariablesDefault(false);
+    }
+});

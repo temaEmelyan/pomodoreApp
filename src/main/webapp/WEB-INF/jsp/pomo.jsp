@@ -1,6 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html lang="en">
 <jsp:include page="fragments/header.jsp"/>
+<head>
+    <script src="${pageContext.request.contextPath}/resources/js/app.js"></script>
+</head>
 <body>
 <jsp:include page="fragments/bodyHeader.jsp"/>
 <div id="pomodoro-app">
@@ -44,4 +47,7 @@
     </div>
 </div>
 </body>
+<script>
+
+</script>
 </html>
