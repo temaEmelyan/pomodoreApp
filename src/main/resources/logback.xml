@@ -23,6 +23,7 @@
     <logger name="com.temelyan.pomoapp" level="debug"/>
     <logger name="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver"
             level="debug"/>
+    <logger name="org.springframework.security" level="debug"/>
 
     <root level="info">
         <appender-ref ref="file"/>
