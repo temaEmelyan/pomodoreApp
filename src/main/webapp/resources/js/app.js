@@ -1,8 +1,9 @@
 const ajaxUrl = 'ajax/';
 const timerSpeed = 1;
 
-var pomodoro = {
-    started: false,
+let pomodoro = {
+    timerIsRunning: false,
+    pomodoroIsActive: false,
     minutes: 0,
     seconds: 0,
     fillerHeight: 0,
@@ -16,16 +17,27 @@ var pomodoro = {
     originalSec: 0,
 
     init: function () {
-        var self = this;
+        let self = this;
         this.minutesDom = $('#minutes');
         this.secondsDom = $('#seconds');
         this.fillerDom = $('#filler');
         this.interval = setInterval(function () {
             self.intervalCallback.apply(self);
         }, 1000 / timerSpeed);
+
         $('#work').click(function () {
-            self.startWork.apply(self);
+            if (!self.pomodoroIsActive) {
+                self.startWork.apply(self);
+                $('#work').text('Pause');
+            } else if (self.timerIsRunning) {
+                self.timerIsRunning = false;
+                $('#work').text('Resume');
+            } else if (!self.timerIsRunning) {
+                self.timerIsRunning = true;
+                $('#work').text('Pause');
+            }
         });
+
         $('#shortBreak').click(function () {
             self.startShortBreak.apply(self);
         });
@@ -38,7 +50,7 @@ var pomodoro = {
 
 
         $('#decreaseDuration').click(function () {
-            if (!pomodoro.started) {
+            if (!pomodoro.timerIsRunning) {
                 if (pomodoro.originalMin > 0) {
                     pomodoro.originalMin--;
                 }
@@ -47,9 +59,8 @@ var pomodoro = {
             }
         });
 
-
         $('#increaseDuration').click(function () {
-            if (!pomodoro.started) {
+            if (!pomodoro.timerIsRunning) {
                 pomodoro.originalMin++;
                 $('#duration').html(pomodoro.originalMin);
                 $('#minutes').html(pomodoro.originalMin);
@@ -57,22 +68,24 @@ var pomodoro = {
         });
     },
 
-    resetVariables: function (mins, secs, started) {
+    resetVariables: function (mins, secs, timerIsRunning) {
         this.minutes = mins;
         this.originalMin = mins;
         this.seconds = secs;
         this.originalSec = secs;
-        this.started = started;
+        this.timerIsRunning = timerIsRunning;
         this.fillerIncrement = 200 / (this.minutes * 60);
         this.fillerHeight = 0;
     },
 
     resetVariablesDefault: function (started) {
-        this.resetVariables(this.originalMin, this.originalSec, started)
+        this.resetVariables(this.originalMin, this.originalSec, started);
+        $('#work').text('Work');
     },
 
     startWork: function () {
         this.resetVariablesDefault(true);
+        this.pomodoroIsActive = true;
     },
 
     startShortBreak: function () {
@@ -84,26 +97,26 @@ var pomodoro = {
     },
 
     stopTimer: function () {
+        if (this.pomodoroIsActive) {
+            util.addPomo(pomodoro.originalMin * 60 + pomodoro.originalSec - pomodoro.minutes * 60 - pomodoro.seconds);
+            this.resetVariablesDefault(false);
+            this.pomodoroIsActive = false;
+        }
         this.resetVariablesDefault(false);
         this.updateDom();
     },
 
-    toDoubleDigit: function (num) {
-        if (num < 10) {
-            return '0' + parseInt(num, 10);
-        }
-        return num;
-    },
-
     updateDom: function () {
-        this.minutesDom.text(this.toDoubleDigit(this.minutes));
-        this.secondsDom.text(this.toDoubleDigit(this.seconds));
+        this.minutesDom.text(util.toDoubleDigit(this.minutes));
+        this.secondsDom.text(util.toDoubleDigit(this.seconds));
         this.fillerHeight = this.fillerHeight + this.fillerIncrement;
         this.fillerDom.css('height', this.fillerHeight + 'px');
     },
 
     intervalCallback: function () {
-        if (!this.started) return false;
+        if (!this.timerIsRunning) {
+            return false;
+        }
         if (this.seconds === 0) {
             if (this.minutes === 0) {
                 this.timerComplete();
@@ -118,9 +131,30 @@ var pomodoro = {
     },
 
     timerComplete: function () {
-        this.started = false;
+        this.timerIsRunning = false;
+        this.pomodoroIsActive = false;
         this.fillerHeight = 0;
-        this.addPomo(this.originalMin * 60 + this.originalSec);
+        util.addPomo(this.originalMin * 60 + this.originalSec);
+    },
+};
+
+$(window).on('load', function () {
+    pomodoro.init();
+});
+
+$(window).on('beforeunload', function (e) {
+    if (pomodoro.pomodoroIsActive) {
+        util.addPomo(pomodoro.originalMin * 60 + pomodoro.originalSec - pomodoro.minutes * 60 - pomodoro.seconds);
+        this.resetVariablesDefault(false);
+    }
+});
+
+let util = {
+    toDoubleDigit: function (num) {
+        if (num < 10) {
+            return '0' + parseInt(num, 10);
+        }
+        return num;
     },
 
     addPomo: function (duration) {
@@ -132,16 +166,5 @@ var pomodoro = {
                 console.log('Details0: ' + desc + '\nError:' + err);
             }
         });
-    }
+    },
 };
-
-$(window).on('load', function () {
-    pomodoro.init();
-});
-
-$(window).on('beforeunload', function (e) {
-    if (pomodoro.started) {
-        pomodoro.addPomo(pomodoro.originalMin * 60 + pomodoro.originalSec - pomodoro.minutes * 60 - pomodoro.seconds);
-        this.resetVariablesDefault(false);
-    }
-});

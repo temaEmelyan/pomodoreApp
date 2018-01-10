@@ -28,11 +28,26 @@
                             <button type="submit" class="btn btn-default">Sign In</button>
                         </div>
                     </div>
-
                 </form>
             </div>
         </div>
     </div>
 </nav>
+
+<div class="container">
+    <button type="submit" class="btn btn-lg btn-primary" onclick="setCredentials('user1@yandex.ru', 'password1')">
+        User1
+    </button>
+    <button type="submit" class="btn btn-lg btn-primary" onclick="setCredentials('user2@gmail.com', 'password1')">
+        User2
+    </button>
+</div>
 </body>
+
+<script type="text/javascript">
+    function setCredentials(username, password) {
+        $('input[name="username"]').val(username);
+        $('input[name="password"]').val(password);
+    }
+</script>
 </html>
