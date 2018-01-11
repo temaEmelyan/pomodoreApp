@@ -26,11 +26,12 @@
         <csrf disabled="true"/>
     </http>
 
-    <beans:bean name="noopEncoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder"/>
+    <beans:bean class="com.temelyan.pomoapp.util.PasswordUtil" id="passwordEncoder"
+                factory-method="getPasswordEncoder"/>
 
     <authentication-manager>
         <authentication-provider user-service-ref="userService">
-            <password-encoder ref="noopEncoder"/>
+            <password-encoder ref="passwordEncoder"/>
         </authentication-provider>
     </authentication-manager>
 </beans:beans>

@@ -4,8 +4,8 @@ ALTER SEQUENCE global_seq
 RESTART WITH 100000;
 
 INSERT INTO users (email, password) VALUES
-  ('user1@yandex.ru', 'password1'),
-  ('user2@gmail.com', 'password1');
+  ('user1@yandex.ru', '$2a$10$/BP6Gs5rob47fKbHtVAlBOAoADfKkocikTMjEoRLkteJ4Da2TDjfC'),
+  ('user2@gmail.com', '$2a$10$/BP6Gs5rob47fKbHtVAlBOAoADfKkocikTMjEoRLkteJ4Da2TDjfC');
 
 INSERT INTO POMOS (DURATION, FINISH, user_id) VALUES
   ('600', '2015-05-30 9:25:00', 100000),

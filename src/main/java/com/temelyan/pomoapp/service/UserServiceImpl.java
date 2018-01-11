@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.temelyan.pomoapp.util.UserUtil.prepareToSave;
+
 @Service("userService")
 public class UserServiceImpl implements UserService, UserDetailsService {
 
@@ -33,12 +35,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void update(UserTo userTo) {
         User user = get(userTo.getId());
-        userRepopsitory.save(UserUtil.updateFromTo(user, userTo));
+        userRepopsitory.save(prepareToSave(UserUtil.updateFromTo(user, userTo)));
     }
 
     @Override
     public void create(User user) {
-        userRepopsitory.save(user);
+        userRepopsitory.save(prepareToSave(user));
     }
 
     @Override
