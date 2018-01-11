@@ -86,26 +86,3 @@ body {
     background: #f00;
 }
 
-#start-page-container {
-    padding-top: 1px;
-    text-align: center;
-}
-
-.link-like-button {
-    font-family: "Source Code Pro", monospace;
-    font-size: 16px;
-    text-decoration: none;
-    background: #080;
-    border: none;
-    color: #fff;
-    padding: 5px;
-    width: 90px;
-    margin: 10px auto;
-    height: 75px;
-    border-radius: 50px;
-    white-space: nowrap;
-}
-
-.rred {
-    background: #080;
-}

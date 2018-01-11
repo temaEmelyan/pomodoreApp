@@ -1,13 +1,14 @@
 package com.temelyan.pomoapp.model;
 
+import com.temelyan.pomoapp.HasId;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 
 @MappedSuperclass
 @Access(AccessType.FIELD)
-public abstract class AbstractEntity {
-    public static final int START_SEQ = 100000;
+public abstract class AbstractEntity implements HasId {
+    private static final int START_SEQ = 100000;
 
     @Id
     @SequenceGenerator(name = "global_seq", sequenceName = "global_seq", allocationSize = 1, initialValue = START_SEQ)
@@ -18,7 +19,7 @@ public abstract class AbstractEntity {
     protected AbstractEntity() {
     }
 
-    protected AbstractEntity(Integer id) {
+    AbstractEntity(Integer id) {
         this.id = id;
     }
 

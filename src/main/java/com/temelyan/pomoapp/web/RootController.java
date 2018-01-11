@@ -2,15 +2,9 @@ package com.temelyan.pomoapp.web;
 
 import com.temelyan.pomoapp.AuthorizedUser;
 import com.temelyan.pomoapp.Util.UserUtil;
-import com.temelyan.pomoapp.model.Pomo;
-import com.temelyan.pomoapp.service.PomoService;
-import com.temelyan.pomoapp.service.UserSevice;
 import com.temelyan.pomoapp.to.UserTo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.temelyan.pomoapp.web.user.AbstractUserController;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,35 +12,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.support.SessionStatus;
 
 import javax.validation.Valid;
-import java.util.List;
 
-import static com.temelyan.pomoapp.Util.ValidationUtil.assureIdConsistent;
-
+@SuppressWarnings("SameReturnValue")
 @Controller
-public class RootController {
-
-    private Logger logger = LoggerFactory.getLogger(getClass());
-
-    @Autowired
-    private PomoService pomoService;
-
-    @Autowired
-    private UserSevice userSevice;
+public class RootController extends AbstractUserController {
 
     @GetMapping("/")
     public String root() {
         logger.info("redirect from root to index.jsp");
         return "pomo";
-    }
-
-    @GetMapping("/log")
-    public String openLog(Model model) {
-        logger.info("redirecting to log page");
-
-        List<Pomo> all = pomoService.getAll(AuthorizedUser.id());
-        model.addAttribute("pomos", all);
-        model.addAttribute("sumDuration", all.stream().mapToInt(Pomo::getDuration).sum());
-        return "pomos";
     }
 
     @GetMapping(value = "/login")
@@ -61,8 +35,7 @@ public class RootController {
 
     @PostMapping("/profile")
     public String updateProfile(@Valid UserTo userTo, BindingResult result, SessionStatus status) {
-        assureIdConsistent(userTo, AuthorizedUser.id());
-        userSevice.update(userTo);
+        super.update(userTo, AuthorizedUser.id());
         AuthorizedUser.get().update(userTo);
         return "redirect:/";
     }
@@ -80,7 +53,7 @@ public class RootController {
             model.addAttribute("register", true);
             return "profile";
         } else {
-            userSevice.create(UserUtil.createNewFromTo(userTo));
+            super.create(UserUtil.createNewFromTo(userTo));
             status.setComplete();
             return "redirect:login?message=app.registered&username=" + userTo.getEmail();
         }
