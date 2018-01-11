@@ -7,4 +7,14 @@ public class UserUtil {
     public static UserTo asTo(User user) {
         return new UserTo(user.getId(), user.getEmail(), user.getPassword());
     }
+
+    public static User updateFromTo(User user, UserTo userTo) {
+        user.setEmail(userTo.getEmail().toLowerCase());
+        user.setPassword(userTo.getPassword());
+        return user;
+    }
+
+    public static User createNewFromTo(UserTo newUser) {
+        return new User(null, newUser.getEmail().toLowerCase(), newUser.getPassword());
+    }
 }

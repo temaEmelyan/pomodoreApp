@@ -33,7 +33,7 @@ public class Pomo extends AbstractEntity {
     }
 
     public Pomo(Integer id, LocalDateTime finish, int duration) {
-        this.id = id;
+        super(id);
         this.duration = duration;
         this.finish = finish;
     }

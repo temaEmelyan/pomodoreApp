@@ -27,9 +27,10 @@ public class User extends AbstractEntity {
     public User() {
     }
 
-    public User(Integer id, @Email @NotBlank String email) {
-        this.id = id;
+    public User(Integer id, @Email @NotBlank String email, @NotBlank @Size(min = 5) String password) {
+        super(id);
         this.email = email;
+        this.password = password;
     }
 
     public String getEmail() {
