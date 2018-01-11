@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.Valid;
 
-import static com.temelyan.pomoapp.Util.ValidationUtil.assureIdConsistent;
-import static com.temelyan.pomoapp.Util.ValidationUtil.checkNew;
+import static com.temelyan.pomoapp.util.ValidationUtil.assureIdConsistent;
+import static com.temelyan.pomoapp.util.ValidationUtil.checkNew;
 
 public class AbstractUserController {
     protected final Logger logger = LoggerFactory.getLogger(getClass());

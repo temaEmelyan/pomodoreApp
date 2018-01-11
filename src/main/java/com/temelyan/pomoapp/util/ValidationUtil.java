@@ -1,7 +1,7 @@
-package com.temelyan.pomoapp.Util;
+package com.temelyan.pomoapp.util;
 
 import com.temelyan.pomoapp.HasId;
-import com.temelyan.pomoapp.Util.exception.NotFoundException;
+import com.temelyan.pomoapp.util.exception.NotFoundException;
 
 public class ValidationUtil {
 

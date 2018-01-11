@@ -1,8 +1,8 @@
 package com.temelyan.pomoapp;
 
-import com.temelyan.pomoapp.Util.UserUtil;
 import com.temelyan.pomoapp.model.User;
 import com.temelyan.pomoapp.to.UserTo;
+import com.temelyan.pomoapp.util.UserUtil;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;

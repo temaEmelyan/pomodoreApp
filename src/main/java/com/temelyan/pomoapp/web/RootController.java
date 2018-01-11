@@ -1,8 +1,8 @@
 package com.temelyan.pomoapp.web;
 
 import com.temelyan.pomoapp.AuthorizedUser;
-import com.temelyan.pomoapp.Util.UserUtil;
 import com.temelyan.pomoapp.to.UserTo;
+import com.temelyan.pomoapp.util.UserUtil;
 import com.temelyan.pomoapp.web.user.AbstractUserController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

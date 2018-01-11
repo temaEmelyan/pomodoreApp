@@ -1,4 +1,4 @@
-package com.temelyan.pomoapp.Util;
+package com.temelyan.pomoapp.util;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

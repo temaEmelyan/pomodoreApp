@@ -10,7 +10,7 @@
 
     <function>
         <name>formatDateTime</name>
-        <function-class>com.temelyan.pomoapp.Util.DateTimeUtil</function-class>
+        <function-class>com.temelyan.pomoapp.util.DateTimeUtil</function-class>
         <function-signature>java.lang.String toString(java.time.LocalDateTime)</function-signature>
     </function>
 </taglib>

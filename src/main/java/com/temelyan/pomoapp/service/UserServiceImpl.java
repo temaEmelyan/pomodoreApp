@@ -1,10 +1,10 @@
 package com.temelyan.pomoapp.service;
 
 import com.temelyan.pomoapp.AuthorizedUser;
-import com.temelyan.pomoapp.Util.UserUtil;
 import com.temelyan.pomoapp.model.User;
 import com.temelyan.pomoapp.repository.UserRepopsitory;
 import com.temelyan.pomoapp.to.UserTo;
+import com.temelyan.pomoapp.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.core.userdetails.UserDetails;

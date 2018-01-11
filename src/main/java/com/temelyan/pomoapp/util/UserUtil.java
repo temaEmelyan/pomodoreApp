@@ -1,4 +1,4 @@
-package com.temelyan.pomoapp.Util;
+package com.temelyan.pomoapp.util;
 
 import com.temelyan.pomoapp.model.User;
 import com.temelyan.pomoapp.to.UserTo;
