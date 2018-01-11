@@ -17,6 +17,7 @@
 
     <http>
         <intercept-url pattern="/login" access="isAnonymous()"/>
+        <intercept-url pattern="/register" access="isAnonymous()"/>
         <intercept-url pattern="/**" access="isAuthenticated()"/>
         <form-login login-page="/login" default-target-url="/"
                     authentication-failure-url="/login?error=true"

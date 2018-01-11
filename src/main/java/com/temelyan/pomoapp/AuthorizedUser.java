@@ -12,10 +12,9 @@ import java.util.ArrayList;
 import static java.util.Objects.requireNonNull;
 
 public class AuthorizedUser extends org.springframework.security.core.userdetails.User {
-
     private static final long serialVersionUID = 1L;
 
-    private final UserTo userTo;
+    private UserTo userTo;
 
     public AuthorizedUser(User user) {
         super(user.getEmail(), user.getPassword(), true, true, true, true, new ArrayList<GrantedAuthority>());
@@ -39,6 +38,10 @@ public class AuthorizedUser extends org.springframework.security.core.userdetail
 
     public static int id() {
         return get().userTo.getId();
+    }
+
+    public void update(UserTo newTo) {
+        userTo = newTo;
     }
 
     public UserTo getUserTo() {

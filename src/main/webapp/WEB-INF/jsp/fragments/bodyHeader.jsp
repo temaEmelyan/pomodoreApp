@@ -24,6 +24,11 @@
                 <a class="nav-link" href="${pageContext.request.contextPath}/log">Log<span
                         class="sr-only">(current)</span></a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="${pageContext.request.contextPath}/profile">Profile<span
+                        class="sr-only">(current)</span></a>
+            </li>
         </ul>
         <a class="btn btn-primary" href="${pageContext.request.contextPath}/logout">
             Logout

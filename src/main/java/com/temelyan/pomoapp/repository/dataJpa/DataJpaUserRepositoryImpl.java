@@ -8,13 +8,13 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class UserJpaPomoRepositoryImpl implements UserRepopsitory {
+public class DataJpaUserRepositoryImpl implements UserRepopsitory {
     @Autowired
     private CrudUserRepository crudRepository;
 
     @Override
     public User save(User user) {
-        return null;
+        return crudRepository.save(user);
     }
 
     @Override
@@ -24,7 +24,7 @@ public class UserJpaPomoRepositoryImpl implements UserRepopsitory {
 
     @Override
     public User get(int id) {
-        return null;
+        return crudRepository.findById(id).orElse(null);
     }
 
     @Override

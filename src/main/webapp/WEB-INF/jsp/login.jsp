@@ -12,7 +12,8 @@
                 <p class="navbar-brand">PomoApp</p>
             </div>
             <div class="col">
-                <form class="navbar-form navbar-right" action="spring_security_check" method="post">
+                <form class="navbar-form navbar-right" action="${pageContext.request.contextPath}/spring_security_check"
+                      method="post">
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
@@ -35,6 +36,7 @@
 </nav>
 
 <div class="container">
+    <a class="btn btn-lg btn-success" href="register">Register &raquo;</a>
     <button type="submit" class="btn btn-lg btn-primary" onclick="setCredentials('user1@yandex.ru', 'password1')">
         User1
     </button>
