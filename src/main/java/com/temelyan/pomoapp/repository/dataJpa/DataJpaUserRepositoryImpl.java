@@ -3,12 +3,15 @@ package com.temelyan.pomoapp.repository.dataJpa;
 import com.temelyan.pomoapp.model.User;
 import com.temelyan.pomoapp.repository.UserRepopsitory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public class DataJpaUserRepositoryImpl implements UserRepopsitory {
+    private static final Sort SORT_EMAIL = Sort.by("email");
+
     @Autowired
     private CrudUserRepository crudRepository;
 
@@ -34,6 +37,6 @@ public class DataJpaUserRepositoryImpl implements UserRepopsitory {
 
     @Override
     public List<User> getAll() {
-        return null;
+        return crudRepository.findAll(SORT_EMAIL);
     }
 }
