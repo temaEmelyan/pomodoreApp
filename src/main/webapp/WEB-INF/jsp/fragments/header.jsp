@@ -5,7 +5,7 @@
     <title>Pomodoro</title>
     <base href="${pageContext.request.contextPath}/"/>
 
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/styles.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/styles.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
 
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
