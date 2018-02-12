@@ -1,15 +1,15 @@
 package com.temelyan.pomoapp.model;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
+
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
 @Table(name = "USERS")
 public class User extends AbstractEntity {
-
     @Email
     @NotBlank
     @Column(name = "email", nullable = false, unique = true)
@@ -17,17 +17,16 @@ public class User extends AbstractEntity {
 
     @Column(name = "password", nullable = false)
     @NotBlank
-    @Size(min = 5)
+    @Size(min = 1)
     private String password;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private
-    List<Pomo> pomos;
+    private List<Pomo> pomos;
 
     public User() {
     }
 
-    public User(Integer id, @Email @NotBlank String email, @NotBlank @Size(min = 5) String password) {
+    public User(Integer id, @Email @NotBlank String email, @NotBlank @Size(min = 1) String password) {
         super(id);
         this.email = email;
         this.password = password;

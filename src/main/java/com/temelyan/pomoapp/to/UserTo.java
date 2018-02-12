@@ -1,7 +1,8 @@
 package com.temelyan.pomoapp.to;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
+
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -15,6 +16,8 @@ public class UserTo extends BaseTo implements Serializable {
     @Size(min = 5, max = 32, message = "length must between 5 and 32 characters")
     private String password;
 
+    private String passwordConfirm;
+
     public UserTo() {
     }
 
@@ -22,6 +25,18 @@ public class UserTo extends BaseTo implements Serializable {
         super(id);
         this.email = email;
         this.password = password;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public String getPasswordConfirm() {
+        return passwordConfirm;
+    }
+
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
     }
 
     public String getPassword() {

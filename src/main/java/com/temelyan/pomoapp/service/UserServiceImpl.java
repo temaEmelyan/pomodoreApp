@@ -6,10 +6,7 @@ import com.temelyan.pomoapp.repository.UserRepopsitory;
 import com.temelyan.pomoapp.to.UserTo;
 import com.temelyan.pomoapp.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,21 +16,30 @@ import java.util.List;
 import static com.temelyan.pomoapp.util.UserUtil.prepareToSave;
 
 @Service("userService")
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService {
+
+    private final UserRepopsitory userRepopsitory;
 
     @Autowired
-    UserRepopsitory userRepopsitory;
+    public UserServiceImpl(UserRepopsitory userRepopsitory) {
+        this.userRepopsitory = userRepopsitory;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepopsitory.getByEmail(email.toLowerCase());
+        User user = loadByEmail(email);
         if (user == null) {
             throw new UsernameNotFoundException("User " + email + " is not found");
         }
         return new AuthorizedUser(user);
     }
 
-    @CacheEvict(value = "users", allEntries = true)
+    @Override
+    public User loadByEmail(String email) {
+        return userRepopsitory.getByEmail(email.toLowerCase());
+    }
+
+    //    @CacheEvict(value = "users", allEntries = true)
     @Transactional
     @Override
     public void update(UserTo userTo) {
@@ -51,7 +57,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepopsitory.get(id);
     }
 
-    @Cacheable("users")
+    //    @Cacheable("users")
     @Override
     public List<User> getAll() {
         return userRepopsitory.getAll();
