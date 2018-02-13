@@ -158,9 +158,8 @@ let util = {
     },
 
     addPomo: function (duration) {
-        $.ajax({
-            url: ajaxUrl + 'add/' + duration,
-            type: 'GET',
+        $.get({
+            url: ajaxUrl + 'add?length=' + duration,
             error: function (xhr, desc, err) {
                 console.log(xhr);
                 console.log('Details: ' + desc + '\nError:' + err);

@@ -2,6 +2,7 @@ package com.temelyan.pomoapp.model;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -16,8 +17,8 @@ public class Pomo extends AbstractEntity {
     Integer duration;
 
     @Column(name = "finish", nullable = false)
-    private
-    LocalDateTime finish;
+    @Type(type = "com.temelyan.pomoapp.util.LocalDateTimeUserType")
+    private LocalDateTime finish;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
