@@ -20,7 +20,7 @@
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <a class="navbar-brand" href="${pageContext.request.contextPath}/">PomoApp</a>
+    <a class="navbar-brand" href="/">PomoApp</a>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
@@ -39,9 +39,18 @@
                         class="sr-only">(current)</span></a>
             </li>
         </ul>
-        <a class="btn btn-primary" href="#" th:href="@{/logout}">
-            Logout
-        </a>
+        <form id="logoutForm" method="POST" action="#" th:action="@{/logout}">
+            <input type="hidden" name="" th:name="${_csrf.parameterName}" value="" th:value="${_csrf.token}"/>
+            <div class="row">
+                <div id="logoutBtnGroup" class="col">
+                    <div class="btn-group pull-right" role="group">
+                        <button id="logout" class="btn btn-danger" type="submit" aria-label="Logout">
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 </nav>
 

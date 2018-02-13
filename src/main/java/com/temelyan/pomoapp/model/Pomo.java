@@ -5,10 +5,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.Duration;
 import java.time.LocalDateTime;
-
-import static java.time.temporal.ChronoUnit.SECONDS;
 
 @Entity
 @Table(name = "POMOS", uniqueConstraints = {@UniqueConstraint(columnNames = {"finish", "user_id"}, name = "pomos_unique_user_datetime_idx")})
@@ -49,20 +46,12 @@ public class Pomo extends AbstractEntity {
         this.duration = start;
     }
 
-    public String getDurationString() {
-        return Duration.of(duration, SECONDS).toString();
-    }
-
     public LocalDateTime getFinish() {
         return finish;
     }
 
     public void setFinish(LocalDateTime finish) {
         this.finish = finish;
-    }
-
-    public String getFinishString() {
-        return finish.toString().replace("T", " ");
     }
 
     public User getUser() {

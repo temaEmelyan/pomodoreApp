@@ -1,6 +1,7 @@
 package com.temelyan.pomoapp.web.pomo;
 
-import com.temelyan.pomoapp.model.Pomo;
+import com.temelyan.pomoapp.to.PomoTo;
+import com.temelyan.pomoapp.util.DateTimeUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +19,15 @@ public class PomoController extends AbstractPomoController {
 
     @GetMapping("/log")
     public String openLog(Model model) {
-        List<Pomo> all = super.getAll();
+        List<PomoTo> all = super.getAll();
         model.addAttribute("pomos", all);
-        model.addAttribute("sumDuration", all.stream().mapToInt(Pomo::getDuration).sum());
+        model.addAttribute("sumDuration",
+                DateTimeUtil.toHhMmSs(
+                        all.stream()
+                                .mapToInt(PomoTo::getDuration)
+                                .sum()
+                )
+        );
         return "pomos";
     }
 }

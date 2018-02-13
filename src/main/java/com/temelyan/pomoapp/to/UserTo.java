@@ -13,7 +13,7 @@ public class UserTo extends BaseTo implements Serializable {
     @NotBlank
     private String email;
 
-    @Size(min = 5, max = 32, message = "length must between 5 and 32 characters")
+    @Size(min = 1, max = 32, message = "length must between 1 and 32 characters")
     private String password;
 
     private String passwordConfirm;
@@ -25,10 +25,6 @@ public class UserTo extends BaseTo implements Serializable {
         super(id);
         this.email = email;
         this.password = password;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public String getPasswordConfirm() {

@@ -1,6 +1,7 @@
 package com.temelyan.pomoapp.util;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class DateTimeUtil {
@@ -8,5 +9,10 @@ public class DateTimeUtil {
 
     public static String toString(LocalDateTime ldt) {
         return ldt == null ? "" : ldt.format(DATE_TIME_FORMATTER);
+    }
+
+    public static String toHhMmSs(Integer durationSeconds) {
+        LocalTime timeOfDay = LocalTime.ofSecondOfDay(durationSeconds);
+        return timeOfDay.toString();
     }
 }
