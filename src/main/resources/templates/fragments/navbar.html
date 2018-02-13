@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org " lang="en">
+<head>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>Work!</title>
+    <div th:replace="fragments/header :: header"></div>
+</head>
+<body>
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark" th:fragment="navbar">
+    <a class="navbar-brand" href="#">PomoApp</a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto mt-2 mt-sm-0">
+            <li class="nav-item active">
+                <a class="nav-link" href="#" th:href="@{/}">Timer</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" th:href="@{/log}">Log<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" th:href="@{/profile}">Profile<span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="navbar navbar-collapse">
+        <ul class="navbar-nav ml-auto">
+            <form class="form-inline my-2 my-sm-0" id="logoutForm" method="POST" action="#" th:action="@{/logout}">
+                <input type="hidden" name="" th:name="${_csrf.parameterName}" value="" th:value="${_csrf.token}"/>
+                <div class="row">
+                    <div id="logoutBtnGroup" class="col">
+                        <div class="btn-group pull-right" role="group">
+                            <button id="logout" class="btn btn-danger" type="submit" aria-label="Logout">
+                                Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </ul>
+    </div>
+</nav>
+</body>
+</html>
