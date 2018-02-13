@@ -140,6 +140,14 @@ let pomodoro = {
 
 $(window).on('load', function () {
     pomodoro.init();
+
+    $(function () {
+        let token = $("meta[name='_csrf']").attr("content");
+        let header = $("meta[name='_csrf_header']").attr("content");
+        $(document).ajaxSend(function (e, xhr, options) {
+            xhr.setRequestHeader(header, token);
+        });
+    });
 });
 
 $(window).on('beforeunload', function (e) {
@@ -158,7 +166,7 @@ let util = {
     },
 
     addPomo: function (duration) {
-        $.get({
+        $.post({
             url: ajaxUrl + 'add?length=' + duration,
             error: function (xhr, desc, err) {
                 console.log(xhr);

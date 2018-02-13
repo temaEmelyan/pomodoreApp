@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org " lang="en">
+<head>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>Profile</title>
+    <div th:replace="fragments/header :: header"></div>
+</head>
+<body>
+<div th:replace="fragments/navbar::navbar"></div>
+
+<div class="container center-block text-center">
+
+    <form method="POST" action="#" th:object="${userTo}" th:action="@{/profile}" class="form-signin">
+        <h2 class="form-signin-heading">Edit your account</h2>
+
+        <div class="form-group">
+            <input type="hidden" th:field="*{email}" class="form-control"/>
+        </div>
+
+        <div class="form-group" th:classappend="${#fields.hasErrors('password')}? has-error">
+            <input type="password" th:field="*{password}" class="form-control" placeholder="Password"/>
+            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</span>
+        </div>
+
+        <div class="form-group" th:classappend="${#fields.hasErrors('passwordConfirm')}? has-error">
+            <input type="password" th:field="*{passwordConfirm}" class="form-control"
+                   placeholder="Confirm your password"/>
+            <span th:if="${#fields.hasErrors('passwordConfirm')}"
+                  th:errors="*{passwordConfirm}">Confirm password error</span>
+        </div>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+    </form>
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

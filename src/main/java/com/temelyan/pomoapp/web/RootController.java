@@ -3,27 +3,29 @@ package com.temelyan.pomoapp.web;
 import com.temelyan.pomoapp.AuthorizedUser;
 import com.temelyan.pomoapp.to.UserTo;
 import com.temelyan.pomoapp.util.UserUtil;
+import com.temelyan.pomoapp.validator.UserUpdateValidator;
 import com.temelyan.pomoapp.validator.UserValidator;
 import com.temelyan.pomoapp.web.user.AbstractUserController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.support.SessionStatus;
 
-import javax.validation.Valid;
-
 @SuppressWarnings("SameReturnValue")
 @Controller
 public class RootController extends AbstractUserController {
 
     private final UserValidator userValidator;
+    private final UserUpdateValidator userUpdateValidator;
 
     @Autowired
-    public RootController(UserValidator userValidator) {
+    public RootController(UserValidator userValidator, UserUpdateValidator userUpdateValidator) {
         this.userValidator = userValidator;
+        this.userUpdateValidator = userUpdateValidator;
     }
 
     @GetMapping("/")
@@ -38,15 +40,23 @@ public class RootController extends AbstractUserController {
     }
 
     @GetMapping("/profile")
-    public String profile() {
+    public String profile(Model model) {
+        UserTo userTo = new UserTo();
+        userTo.setEmail(AuthorizedUser.get().getUserTo().getEmail());
+        model.addAttribute("userTo", userTo);
         return "profile";
     }
 
     @PostMapping("/profile")
-    public String updateProfile(@Valid UserTo userTo, BindingResult result, SessionStatus status) {
-        super.update(userTo, AuthorizedUser.id());
-        AuthorizedUser.get().update(userTo);
-        return "redirect:/";
+    public String updateProfile(UserTo userTo, BindingResult bindingResult, SessionStatus status) {
+        userUpdateValidator.validate(userTo, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "profile";
+        } else {
+            super.update(userTo, AuthorizedUser.id());
+            AuthorizedUser.get().update(userTo);
+            return "redirect:/";
+        }
     }
 
     @GetMapping("/registration")
