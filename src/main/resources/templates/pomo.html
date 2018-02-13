@@ -8,47 +8,36 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content=""/>
     <meta name="author" content=""/>
-
-    <title>Log in with your account</title>
-
-    <link href="../static/css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
-    <link href="../static/css/styles.css" th:href="@{css/styles.css}" rel="stylesheet" type="text/css"/>
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <title>Work!</title>
+    <div th:replace="fragments/header :: header"></div>
 </head>
 <body>
 <div id="pomodoro-app">
     <div class="container-fluid myContainer">
         <div class="row" style="text-align: center;">
-            <div class="col-xs-6">
+            <div class="col" style="align-items: center">
                 <div class="row">
-                    <div class="col-xs-4">
+                    <div class="col">
                         <button id="decreaseDuration" class="btn pl-min-btns">-</button>
                     </div>
-                    <div class="col-xs-4">
+                    <div class="col">
                         <h3 id="duration" style="color:white; padding: 0 10px 0 10px;">25</h3>
                     </div>
-                    <div class="col-xs-4">
+                    <div class="col">
                         <button id="increaseDuration" class="btn pl-min-btns">+</button>
                     </div>
                 </div>
             </div>
-            <div class="col-xs-6" style="align-items: left">
+            <div class="col" style="align-items: center">
                 <div class="row">
-                    <div class="mx-auto row">
-                        <div class="col-xs-4">
-                            <button id="decreaseDurationBrake" class="btn pl-min-btns">-</button>
-                        </div>
-                        <div class="col-xs-4">
-                            <h3 id="durationBreak" style="color:white; padding: 0 10px 0 10px;">5</h3>
-                        </div>
-                        <div class="col-xs-4">
-                            <button id="increaseDurationBrake" class="btn pl-min-btns">+</button>
-                        </div>
+                    <div class="col">
+                        <button id="decreaseDurationBrake" class="btn pl-min-btns">-</button>
+                    </div>
+                    <div class="col">
+                        <h3 id="durationBreak" style="color:white; padding: 0 10px 0 10px;">5</h3>
+                    </div>
+                    <div class="col">
+                        <button id="increaseDurationBrake" class="btn pl-min-btns">+</button>
                     </div>
                 </div>
             </div>
@@ -71,11 +60,7 @@
         </div>
     </div>
 </div>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="../static/js/bootstrap.min.js" th:src="@{js/bootstrap.min.js}"></script>
 <script src="../static/js/app.js" th:src="@{js/app.js}"></script>
-
-
 </body>
 </html>

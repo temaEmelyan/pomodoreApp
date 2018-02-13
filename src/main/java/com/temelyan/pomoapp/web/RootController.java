@@ -64,7 +64,7 @@ public class RootController extends AbstractUserController {
         } else {
             super.create(UserUtil.createNewFromTo(userTo));
             status.setComplete();
-            return "redirect:login?message=app.registered&username=" + userTo.getEmail();
+            return "redirect:login";
         }
     }
 }
