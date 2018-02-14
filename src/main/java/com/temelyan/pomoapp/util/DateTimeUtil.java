@@ -13,6 +13,6 @@ public class DateTimeUtil {
 
     public static String toHhMmSs(Integer durationSeconds) {
         LocalTime timeOfDay = LocalTime.ofSecondOfDay(durationSeconds);
-        return timeOfDay.toString();
+        return timeOfDay.format(DateTimeFormatter.ISO_LOCAL_TIME);
     }
 }
