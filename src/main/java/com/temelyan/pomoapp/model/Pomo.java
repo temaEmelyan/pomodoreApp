@@ -21,10 +21,10 @@ public class Pomo extends AbstractEntity {
     private LocalDateTime finish;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "project_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
-    private User user;
+    private Project project;
 
     public Pomo() {
     }
@@ -55,11 +55,11 @@ public class Pomo extends AbstractEntity {
         this.finish = finish;
     }
 
-    public User getUser() {
-        return user;
+    public Project getProject() {
+        return project;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setProject(Project project) {
+        this.project = project;
     }
 }

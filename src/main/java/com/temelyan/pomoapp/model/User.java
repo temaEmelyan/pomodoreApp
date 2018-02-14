@@ -21,7 +21,7 @@ public class User extends AbstractEntity {
     private String password;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private List<Pomo> pomos;
+    private List<Project> projects;
 
     public User() {
     }
@@ -40,12 +40,12 @@ public class User extends AbstractEntity {
         this.email = email;
     }
 
-    public List<Pomo> getPomos() {
-        return pomos;
+    public List<Project> getProjects() {
+        return projects;
     }
 
-    public void setPomos(List<Pomo> pomos) {
-        this.pomos = pomos;
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
     }
 
     public String getPassword() {
