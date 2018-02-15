@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
-@Table(name = "USERS")
+@Table(name = "USERS", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 public class User extends AbstractEntity {
     @Email
     @NotBlank
@@ -20,7 +20,7 @@ public class User extends AbstractEntity {
     @Size(min = 1)
     private String password;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<Project> projects;
 
     public User() {

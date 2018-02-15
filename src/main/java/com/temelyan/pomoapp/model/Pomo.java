@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "POMOS", uniqueConstraints = {@UniqueConstraint(columnNames = {"finish", "user_id"}, name = "pomos_unique_user_datetime_idx")})
+@Table(name = "POMOS", uniqueConstraints = {@UniqueConstraint(columnNames = {"finish", "project_id"}, name = "pomos_unique_project_datetime_idx")})
 public class Pomo extends AbstractEntity {
 
     @Column(name = "duration", nullable = false)

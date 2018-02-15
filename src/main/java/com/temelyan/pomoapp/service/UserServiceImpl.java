@@ -1,6 +1,7 @@
 package com.temelyan.pomoapp.service;
 
 import com.temelyan.pomoapp.AuthorizedUser;
+import com.temelyan.pomoapp.model.Project;
 import com.temelyan.pomoapp.model.User;
 import com.temelyan.pomoapp.repository.UserRepopsitory;
 import com.temelyan.pomoapp.to.UserTo;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 import static com.temelyan.pomoapp.util.UserUtil.prepareToSave;
@@ -49,6 +51,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void create(User user) {
+        Project project = new Project("Default");
+        user.setProjects(Collections.singletonList(project));
+        project.setUser(user);
         userRepopsitory.save(prepareToSave(user));
     }
 

@@ -1,7 +1,7 @@
 package com.temelyan.pomoapp.repository.dataJpa;
 
 import com.temelyan.pomoapp.model.Pomo;
-import com.temelyan.pomoapp.model.User;
+import com.temelyan.pomoapp.model.Project;
 import com.temelyan.pomoapp.repository.PomoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -11,16 +11,20 @@ import java.util.List;
 @Repository
 public class DataJpaPomoRepositoryImpl implements PomoRepository {
 
-    @Autowired
-    private CrudUserRepository crudUserRepository;
+    private final CrudPomoRepository crudPomoRepository;
+
+    private final CrudProjectRepository crudProjectRepository;
 
     @Autowired
-    private CrudPomoRepository crudPomoRepository;
+    public DataJpaPomoRepositoryImpl(CrudPomoRepository crudPomoRepository, CrudProjectRepository crudProjectRepository) {
+        this.crudPomoRepository = crudPomoRepository;
+        this.crudProjectRepository = crudProjectRepository;
+    }
 
     @Override
-    public Pomo save(Pomo pomo, int userId) {
-        User one = crudUserRepository.getOne(userId);
-        pomo.setUser(one);
+    public Pomo save(Pomo pomo, int projectId) {
+        Project one = crudProjectRepository.getOne(projectId);
+        pomo.setProject(one);
         return crudPomoRepository.save(pomo);
     }
 

@@ -11,6 +11,6 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface CrudPomoRepository extends JpaRepository<Pomo, Integer> {
 
-    @Query("SELECT p FROM Pomo p WHERE p.user.id=:userId ORDER BY p.finish DESC")
-    List<Pomo> getAll(@Param("userId") int userId);
+    @Query("SELECT p FROM Pomo p WHERE p.project.id=:projectId ORDER BY p.finish DESC")
+    List<Pomo> getAll(@Param("projectId") int projectId);
 }

@@ -6,7 +6,6 @@ import java.util.List;
 @Entity
 @Table(name = "PROJECTS")
 public class Project extends AbstractEntity {
-
     @Column(name = "name")
     private String name;
 
@@ -16,4 +15,35 @@ public class Project extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    public Project() {
+    }
+
+    public Project(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Pomo> getPomo() {
+        return pomo;
+    }
+
+    public void setPomo(List<Pomo> pomo) {
+        this.pomo = pomo;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
