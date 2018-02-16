@@ -184,8 +184,9 @@ let util = {
                 console.log('Details: ' + desc + '\nError:' + err);
             }
         }).done(function () {
-            let nameOfTheNewProject = $('#project-name').val();
-            util.fetchProjects(nameOfTheNewProject);
+            let nameOfTheNewProjectInput = $('#project-name');
+            util.fetchProjects(nameOfTheNewProjectInput.val());
+            nameOfTheNewProjectInput.val('');
             $('#addNewProjModal').modal('hide');
         });
     },

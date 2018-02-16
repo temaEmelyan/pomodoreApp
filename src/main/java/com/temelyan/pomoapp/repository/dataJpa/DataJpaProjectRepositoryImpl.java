@@ -24,7 +24,7 @@ public class DataJpaProjectRepositoryImpl implements ProjectRepository {
 
     @Override
     public List<Project> getAll(Integer userId) {
-        return crudProjectRepository.findAllByUser(crudUserRepository.getOne(userId));
+        return crudProjectRepository.findAllByUserOrderByName(crudUserRepository.getOne(userId));
     }
 
     @Override
