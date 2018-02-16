@@ -5,7 +5,7 @@ import com.temelyan.pomoapp.model.Pomo;
 import java.util.List;
 
 public interface PomoRepository {
-    Pomo save(Pomo pomo, int userId);
+    Pomo save(Pomo pomo, int projectId);
 
     List<Pomo> getAll(int userId);
 }

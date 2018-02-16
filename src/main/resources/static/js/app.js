@@ -81,10 +81,12 @@ let pomodoro = {
     resetVariablesDefault: function (started) {
         this.resetVariables(this.originalMin, this.originalSec, started);
         $('#work').text('Work');
+        this.dropDownActivate();
     },
 
     startWork: function () {
         this.resetVariablesDefault(true);
+        this.dropDownDeactivate();
         this.pomodoroIsActive = true;
     },
 
@@ -135,6 +137,14 @@ let pomodoro = {
         this.pomodoroIsActive = false;
         this.fillerHeight = 0;
         util.addPomo(this.originalMin * 60 + this.originalSec);
+    },
+
+    dropDownActivate: function () {
+        $('#projectsDropDown').prop('disabled', false);
+    },
+
+    dropDownDeactivate: function () {
+        $('#projectsDropDown').prop('disabled', 'disabled');
     }
 };
 
@@ -167,7 +177,7 @@ let util = {
 
     addPomo: function (duration) {
         $.post({
-            url: ajaxUrl + 'add?length=' + duration,
+            url: ajaxUrl + 'add?length=' + duration + '&projectId=' + $('#projectsDropDown').val(),
             error: function (xhr, desc, err) {
                 console.log(xhr);
                 console.log('Details: ' + desc + '\nError:' + err);

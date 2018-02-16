@@ -26,8 +26,11 @@ public class AbstractPomoController {
         return pomos.stream().map(PomoTo::fromPomo).collect(Collectors.toList());
     }
 
-    void add(int length) {
+    void add(int length, int projecId) {
         logger.info("add Pomo with the length {}", length);
-        pomoService.add(new Pomo(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS), length), AuthorizedUser.id());
+        pomoService.add(
+                new Pomo(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS), length),
+                projecId
+        );
     }
 }

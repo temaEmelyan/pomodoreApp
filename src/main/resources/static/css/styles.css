@@ -16,6 +16,7 @@
 
 body {
     background-color: #333333 !important;
+    font-family: Ubuntu, "Source Code Pro", monospace;
 }
 
 .pl-min-btns {

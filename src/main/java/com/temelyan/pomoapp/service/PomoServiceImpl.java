@@ -9,12 +9,16 @@ import java.util.List;
 
 @Service
 public class PomoServiceImpl implements PomoService {
+    final PomoRepository pomoRepository;
+
     @Autowired
-    PomoRepository pomoRepository;
+    public PomoServiceImpl(PomoRepository pomoRepository) {
+        this.pomoRepository = pomoRepository;
+    }
 
     @Override
-    public void add(Pomo pomo, int userId) {
-        pomoRepository.save(pomo, userId);
+    public void add(Pomo pomo, int projectId) {
+        pomoRepository.save(pomo, projectId);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.temelyan.pomoapp.web;
 
 import com.temelyan.pomoapp.AuthorizedUser;
+import com.temelyan.pomoapp.model.User;
+import com.temelyan.pomoapp.service.UserService;
 import com.temelyan.pomoapp.to.UserTo;
 import com.temelyan.pomoapp.util.UserUtil;
 import com.temelyan.pomoapp.validator.UserUpdateValidator;
@@ -20,17 +22,24 @@ import org.springframework.web.bind.support.SessionStatus;
 public class RootController extends AbstractUserController {
 
     private final UserValidator userValidator;
+    private final UserService userService;
     private final UserUpdateValidator userUpdateValidator;
 
     @Autowired
-    public RootController(UserValidator userValidator, UserUpdateValidator userUpdateValidator) {
+    public RootController(UserValidator userValidator,
+                          UserUpdateValidator userUpdateValidator,
+                          UserService userService
+    ) {
         this.userValidator = userValidator;
         this.userUpdateValidator = userUpdateValidator;
+        this.userService = userService;
     }
 
     @GetMapping("/")
-    public String root() {
+    public String root(Model model) {
         logger.info("redirect from root to pomo.html");
+        User withProjects = userService.getWithProjects(AuthorizedUser.id());
+        model.addAttribute("user", withProjects);
         return "pomo";
     }
 

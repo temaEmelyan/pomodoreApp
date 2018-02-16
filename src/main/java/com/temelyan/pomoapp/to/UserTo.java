@@ -1,10 +1,13 @@
 package com.temelyan.pomoapp.to;
 
+import com.temelyan.pomoapp.model.Project;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
 
 public class UserTo extends BaseTo implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -18,13 +21,20 @@ public class UserTo extends BaseTo implements Serializable {
 
     private String passwordConfirm;
 
+    private List<Project> projects;
+
     public UserTo() {
     }
 
     public UserTo(Integer id, String email, String password) {
+        this(id, email, password, null);
+    }
+
+    public UserTo(Integer id, String email, String password, List<Project> projects) {
         super(id);
         this.email = email;
         this.password = password;
+        this.projects = projects == null ? Collections.emptyList() : projects;
     }
 
     public String getPasswordConfirm() {
@@ -33,6 +43,14 @@ public class UserTo extends BaseTo implements Serializable {
 
     public void setPasswordConfirm(String passwordConfirm) {
         this.passwordConfirm = passwordConfirm;
+    }
+
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
     }
 
     public String getPassword() {

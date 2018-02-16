@@ -54,6 +54,17 @@
             <button id="longBreak">Long Break</button>
             <button id="stop">Stop</button>
         </div>
+        <div class="row" style="padding-top: 20px">
+            <div class="col">
+                <label for="projectsDropDown"><h3 style="color:white">Select Project</h3></label>
+            </div>
+            <div class="col">
+                <select class="form-control" id="projectsDropDown">
+                    <option th:each="project : ${user.getProjects()}" th:value="${project.id}"
+                            th:text="${project.getName()}"></option>
+                </select>
+            </div>
+        </div>
     </div>
 </div>
 <div th:replace="fragments/footer :: footer"></div>

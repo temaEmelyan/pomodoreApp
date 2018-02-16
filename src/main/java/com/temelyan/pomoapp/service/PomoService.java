@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PomoService {
 
-    void add(Pomo pomo, int userId);
+    void add(Pomo pomo, int projectId);
 
     List<Pomo> getAll(int userId);
 }
