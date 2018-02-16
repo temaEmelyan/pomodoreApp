@@ -55,18 +55,44 @@
             <button id="stop">Stop</button>
         </div>
         <div class="row" style="padding-top: 20px">
-            <div class="col">
-                <label for="projectsDropDown"><h3 style="color:white">Select Project</h3></label>
-            </div>
-            <div class="col">
-                <select class="form-control" id="projectsDropDown">
-                    <option th:each="project : ${user.getProjects()}" th:value="${project.id}"
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <label class="input-group-text inverse-dropdown" for="projectsDropDown">Select project</label>
+                </div>
+
+                <select class="custom-select inverse-dropdown" id="projectsDropDown">
+                    <option class="optionProjectName" th:each="project : ${user.getProjects()}" th:value="${project.id}"
                             th:text="${project.getName()}"></option>
+                    <option id="addNewProj" value="-1" style="font-weight: bold">add new project</option>
                 </select>
             </div>
         </div>
     </div>
 </div>
+
+<div class="modal" id="addNewProjModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addNewProjModalLabel">Add new Project</h5>
+                <button type="button" class="close" data-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addProjectForm">
+                    <div class="form-group">
+                        <label for="project-name" class="col-form-label">Project Name:</label>
+                        <input type="text" name="name" class="form-control" id="project-name"/>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="util.saveProject()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div th:replace="fragments/footer :: footer"></div>
 <script src="../static/js/app.js" th:src="@{js/app.js}"></script>
 </body>

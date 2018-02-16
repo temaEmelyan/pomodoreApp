@@ -6,10 +6,10 @@ import com.temelyan.pomoapp.HasId;
 abstract public class BaseTo implements HasId {
     protected Integer id;
 
-    public BaseTo() {
+    BaseTo() {
     }
 
-    public BaseTo(Integer id) {
+    BaseTo(Integer id) {
         this.id = id;
     }
 

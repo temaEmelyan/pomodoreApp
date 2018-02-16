@@ -13,7 +13,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AbstractPomoController {
+public abstract class AbstractPomoController {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired

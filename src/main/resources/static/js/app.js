@@ -151,6 +151,12 @@ let pomodoro = {
 $(window).on('load', function () {
     pomodoro.init();
 
+    $('#projectsDropDown').change(function () {
+        if ($(this).val() === "-1") {
+            $('#addNewProjModal').modal('show');
+        }
+    });
+
     $(function () {
         let token = $("meta[name='_csrf']").attr("content");
         let header = $("meta[name='_csrf_header']").attr("content");
@@ -168,6 +174,52 @@ $(window).on('beforeunload', function (e) {
 });
 
 let util = {
+    saveProject: function () {
+        let serialize = $('#addProjectForm').serialize();
+        $.post({
+            url: ajaxUrl + 'add/project',
+            data: serialize,
+            error: function (xhr, desc, err) {
+                console.log(xhr);
+                console.log('Details: ' + desc + '\nError:' + err);
+            }
+        }).done(function () {
+            let nameOfTheNewProject = $('#project-name').val();
+            util.fetchProjects(nameOfTheNewProject);
+            $('#addNewProjModal').modal('hide');
+        });
+    },
+
+    fetchProjects: function (nameOfTheNewProject) {
+        $.get({
+            url: ajaxUrl + 'get/projects',
+            success: function (projects) {
+                util.updateSelectWithNewData(projects, nameOfTheNewProject);
+            },
+            error: function (xhr, desc, err) {
+                console.log(xhr);
+                console.log('Details: ' + desc + '\nError:' + err);
+            }
+        });
+    },
+
+    updateSelectWithNewData: function (data, nameOfTheNewProject) {
+        let dropDown = $('#projectsDropDown');
+        $('.optionProjectName').remove();
+        data.reverse().forEach(value => {
+            dropDown.prepend($('<option>', {
+                class: 'optionProjectName',
+                value: value.id,
+                text: value.name
+            }));
+        });
+
+        $('.optionProjectName').filter(function () {
+            // noinspection EqualityComparisonWithCoercionJS
+            return $(this).html() == nameOfTheNewProject
+        }).attr('selected', 'selected')
+    },
+
     toDoubleDigit: function (num) {
         if (num < 10) {
             return '0' + parseInt(num, 10);

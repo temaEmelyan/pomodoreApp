@@ -1,6 +1,7 @@
 package com.temelyan.pomoapp.model;
 
 import javax.persistence.*;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -32,7 +33,7 @@ public class Project extends AbstractEntity {
     }
 
     public List<Pomo> getPomo() {
-        return pomo;
+        return pomo == null ? Collections.emptyList() : pomo;
     }
 
     public void setPomo(List<Pomo> pomo) {

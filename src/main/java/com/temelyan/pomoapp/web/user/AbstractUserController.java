@@ -13,7 +13,7 @@ import javax.validation.Valid;
 import static com.temelyan.pomoapp.util.ValidationUtil.assureIdConsistent;
 import static com.temelyan.pomoapp.util.ValidationUtil.checkNew;
 
-public class AbstractUserController {
+public abstract class AbstractUserController {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired

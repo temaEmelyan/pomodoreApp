@@ -17,6 +17,7 @@
 body {
     background-color: #333333 !important;
     font-family: Ubuntu, "Source Code Pro", monospace;
+    color: #fff;
 }
 
 .pl-min-btns {
@@ -87,3 +88,8 @@ body {
     background: #f00;
 }
 
+.inverse-dropdown {
+    background: #4e555b;
+    color: #ffffff;
+    border: #4e555b;
+}
