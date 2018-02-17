@@ -168,6 +168,19 @@ $(window).on('load', function () {
             xhr.setRequestHeader(header, token);
         });
     });
+
+    let projectNameInput = $('#project-name')[0];
+    projectNameInput.addEventListener('keypress', function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+        }
+    });
+
+    projectNameInput.onkeydown = function (e) {
+        if (e.keyCode === 13) {
+            util.saveProject();
+        }
+    }
 });
 
 $(window).on('beforeunload', function (e) {
