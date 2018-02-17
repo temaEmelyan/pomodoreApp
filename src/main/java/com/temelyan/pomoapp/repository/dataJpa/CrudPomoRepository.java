@@ -13,4 +13,7 @@ public interface CrudPomoRepository extends JpaRepository<Pomo, Integer> {
 
     @Query("SELECT p FROM Pomo p WHERE p.project.id=:projectId ORDER BY p.finish DESC")
     List<Pomo> getAll(@Param("projectId") int projectId);
+
+    @Query("SELECT p FROM Pomo p WHERE p.project.user.id=:userId ORDER BY p.project.name, p.finish DESC")
+    List<Pomo> getAllForUser(@Param("userId") int userId);
 }

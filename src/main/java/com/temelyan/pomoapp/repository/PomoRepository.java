@@ -7,5 +7,7 @@ import java.util.List;
 public interface PomoRepository {
     Pomo save(Pomo pomo, int projectId);
 
-    List<Pomo> getAll(int userId);
+    List<Pomo> getAll(int projectId);
+
+    List<Pomo> getAllForUser(int projectId);
 }

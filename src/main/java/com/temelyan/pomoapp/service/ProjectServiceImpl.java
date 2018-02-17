@@ -6,6 +6,7 @@ import com.temelyan.pomoapp.to.ProjectTo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,13 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<ProjectTo> getAll(int userId) {
-        return projectRepository.getAll(userId).stream().map(ProjectTo::fromProject).collect(Collectors.toList());
+        return projectRepository
+                .getAll(userId)
+                .stream()
+                .map(project -> new ProjectTo(
+                        project.getId(),
+                        project.getName(),
+                        Collections.emptyList())
+                ).collect(Collectors.toList());
     }
 }

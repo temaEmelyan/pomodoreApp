@@ -29,7 +29,12 @@ public class DataJpaPomoRepositoryImpl implements PomoRepository {
     }
 
     @Override
-    public List<Pomo> getAll(int userId) {
-        return crudPomoRepository.getAll(userId);
+    public List<Pomo> getAll(int projectId) {
+        return crudPomoRepository.getAll(projectId);
+    }
+
+    @Override
+    public List<Pomo> getAllForUser(int userId) {
+        return crudPomoRepository.getAllForUser(userId);
     }
 }

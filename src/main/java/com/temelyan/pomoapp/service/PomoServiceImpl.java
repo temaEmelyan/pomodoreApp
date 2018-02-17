@@ -1,15 +1,21 @@
 package com.temelyan.pomoapp.service;
 
 import com.temelyan.pomoapp.model.Pomo;
+import com.temelyan.pomoapp.model.Project;
 import com.temelyan.pomoapp.repository.PomoRepository;
+import com.temelyan.pomoapp.to.PomoTo;
+import com.temelyan.pomoapp.to.ProjectTo;
+import com.temelyan.pomoapp.util.DateTimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PomoServiceImpl implements PomoService {
-    final PomoRepository pomoRepository;
+    private final PomoRepository pomoRepository;
 
     @Autowired
     public PomoServiceImpl(PomoRepository pomoRepository) {
@@ -22,7 +28,36 @@ public class PomoServiceImpl implements PomoService {
     }
 
     @Override
-    public List<Pomo> getAll(int userId) {
-        return pomoRepository.getAll(userId);
+    public List<PomoTo> getAll(int projectId) {
+        List<Pomo> allForProject = pomoRepository.getAllForUser(projectId);
+        ProjectTo projectTo = null;
+
+        if (allForProject.size() > 0) {
+            Pomo pomo = allForProject.get(0);
+            Project project = pomo.getProject();
+            projectTo = new ProjectTo(project.getId(), project.getName(), Collections.emptyList());
+        }
+        ProjectTo finalProjectTo = projectTo;
+
+        return allForProject
+                .stream()
+                .map(pomo -> new PomoTo(
+                        pomo.getId(),
+                        pomo.getDuration(),
+                        DateTimeUtil.toString(pomo.getFinish()),
+                        finalProjectTo)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PomoTo> getAllForUser(int userId) {
+        List<Pomo> allForUser = pomoRepository.getAllForUser(userId);
+
+        return allForUser
+                .stream()
+                .map(pomo -> {
+                    Project project = pomo.getProject();
+                    ProjectTo projectTo = new ProjectTo(project.getId(), project.getName(), Collections.emptyList());
+                    return new PomoTo(pomo.getId(), pomo.getDuration(), DateTimeUtil.toString(pomo.getFinish()), projectTo);
+                }).collect(Collectors.toList());
     }
 }
