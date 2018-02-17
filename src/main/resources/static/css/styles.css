@@ -32,6 +32,13 @@ body {
     text-align: center;
 }
 
+.log-page-container {
+@include: container-fluid;
+    width: 800px;
+    margin: 20px auto;
+    text-align: center;
+}
+
 #timer {
     color: #080;
     font-size: 50px;
@@ -92,4 +99,14 @@ body {
     background: #4e555b;
     color: #ffffff;
     border: #4e555b;
+}
+
+#reportrange {
+    color: #fff;
+    background: #444;
+    border: 1px solid #333;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px 10px;
+    width: 100%
 }

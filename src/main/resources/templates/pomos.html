@@ -13,26 +13,46 @@
 </head>
 <body>
 <div th:replace="fragments/navbar::navbar"></div>
-<div class="myContainer container-fluid">
-    <table class="table table-hover" style="background-color: #333; color: #eeeeee">
-        <thead class="thead-inverse">
-        <tr>
-            <th>Project Name</th>
-            <th>Date Time</th>
-            <th>Duration</th>
-        </tr>
-        </thead>
-        <tr th:each="pomoTo : ${pomos}">
-            <td th:text="${pomoTo.getProjectTo().getName()}"></td>
-            <td th:text="${pomoTo.getFinish()}"></td>
-            <td class="durationElement" th:text="${pomoTo.getDurationFormattedString()}"></td>
-        </tr>
-        <tr style="background-color: #414141">
-            <td></td>
-            <td>Overall</td>
-            <td class="durationElement" th:text="${sumDuration}"></td>
-        </tr>
-    </table>
+<div class="log-page-container">
+    <div class="row">
+        <div class="col text-style">
+            <h4>select date</h4>
+        </div>
+        <div class="col" style="padding-bottom: 20px">
+            <div id="reportrange" class="pull-right">
+                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                <span></span> <b class="caret"></b>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <table class="table table-hover" style="background-color: #333; color: #eeeeee">
+            <thead class="thead-inverse">
+            <tr>
+                <th>Project Name</th>
+                <th>Date Time</th>
+                <th>Duration</th>
+            </tr>
+            </thead>
+            <tr th:each="pomoTo : ${pomos}">
+                <td th:text="${pomoTo.getProjectTo().getName()}"></td>
+                <td th:text="${pomoTo.getFinish()}"></td>
+                <td class="durationElement" th:text="${pomoTo.getDurationFormattedString()}"></td>
+            </tr>
+            <tr style="background-color: #414141">
+                <td></td>
+                <td>Overall</td>
+                <td class="durationElement" th:text="${sumDuration}"></td>
+            </tr>
+        </table>
+    </div>
 </div>
+
+<div th:replace="fragments/footer :: footer"></div>
+<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<link href="../static/css/daterangepicker.css" th:href="@{css/daterangepicker.css}" rel="stylesheet"
+      type="text/css"/>
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+<script src="../static/js/log.js" th:src="@{js/log.js}"></script>
 </body>
 </html>
