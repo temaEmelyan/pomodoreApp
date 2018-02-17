@@ -1,5 +1,6 @@
 package com.temelyan.pomoapp.to;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProjectTo extends BaseTo {
@@ -12,6 +13,10 @@ public class ProjectTo extends BaseTo {
         super(id);
         this.name = name;
         this.pomoTos = pomoTos;
+    }
+
+    public ProjectTo(Integer id, String name) {
+        this(id, name, new ArrayList<>());
     }
 
     public String getName() {

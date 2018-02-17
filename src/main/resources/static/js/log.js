@@ -10,19 +10,38 @@ function fetchPomos(startStr, endStr) {
             $('.pomo-table-row').remove();
 
             let newDuration = 0;
-            data.reverse().forEach(value => {
-                let newRow = $('<tr>', {class: 'pomo-table-row',});
-                newRow.append($('<td>', {text: value.projectTo.name}));
-                newRow.append($('<td>', {text: value.finish}));
-                newRow.append($('<td>', {text: toHHMMSS(value.duration)}));
+            data.reverse().forEach(project => {
+                let projectDuration = 0;
+
+                project.pomoTos.forEach(pomoTo => {
+                    projectDuration += pomoTo.duration;
+                });
+
+                let newRow = $('<tr>', {
+                    class: 'pomo-table-row',
+                    id: project.id
+                });
+                newRow.append($('<td>', {text: project.name}));
+                newRow.append($('<td>', {text: ''}));
+                newRow.append($('<td>', {text: toHHMMSS(projectDuration)}));
                 $('.pomo-log-table').prepend(newRow);
 
-                newDuration += value.duration;
+                let projectTableRow = $('#' + project.id + '.pomo-table-row')[0];
+                projectTableRow.hiddenData = project.pomoTos;
+                projectTableRow.onclick = function () {
+                    expandTableRow(projectTableRow);
+                };
+
+                newDuration += projectDuration;
             });
 
             $('.durationElement').html(toHHMMSS(newDuration));
         }
     })
+}
+
+function expandTableRow(selector) {
+
 }
 
 $(window).on('load', function () {
