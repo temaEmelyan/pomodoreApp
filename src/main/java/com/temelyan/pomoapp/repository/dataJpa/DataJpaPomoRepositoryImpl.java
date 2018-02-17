@@ -6,6 +6,9 @@ import com.temelyan.pomoapp.repository.PomoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Repository
@@ -36,5 +39,13 @@ public class DataJpaPomoRepositoryImpl implements PomoRepository {
     @Override
     public List<Pomo> getAllForUser(int userId) {
         return crudPomoRepository.getAllForUser(userId);
+    }
+
+    @Override
+    public List<Pomo> getAllForUserInDateRange(LocalDate fromDate, LocalDate toDate, int userId) {
+        LocalDateTime fromDT = LocalDateTime.of(fromDate, LocalTime.MIN);
+        LocalDateTime toDT = LocalDateTime.of(toDate, LocalTime.MAX);
+
+        return crudPomoRepository.getAllForUserInDateRange(fromDT, toDT, userId);
     }
 }

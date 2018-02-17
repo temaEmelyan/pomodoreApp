@@ -9,6 +9,7 @@ import com.temelyan.pomoapp.util.DateTimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,6 +55,17 @@ public class PomoServiceImpl implements PomoService {
 
         return allForUser
                 .stream()
+                .map(pomo -> {
+                    Project project = pomo.getProject();
+                    ProjectTo projectTo = new ProjectTo(project.getId(), project.getName(), Collections.emptyList());
+                    return new PomoTo(pomo.getId(), pomo.getDuration(), DateTimeUtil.toString(pomo.getFinish()), projectTo);
+                }).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PomoTo> getAllForUserInDateRange(LocalDate fromDate, LocalDate toDate, int id) {
+        List<Pomo> pomos = pomoRepository.getAllForUserInDateRange(fromDate, toDate, id);
+        return pomos.stream()
                 .map(pomo -> {
                     Project project = pomo.getProject();
                     ProjectTo projectTo = new ProjectTo(project.getId(), project.getName(), Collections.emptyList());

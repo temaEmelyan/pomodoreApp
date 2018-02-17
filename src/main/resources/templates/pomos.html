@@ -26,7 +26,7 @@
         </div>
     </div>
     <div class="row">
-        <table class="table table-hover" style="background-color: #333; color: #eeeeee">
+        <table class="table table-hover pomo-log-table" style="background-color: #333; color: #eeeeee">
             <thead class="thead-inverse">
             <tr>
                 <th>Project Name</th>
@@ -34,15 +34,10 @@
                 <th>Duration</th>
             </tr>
             </thead>
-            <tr th:each="pomoTo : ${pomos}">
-                <td th:text="${pomoTo.getProjectTo().getName()}"></td>
-                <td th:text="${pomoTo.getFinish()}"></td>
-                <td class="durationElement" th:text="${pomoTo.getDurationFormattedString()}"></td>
-            </tr>
             <tr style="background-color: #414141">
                 <td></td>
                 <td>Overall</td>
-                <td class="durationElement" th:text="${sumDuration}"></td>
+                <td class="durationElement"></td>
             </tr>
         </table>
     </div>

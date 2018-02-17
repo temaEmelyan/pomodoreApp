@@ -86,4 +86,10 @@ public class RootController extends AbstractUserController {
             return "redirect:login";
         }
     }
+
+    @GetMapping("/log")
+    public String openLog() {
+        logger.info("opening log page");
+        return "pomos";
+    }
 }

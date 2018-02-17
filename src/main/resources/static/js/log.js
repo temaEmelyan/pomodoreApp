@@ -1,13 +1,32 @@
 const ajaxUrl = 'ajax/';
+const getPomosUrl = ajaxUrl + 'pomo/get';
 const today = moment();
 const yesterday = moment().subtract(1, 'days');
 
+function fetchPomos(startStr, endStr) {
+    $.get({
+        url: getPomosUrl + '?from=' + startStr + '&to=' + endStr,
+        success: function (data) {
+            $('.pomo-table-row').remove();
+
+            let newDuration = 0;
+            data.reverse().forEach(value => {
+                let newRow = $('<tr>', {class: 'pomo-table-row',});
+                newRow.append($('<td>', {text: value.projectTo.name}));
+                newRow.append($('<td>', {text: value.finish}));
+                newRow.append($('<td>', {text: toHHMMSS(value.duration)}));
+                $('.pomo-log-table').prepend(newRow);
+
+                newDuration += value.duration;
+            });
+
+            $('.durationElement').html(toHHMMSS(newDuration));
+        }
+    })
+}
+
 $(window).on('load', function () {
-
-    let start = moment();
-    let end = moment();
-
-    function cb(start, end) {
+    function callBack(start, end) {
         let str;
         if (start._d.toLocaleDateString() === end._d.toLocaleDateString()) {
             if (start._d.toLocaleDateString() === today._d.toLocaleDateString()) {
@@ -20,16 +39,16 @@ $(window).on('load', function () {
         } else {
             str = start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
         }
-        $('#reportrange span').html(str);
+        $('#reportrange').find('span').html(str);
 
-        pick_up_the_date_range_and_redraw_the_table();
-
-
+        let startStr = start.format('YYYY-MM-DD');
+        let endStr = end.format('YYYY-MM-DD');
+        fetchPomos(startStr, endStr);
     }
 
     $('#reportrange').daterangepicker({
-        startDate: start,
-        endDate: end,
+        startDate: today,
+        endDate: today,
         ranges: {
             'Today': [moment(), moment()],
             'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -37,13 +56,18 @@ $(window).on('load', function () {
             'Last 30 Days': [moment().subtract(29, 'days'), moment()],
             'This Month': [moment().startOf('month'), moment().endOf('month')],
             'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        }
-    }, cb);
+        },
+    }, callBack);
 
-    cb(start, end);
-
+    callBack(today, today);
 });
 
-function pick_up_the_date_range_and_redraw_the_table() {
-
-}
+const toHHMMSS = (secs) => {
+    let sec_num = parseInt(secs, 10);
+    let hours = Math.floor(sec_num / 3600) % 24;
+    let minutes = Math.floor(sec_num / 60) % 60;
+    let seconds = sec_num % 60;
+    return [hours, minutes, seconds]
+        .map(v => v < 10 ? "0" + v : v)
+        .join(":")
+};

@@ -3,6 +3,7 @@ package com.temelyan.pomoapp.service;
 import com.temelyan.pomoapp.model.Pomo;
 import com.temelyan.pomoapp.to.PomoTo;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface PomoService {
@@ -12,4 +13,6 @@ public interface PomoService {
     List<PomoTo> getAll(int projectId);
 
     List<PomoTo> getAllForUser(int userId);
+
+    List<PomoTo> getAllForUserInDateRange(LocalDate fromDate, LocalDate toDate, int id);
 }
