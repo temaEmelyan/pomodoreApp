@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Entity
-@Table(name = "PROJECTS")
+@Table(name = "PROJECTS", uniqueConstraints = @UniqueConstraint(columnNames = {"name", "user_id"}))
 public class Project extends AbstractEntity {
     @Column(name = "name")
     private String name;

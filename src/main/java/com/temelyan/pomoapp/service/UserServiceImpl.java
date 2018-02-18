@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void create(User user) {
-        Project project = new Project("Default");
+        Project project = new Project("Work");
         user.setProjects(Collections.singletonList(project));
         project.setUser(user);
         userRepopsitory.save(prepareToSave(user));
