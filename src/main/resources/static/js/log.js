@@ -20,6 +20,7 @@ function fetchPomos(startStr, endStr) {
                 let newRowContainer = $('<div>', {class: 'pomo-table-row-container', id: project.id});
                 let newRow = $('<div>', {class: 'pomo-table-row row'});
                 newRow.append($('<div>', {class: 'col', text: project.name}));
+                newRow.append($('<div>', {class: 'col', text: project.pomoTos.length + ' pom'}));
                 newRow.append($('<div>', {class: 'col', text: ''}));
                 newRow.append($('<div>', {class: 'col', text: toHHMMSS(projectDuration)}));
 
@@ -42,22 +43,34 @@ function fetchPomos(startStr, endStr) {
 }
 
 function expandTableRow(projectTableRowContainer) {
-    console.log(projectTableRowContainer.hiddenData);
     projectTableRowContainer.shown = !projectTableRowContainer.shown;
+
     if (projectTableRowContainer.shown) {
         let expandedContainer = $('<div>', {class: 'pomo-table-row-expanded-container'});
 
         projectTableRowContainer.hiddenData.forEach(pomoTo => {
             let newExpandedRow = $('<div>', {class: 'row pomo-table-row-expanded'});
             newExpandedRow.append($('<div>', {class: 'col', text: ''}));
-            newExpandedRow.append($('<div>', {class: 'col', text: pomoTo.finish}));
-            newExpandedRow.append($('<div>', {class: 'col', text: pomoTo.durationFormattedString}));
+            newExpandedRow.append($('<div>', {
+                class: 'col',
+                text: dropYearFromStringIfItIsCurrentYeat(pomoTo.finishDate)
+            }));
+            newExpandedRow.append($('<div>', {class: 'col', text: pomoTo.finishTime}));
+            newExpandedRow.append($('<div>', {class: 'col', text: toHHMMSS(pomoTo.duration)}));
             expandedContainer.append(newExpandedRow);
         });
 
         projectTableRowContainer.append(expandedContainer);
     } else {
         projectTableRowContainer.find('.pomo-table-row-expanded-container').remove();
+    }
+}
+
+function dropYearFromStringIfItIsCurrentYeat(date) {
+    if (date.split(' ')[2] === today.year().toString()) {
+        return date.split(' ')[0] + ' ' + date.split(' ')[1];
+    } else {
+        return date;
     }
 }
 
@@ -100,10 +113,11 @@ $(window).on('load', function () {
 
 const toHHMMSS = (secs) => {
     let sec_num = parseInt(secs, 10);
-    let hours = Math.floor(sec_num / 3600) % 24;
-    let minutes = Math.floor(sec_num / 60) % 60;
-    let seconds = sec_num % 60;
+    let hours = Math.floor(sec_num / 3600) % 24 + ' h';
+    let minutes = Math.floor(sec_num / 60) % 60 + ' m';
+    let seconds = sec_num % 60 + ' s';
     return [hours, minutes, seconds]
         .map(v => v < 10 ? "0" + v : v)
-        .join(":")
+        .filter(v => v !== '0 h')
+        .join(" ")
 };

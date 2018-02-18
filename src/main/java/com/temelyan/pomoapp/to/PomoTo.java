@@ -6,14 +6,26 @@ public class PomoTo extends BaseTo {
 
     private Integer duration;
 
-    private String finish;
+    private String finishDate;
+
+    private String finishTime;
+
     private ProjectTo projectTo;
 
-    public PomoTo(Integer id, Integer duration, String finish, ProjectTo projectTo) {
+    public PomoTo(Integer id, Integer duration, String finishDate, String finishTime, ProjectTo projectTo) {
         super(id);
         this.duration = duration;
-        this.finish = finish;
+        this.finishDate = finishDate;
+        this.finishTime = finishTime;
         this.projectTo = projectTo;
+    }
+
+    public String getFinishTime() {
+        return finishTime;
+    }
+
+    public void setFinishTime(String finishTime) {
+        this.finishTime = finishTime;
     }
 
     public ProjectTo getProjectTo() {
@@ -36,11 +48,11 @@ public class PomoTo extends BaseTo {
         this.duration = duration;
     }
 
-    public String getFinish() {
-        return finish;
+    public String getFinishDate() {
+        return finishDate;
     }
 
-    public void setFinish(String finish) {
-        this.finish = finish;
+    public void setFinishDate(String finishDate) {
+        this.finishDate = finishDate;
     }
 }

@@ -2,10 +2,19 @@ package com.temelyan.pomoapp.util;
 
 import org.junit.Test;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 public class DateTimeUtilTest {
+
+    @Test
+    public void LDTtoString() {
+        assertEquals("02 Dec 2017", DateTimeUtil.toString(LocalDate.of(2017, 12, 2)));
+        assertEquals("22:22", DateTimeUtil.toString(LocalTime.of(22, 22, 12)));
+    }
 
     @Test
     public void toHhMmSsTest() {

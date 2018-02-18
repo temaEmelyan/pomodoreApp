@@ -4,8 +4,9 @@ import com.temelyan.pomoapp.model.Pomo;
 import com.temelyan.pomoapp.model.Project;
 import com.temelyan.pomoapp.repository.PomoRepository;
 import com.temelyan.pomoapp.to.PomoTo;
+import com.temelyan.pomoapp.to.PomoToFactory;
 import com.temelyan.pomoapp.to.ProjectTo;
-import com.temelyan.pomoapp.util.DateTimeUtil;
+import com.temelyan.pomoapp.to.ProjectToFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,11 +43,7 @@ public class PomoServiceImpl implements PomoService {
 
         return allForProject
                 .stream()
-                .map(pomo -> new PomoTo(
-                        pomo.getId(),
-                        pomo.getDuration(),
-                        DateTimeUtil.toString(pomo.getFinish()),
-                        finalProjectTo)).collect(Collectors.toList());
+                .map(pomo -> PomoToFactory.fromEntity(pomo, finalProjectTo)).collect(Collectors.toList());
     }
 
     @Override
@@ -57,19 +54,20 @@ public class PomoServiceImpl implements PomoService {
                 .stream()
                 .map(pomo -> {
                     Project project = pomo.getProject();
-                    ProjectTo projectTo = new ProjectTo(project.getId(), project.getName(), Collections.emptyList());
-                    return new PomoTo(pomo.getId(), pomo.getDuration(), DateTimeUtil.toString(pomo.getFinish()), projectTo);
+                    ProjectTo projectTo = ProjectToFactory.fromEntity(project);
+                    return PomoToFactory.fromEntity(pomo, projectTo);
                 }).collect(Collectors.toList());
     }
 
     @Override
     public List<PomoTo> getAllForUserInDateRange(LocalDate fromDate, LocalDate toDate, int id) {
         List<Pomo> pomos = pomoRepository.getAllForUserInDateRange(fromDate, toDate, id);
+
         return pomos.stream()
                 .map(pomo -> {
                     Project project = pomo.getProject();
                     ProjectTo projectTo = new ProjectTo(project.getId(), project.getName(), Collections.emptyList());
-                    return new PomoTo(pomo.getId(), pomo.getDuration(), DateTimeUtil.toString(pomo.getFinish()), projectTo);
+                    return PomoToFactory.fromEntity(pomo, projectTo);
                 }).collect(Collectors.toList());
     }
 }

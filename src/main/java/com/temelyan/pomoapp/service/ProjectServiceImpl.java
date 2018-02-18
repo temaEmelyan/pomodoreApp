@@ -4,9 +4,9 @@ import com.temelyan.pomoapp.model.Pomo;
 import com.temelyan.pomoapp.model.Project;
 import com.temelyan.pomoapp.repository.PomoRepository;
 import com.temelyan.pomoapp.repository.ProjectRepository;
-import com.temelyan.pomoapp.to.PomoToUtil;
+import com.temelyan.pomoapp.to.PomoToFactory;
 import com.temelyan.pomoapp.to.ProjectTo;
-import com.temelyan.pomoapp.to.ProjectToUtil;
+import com.temelyan.pomoapp.to.ProjectToFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,9 +54,9 @@ public class ProjectServiceImpl implements ProjectService {
 
             ProjectTo projectTo = integerProjectToMap.computeIfAbsent(
                     project.getId(), integer ->
-                            ProjectToUtil.fromEntity(project));
+                            ProjectToFactory.fromEntity(project));
 
-            projectTo.getPomoTos().add(PomoToUtil.fromEntity(pomo, null));
+            projectTo.getPomoTos().add(PomoToFactory.fromEntity(pomo, null));
         });
 
         ArrayList<ProjectTo> projectTos = new ArrayList<>(integerProjectToMap.values());

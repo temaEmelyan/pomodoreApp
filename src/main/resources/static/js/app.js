@@ -104,7 +104,8 @@ let pomodoro = {
 
     stopTimer: function () {
         if (this.pomodoroIsActive) {
-            util.addPomo(pomodoro.originalMin * 60 + pomodoro.originalSec - pomodoro.minutes * 60 - pomodoro.seconds);
+            util.addPomo(pomodoro.originalMin * 60 + pomodoro.originalSec
+                - pomodoro.minutes * 60 - pomodoro.seconds);
             this.resetVariablesDefault(false);
             this.pomodoroIsActive = false;
         }
@@ -141,6 +142,8 @@ let pomodoro = {
         this.pomodoroIsActive = false;
         this.fillerHeight = 0;
         util.addPomo(this.originalMin * 60 + this.originalSec);
+        this.resetVariablesDefault(false);
+        this.updateDom();
     },
 
     dropDownActivate: function () {
