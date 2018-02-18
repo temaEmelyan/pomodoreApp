@@ -155,8 +155,32 @@ let pomodoro = {
     }
 };
 
+let failedNote;
+
+function closeNoty() {
+    if (failedNote) {
+        failedNote.close();
+        failedNote = undefined;
+    }
+}
+
+function failNoty(jqXHR) {
+    closeNoty();
+    // https://stackoverflow.com/questions/48229776
+    let errorInfo = JSON.parse(jqXHR.responseText);
+    failedNote = new Noty({
+        text: "<span class='glyphicon glyphicon-exclamation-sign'></span> &nbsp;" + "error status" + ": " + jqXHR.status + "<br>" + errorInfo.type + "<br>" + errorInfo.detail,
+        type: "error",
+        layout: "bottomRight"
+    }).show();
+}
+
 $(window).on('load', function () {
     pomodoro.init();
+
+    $(document).ajaxError(function (event, jqXHR, options, jsExc) {
+        failNoty(jqXHR);
+    });
 
     $('#projectsDropDown').change(function () {
         if ($(this).val() === "-1") {
