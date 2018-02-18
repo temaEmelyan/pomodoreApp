@@ -110,3 +110,18 @@ body {
     padding: 5px 10px;
     width: 100%
 }
+
+.pomo-table-row-container:hover {
+    background-color: #414141;
+}
+
+.pomo-table-row-container {
+    font-size: 14px;
+    border-bottom: 1px solid #414141;
+    border-top: 1px solid #414141;
+}
+
+.pomo-table-row-expanded-container {
+    font-size: 13px;
+    padding-bottom: 10px;
+}

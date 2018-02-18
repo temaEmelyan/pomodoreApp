@@ -7,7 +7,7 @@ function fetchPomos(startStr, endStr) {
     $.get({
         url: getPomosUrl + '?from=' + startStr + '&to=' + endStr,
         success: function (data) {
-            $('.pomo-table-row').remove();
+            $('.pomo-table-row-container').remove();
 
             let newDuration = 0;
             data.reverse().forEach(project => {
@@ -17,19 +17,20 @@ function fetchPomos(startStr, endStr) {
                     projectDuration += pomoTo.duration;
                 });
 
-                let newRow = $('<tr>', {
-                    class: 'pomo-table-row',
-                    id: project.id
-                });
-                newRow.append($('<td>', {text: project.name}));
-                newRow.append($('<td>', {text: ''}));
-                newRow.append($('<td>', {text: toHHMMSS(projectDuration)}));
-                $('.pomo-log-table').prepend(newRow);
+                let newRowContainer = $('<div>', {class: 'pomo-table-row-container', id: project.id});
+                let newRow = $('<div>', {class: 'pomo-table-row row'});
+                newRow.append($('<div>', {class: 'col', text: project.name}));
+                newRow.append($('<div>', {class: 'col', text: ''}));
+                newRow.append($('<div>', {class: 'col', text: toHHMMSS(projectDuration)}));
 
-                let projectTableRow = $('#' + project.id + '.pomo-table-row')[0];
-                projectTableRow.hiddenData = project.pomoTos;
-                projectTableRow.onclick = function () {
-                    expandTableRow(projectTableRow);
+                newRowContainer.append(newRow);
+                $('.pomo-log-table').prepend(newRowContainer);
+
+                let projectTableRowContainer = $('#' + project.id + '.pomo-table-row-container');
+                projectTableRowContainer.hiddenData = project.pomoTos;
+                projectTableRowContainer.shown = false;
+                projectTableRowContainer[0].onclick = function () {
+                    expandTableRow(projectTableRowContainer);
                 };
 
                 newDuration += projectDuration;
@@ -40,8 +41,24 @@ function fetchPomos(startStr, endStr) {
     })
 }
 
-function expandTableRow(selector) {
+function expandTableRow(projectTableRowContainer) {
+    console.log(projectTableRowContainer.hiddenData);
+    projectTableRowContainer.shown = !projectTableRowContainer.shown;
+    if (projectTableRowContainer.shown) {
+        let expandedContainer = $('<div>', {class: 'pomo-table-row-expanded-container'});
 
+        projectTableRowContainer.hiddenData.forEach(pomoTo => {
+            let newExpandedRow = $('<div>', {class: 'row pomo-table-row-expanded'});
+            newExpandedRow.append($('<div>', {class: 'col', text: ''}));
+            newExpandedRow.append($('<div>', {class: 'col', text: pomoTo.finish}));
+            newExpandedRow.append($('<div>', {class: 'col', text: pomoTo.durationFormattedString}));
+            expandedContainer.append(newExpandedRow);
+        });
+
+        projectTableRowContainer.append(expandedContainer);
+    } else {
+        projectTableRowContainer.find('.pomo-table-row-expanded-container').remove();
+    }
 }
 
 $(window).on('load', function () {
