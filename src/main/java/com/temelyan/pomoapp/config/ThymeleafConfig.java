@@ -1,10 +1,11 @@
 package com.temelyan.pomoapp.config;
 
-import org.apache.commons.lang3.CharEncoding;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Description;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+
+import java.nio.charset.StandardCharsets;
 
 @Configuration
 public class ThymeleafConfig {
@@ -13,11 +14,11 @@ public class ThymeleafConfig {
     @Description("Thymeleaf template resolver")
     public ClassLoaderTemplateResolver templateResolver() {
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setPrefix("/templates");
+        templateResolver.setPrefix("/templates/");
         templateResolver.setSuffix(".html");
         templateResolver.setCacheable(false);
         templateResolver.setTemplateMode("HTML5");
-        templateResolver.setCharacterEncoding(CharEncoding.UTF_8);
+        templateResolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
         templateResolver.setOrder(1);
         return templateResolver;
     }
