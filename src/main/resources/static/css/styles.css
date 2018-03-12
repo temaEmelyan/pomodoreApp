@@ -130,6 +130,11 @@ body {
     padding-bottom: 10px;
 }
 
+.time {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
 .has-error {
     color: red;
 }
