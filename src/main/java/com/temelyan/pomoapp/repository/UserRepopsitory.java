@@ -14,4 +14,6 @@ public interface UserRepopsitory {
     User getByEmail(String email);
 
     List<User> getAll();
+
+    User findUserByResetToken(String token);
 }
