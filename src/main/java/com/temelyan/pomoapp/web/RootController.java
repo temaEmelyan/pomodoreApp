@@ -62,6 +62,7 @@ public class RootController extends AbstractUserController {
         if (bindingResult.hasErrors()) {
             return "profile";
         } else {
+            userTo.setPassword(userTo.getNewPassword());
             super.update(userTo, AuthorizedUser.id());
             AuthorizedUser.get().update(userTo);
             return "redirect:/";

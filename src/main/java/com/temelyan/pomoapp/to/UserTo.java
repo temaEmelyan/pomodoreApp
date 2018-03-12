@@ -1,9 +1,9 @@
 package com.temelyan.pomoapp.to;
 
 import com.temelyan.pomoapp.model.Project;
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Collections;
@@ -18,9 +18,8 @@ public class UserTo extends BaseTo implements Serializable {
 
     @Size(min = 1, max = 32, message = "length must between 1 and 32 characters")
     private String password;
-
+    private String newPassword;
     private String passwordConfirm;
-
     private List<Project> projects;
 
     public UserTo() {
@@ -35,6 +34,14 @@ public class UserTo extends BaseTo implements Serializable {
         this.email = email;
         this.password = password;
         this.projects = projects == null ? Collections.emptyList() : projects;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
 
     public String getPasswordConfirm() {
