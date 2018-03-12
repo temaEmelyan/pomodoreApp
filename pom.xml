@@ -4,14 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-
+    <groupId>com.temaEmelyan</groupId>
     <artifactId>pomodoreApp</artifactId>
-    <groupId>com.tEmelyean</groupId>
-    <packaging>war</packaging>
-
-    <version>1.0-SNAPSHOT</version>
-
-    <name>Pomodore Application</name>
+    <version>1.0</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -19,6 +14,7 @@
         <version>2.0.0.RELEASE</version>
         <relativePath/>
     </parent>
+    <name>pomodoreApp</name>
 
     <properties>
         <java.version>1.8</java.version>
@@ -65,7 +61,7 @@
 
         <dependency>
             <groupId>org.webjars</groupId>
-            <artifactId>webjars-locator</artifactId>
+            <artifactId>webjars-locator-core</artifactId>
             <version>RELEASE</version>
         </dependency>
 
@@ -102,24 +98,20 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <version>3.0.2</version>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
                         <executions>
                             <execution>
-                                <phase>package</phase>
                                 <goals>
-                                    <goal>copy</goal>
+                                    <goal>build-info</goal>
                                 </goals>
                                 <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>com.github.jsimone</groupId>
-                                            <artifactId>webapp-runner</artifactId>
-                                            <version>8.5.11.2</version>
-                                            <destFileName>webapp-runner.jar</destFileName>
-                                        </artifactItem>
-                                    </artifactItems>
+                                    <additionalProperties>
+                                        <encoding.source>${project.build.sourceEncoding}</encoding.source>
+                                        <encoding.reporting>${project.reporting.outputEncoding}</encoding.reporting>
+                                        <java.source>${maven.compiler.source}</java.source>
+                                        <java.target>${maven.compiler.target}</java.target>
+                                    </additionalProperties>
                                 </configuration>
                             </execution>
                         </executions>

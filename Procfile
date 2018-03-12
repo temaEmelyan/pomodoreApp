@@ -1,1 +1,1 @@
-web:    java $JAVA_OPTS -Dspring.profiles.active="heroku" -jar target/dependency/webapp-runner.jar --port $PORT target/*.war
+web: java $JAVA_OPTS -Dspring.profiles.active="heroku" -Dserver.port=$PORT -jar target/pomodoreApp-1.0.jar
