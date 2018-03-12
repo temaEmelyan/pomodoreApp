@@ -13,10 +13,9 @@
 
     <div th:replace="fragments/header :: header"></div>
 </head>
-
 <body>
 
-<div class="container center-block text-center">
+<div class="container login-register-container center-block text-center">
 
     <form method="POST" action="#" th:object="${userTo}" th:action="@{/registration}" class="form-signin">
         <h2 class="form-signin-heading">Create your account</h2>

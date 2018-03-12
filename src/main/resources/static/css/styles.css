@@ -39,6 +39,10 @@ body {
     text-align: center;
 }
 
+.login-register-container {
+    max-width: 500px;
+}
+
 #timer {
     color: #080;
     font-size: 50px;
@@ -124,4 +128,8 @@ body {
 .pomo-table-row-expanded-container {
     font-size: 13px;
     padding-bottom: 10px;
+}
+
+.has-error {
+    color: red;
 }

@@ -13,34 +13,17 @@
     <div th:replace="fragments/header :: header"></div>
 </head>
 <body>
-<div class="container">
+<div class="container login-register-container center-block text-center">
     <form method="POST" action="#" th:action="@{/login}" class="form-signin">
         <h2 class="form-heading">Log in</h2>
-
         <input name="username" type="text" class="form-control" placeholder="Username" autofocus="true"/>
         <input name="password" type="password" class="form-control" placeholder="Password"/>
         <input type="hidden" name="" th:name="${_csrf.parameterName}" value="" th:value="${_csrf.token}"/>
-
         <button class="btn btn-lg btn-primary btn-block" type="submit">Log In</button>
         <h4 class="text-center">
             <a href="registration.html" th:href="@{/registration}">Create an account</a>
         </h4>
-
     </form>
 </div>
-<div class="container">
-    <button type="submit" class="btn btn-lg btn-primary" onclick="setCredentials('user1@yandex.ru', 'password1')">
-        User1
-    </button>
-    <button type="submit" class="btn btn-lg btn-primary" onclick="setCredentials('user2@gmail.com', 'password1')">
-        User2
-    </button>
-</div>
-<script type="text/javascript">
-    function setCredentials(username, password) {
-        $('input[name="username"]').val(username);
-        $('input[name="password"]').val(password);
-    }
-</script>
 </body>
 </html>
