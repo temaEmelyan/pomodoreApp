@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.thymeleaf.org " lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -13,6 +12,7 @@
     <div th:replace="fragments/header :: header"></div>
 </head>
 <body>
+<div th:replace="fragments/navbar::navbar"></div>
 <div class="container login-register-container center-block text-center">
     <form method="POST" action="#" th:action="@{/login}" class="form-signin">
         <h2 class="form-heading">Log in</h2>
