@@ -9,6 +9,9 @@ import com.temelyan.pomoapp.validator.UserUpdateValidator;
 import com.temelyan.pomoapp.validator.UserValidator;
 import com.temelyan.pomoapp.web.user.AbstractUserController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -45,6 +48,10 @@ public class RootController extends AbstractUserController {
 
     @GetMapping(value = "/login")
     public String login() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!(auth instanceof AnonymousAuthenticationToken)) {
+            return "redirect:/";
+        }
         return "login";
     }
 
