@@ -44,12 +44,22 @@ public class UserServiceImpl implements UserService {
         return userRepopsitory.getByEmail(email.toLowerCase());
     }
 
+    @Override
+    public void update(User user) {
+        userRepopsitory.save(user);
+    }
+
     //    @CacheEvict(value = "users", allEntries = true)
     @Transactional
     @Override
     public void update(UserTo userTo) {
         User user = get(userTo.getId());
         userRepopsitory.save(prepareToSave(UserUtil.updateFromTo(user, userTo)));
+    }
+
+    @Override
+    public User findUserByResetToken(String token) {
+        return userRepopsitory.findUserByResetToken(token);
     }
 
     @Override

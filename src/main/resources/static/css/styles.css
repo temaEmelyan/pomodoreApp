@@ -87,6 +87,10 @@ body {
     border-radius: 50px;
 }
 
+#buttons button:focus {
+    outline: none;
+}
+
 #buttons button#shortBreak {
     background: #080;
 }

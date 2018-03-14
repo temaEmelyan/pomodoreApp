@@ -13,6 +13,8 @@ public interface UserService extends UserDetailsService {
 
     User get(int id);
 
+    void update(User user);
+
     void create(User user);
 
     List<User> getAll();
@@ -23,4 +25,6 @@ public interface UserService extends UserDetailsService {
     User loadByEmail(String email);
 
     User getWithProjects(int id);
+
+    User findUserByResetToken(String token);
 }

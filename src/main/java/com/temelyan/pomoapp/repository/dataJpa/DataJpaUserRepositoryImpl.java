@@ -12,8 +12,12 @@ import java.util.List;
 public class DataJpaUserRepositoryImpl implements UserRepopsitory {
     private static final Sort SORT_EMAIL = new Sort("email");
 
+    private final CrudUserRepository crudRepository;
+
     @Autowired
-    private CrudUserRepository crudRepository;
+    public DataJpaUserRepositoryImpl(CrudUserRepository crudRepository) {
+        this.crudRepository = crudRepository;
+    }
 
     @Override
     public User save(User user) {
@@ -33,6 +37,11 @@ public class DataJpaUserRepositoryImpl implements UserRepopsitory {
     @Override
     public User getByEmail(String email) {
         return crudRepository.getByEmail(email);
+    }
+
+    @Override
+    public User findUserByResetToken(String token) {
+        return crudRepository.findByResetToken(token);
     }
 
     @Override
