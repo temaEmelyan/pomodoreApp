@@ -12,6 +12,7 @@ let pomodoro = {
     seconds: 0,
     fillerHeight: 0,
     fillerIncrement: 0,
+    startedAt: null,
     interval: null,
     minutesDom: null,
     secondsDom: null,
@@ -19,6 +20,8 @@ let pomodoro = {
 
     originalMin: 25,
     originalSec: 0,
+    originalBreakMin: 5,
+    originalLongBreakMin: 25,
 
     init: function () {
         let self = this;
@@ -27,7 +30,7 @@ let pomodoro = {
         this.fillerDom = $('#filler');
         this.interval = setInterval(function () {
             self.intervalCallback.apply(self);
-        }, 1000 / timerSpeed);
+        }, 250 / timerSpeed);
 
         $('#work').click(function () {
             if (!self.pomodoroIsActive) {
@@ -38,15 +41,20 @@ let pomodoro = {
                 $('#work').text('Resume');
             } else if (!self.timerIsRunning) {
                 self.timerIsRunning = true;
+                self.startedAt = Date.now();
                 $('#work').text('Pause');
             }
         });
 
         $('#shortBreak').click(function () {
-            self.startShortBreak.apply(self);
+            if (!self.timerIsRunning) {
+                self.startShortBreak.apply(self);
+            }
         });
         $('#longBreak').click(function () {
-            self.startLongBreak.apply(self);
+            if (!self.timerIsRunning) {
+                self.startLongBreak.apply(self);
+            }
         });
         $('#stop').click(function () {
             self.stopTimer.apply(self);
@@ -70,20 +78,37 @@ let pomodoro = {
                 $('#minutes').html(pomodoro.originalMin);
             }
         });
+
+        $('#decreaseDurationBrake').click(function () {
+            if (!pomodoro.timerIsRunning) {
+                if (pomodoro.originalBreakMin > 0) {
+                    pomodoro.originalBreakMin--;
+                }
+                $('#durationBreak').html(pomodoro.originalBreakMin);
+            }
+        });
+
+        $('#increaseDurationBrake').click(function () {
+            if (!pomodoro.timerIsRunning) {
+                pomodoro.originalBreakMin++;
+                $('#durationBreak').html(pomodoro.originalBreakMin);
+            }
+        });
     },
 
-    resetVariables: function (mins, secs, timerIsRunning) {
+    resetVariables: function (mins, secs, isTimerRunning) {
         this.minutes = mins;
-        this.originalMin = mins;
+
         this.seconds = secs;
-        this.originalSec = secs;
-        this.timerIsRunning = timerIsRunning;
+
+        this.timerIsRunning = isTimerRunning;
         this.fillerIncrement = 200 / (this.minutes * 60);
         this.fillerHeight = 0;
+        this.startedAt = null;
     },
 
-    resetVariablesDefault: function (started) {
-        this.resetVariables(this.originalMin, this.originalSec, started);
+    resetVariablesDefault: function (isTimerRunning) {
+        this.resetVariables(this.originalMin, this.originalSec, isTimerRunning);
         $('#work').text('Work');
         this.dropDownActivate();
     },
@@ -95,11 +120,11 @@ let pomodoro = {
     },
 
     startShortBreak: function () {
-        this.resetVariables(5, 0, true);
+        this.resetVariables(this.originalBreakMin, 0, true);
     },
 
     startLongBreak: function () {
-        this.resetVariables(15, 0, true);
+        this.resetVariables(this.originalLongBreakMin, 0, true);
     },
 
     stopTimer: function () {
@@ -124,17 +149,24 @@ let pomodoro = {
         if (!this.timerIsRunning) {
             return false;
         }
-        if (this.seconds === 0) {
-            if (this.minutes === 0) {
-                this.timerComplete();
-                return;
-            }
-            this.seconds = 59;
-            this.minutes--;
-        } else {
-            this.seconds--;
+        if (this.startedAt == null) {
+            this.startedAt = Date.now();
         }
-        this.updateDom();
+        this.elapsedFromStart = Date.now() - this.startedAt;
+        if (this.elapsedFromStart > 1000) {
+            this.startedAt += 1000;
+            if (this.seconds === 0) {
+                if (this.minutes === 0) {
+                    this.timerComplete();
+                    return;
+                }
+                this.seconds = 59;
+                this.minutes--;
+            } else {
+                this.seconds--;
+            }
+            this.updateDom();
+        }
     },
 
     timerComplete: function () {
