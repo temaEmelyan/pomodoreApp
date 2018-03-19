@@ -16,8 +16,11 @@
 <div class="container login-register-container center-block text-center">
     <form method="POST" action="#" th:action="@{/login}" class="form-signin">
         <h2 class="form-heading">Log in</h2>
-        <input name="username" type="text" class="form-control" placeholder="Username" autofocus="autofocus"/>
-        <input name="password" type="password" class="form-control" placeholder="Password"/>
+        <span class="has-error" th:text="${errorMessage} "></span>
+        <input name="username" type="text" class="form-control" placeholder="Username"
+               th:autofocus="${username==null}" th:value="${username}"/>
+        <input name="password" type="password" class="form-control" placeholder="Password"
+               th:autofocus="${username!=null}"/>
         <input type="hidden" name="" th:name="${_csrf.parameterName}" value="" th:value="${_csrf.token}"/>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Log In</button>
         <h4 class="text-center">

@@ -37,6 +37,14 @@ public class PasswordController {
         return "forgotPassword";
     }
 
+    @PostMapping(value = "/fail")
+    public String fail(@RequestParam Map<String, String> params, Model model) {
+        model.addAttribute("username", params.getOrDefault("username", ""));
+        model.addAttribute("errorMessage", "Bad credentials");
+
+        return "login";
+    }
+
     @PostMapping(value = "/forgot")
     public String processForgotPasswordForm(@RequestParam("email") String userEmail, Model model, HttpServletRequest request) {
         User user = userService.loadByEmail(userEmail);
