@@ -90,7 +90,7 @@
 
     <profiles>
         <profile>
-            <id>postgres</id>
+            <id>develop</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
