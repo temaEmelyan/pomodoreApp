@@ -10,8 +10,10 @@ import java.util.List;
 @RequestMapping("/ajax/pomo/")
 public class PomoRestController extends AbstractPomoController {
     @PostMapping(path = "add")
-    public void addPomo(@RequestParam("length") int length, @RequestParam("projectId") int projectId) {
-        super.add(length, projectId);
+    public void addPomo(@RequestParam("length") int length,
+                        @RequestParam("projectId") int projectId,
+                        @RequestParam("clientTimeZone") int clientTimeZone) {
+        super.add(length, projectId, clientTimeZone);
     }
 
     @GetMapping(path = "get", produces = MediaType.APPLICATION_JSON_VALUE)

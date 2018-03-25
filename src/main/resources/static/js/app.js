@@ -4,6 +4,7 @@ const projectUrl = ajaxUrl + 'project/';
 const addProjectUrl = projectUrl + 'add';
 const getProjectsUrl = projectUrl + 'get';
 const timerSpeed = 1;
+const timeZoneOffset = -new Date().getTimezoneOffset() / 60;
 
 let pomodoro = {
     timerIsRunning: false,
@@ -306,7 +307,10 @@ let util = {
 
     addPomo: function (duration) {
         $.post({
-            url: addPomoUrl + '?length=' + duration + '&projectId=' + $('#projectsDropDown').val(),
+            url: addPomoUrl +
+            '?length=' + duration
+            + '&projectId=' + $('#projectsDropDown').val()
+            + '&clientTimeZone=' + timeZoneOffset,
             error: function (xhr, desc, err) {
                 console.log(xhr);
                 console.log('Details: ' + desc + '\nError:' + err);

@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -31,10 +33,21 @@ public abstract class AbstractPomoController {
         return pomoService.getAllForUser(userId);
     }
 
-    void add(int length, int projecId) {
+    void add(int length, int projecId, int clientTimeZone) {
         logger.info("add Pomo with the length {}", length);
-        LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        pomoService.add(new Pomo(now, length), projecId);
+
+        LocalDateTime serverTimeNow = LocalDateTime.now();
+
+        int serverTimeZone = ZoneOffset.systemDefault()
+                .getRules()
+                .getOffset(serverTimeNow)
+                .get(ChronoField.OFFSET_SECONDS) / 3600;
+
+        LocalDateTime clientsTime = serverTimeNow
+                .truncatedTo(ChronoUnit.SECONDS)
+                .plus(clientTimeZone - serverTimeZone, ChronoUnit.HOURS);
+
+        pomoService.add(new Pomo(clientsTime, length), projecId);
     }
 
     List<ProjectTo> getInDateRange(String from, String to) {
