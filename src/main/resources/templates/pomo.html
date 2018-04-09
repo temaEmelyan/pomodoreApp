@@ -93,6 +93,11 @@
     </div>
 </div>
 
+<audio id="myAudio">
+    <source src="../static/gong.wav" th:src="@{gong.wav}" type="audio/wav">
+    Your browser does not support the audio element.
+</audio>
+
 <div th:replace="fragments/footer :: footer"></div>
 <script src="../static/js/app.js" th:src="@{js/app.js}"></script>
 </body>

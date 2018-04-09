@@ -5,6 +5,7 @@ const addProjectUrl = projectUrl + 'add';
 const getProjectsUrl = projectUrl + 'get';
 const timerSpeed = 1;
 const timeZoneOffset = -new Date().getTimezoneOffset() / 60;
+const gongMusic = document.getElementById("myAudio");
 
 let pomodoro = {
     timerIsRunning: false,
@@ -306,6 +307,8 @@ let util = {
     },
 
     addPomo: function (duration) {
+        gongMusic.play();
+
         $.post({
             url: addPomoUrl +
             '?length=' + duration
