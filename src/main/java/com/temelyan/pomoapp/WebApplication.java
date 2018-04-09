@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class WebApplication {
 
     public static void main(String[] args) {
+        System.out.println("Env home folder is: " + System.getenv("HOME"));
         new SpringApplication(WebApplication.class).run(args);
     }
 }
