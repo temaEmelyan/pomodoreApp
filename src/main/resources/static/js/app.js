@@ -8,6 +8,7 @@ const timeZoneOffset = -new Date().getTimezoneOffset() / 60;
 const gongMusic = document.getElementById("myAudio");
 
 let pomodoro = {
+    shouldAddPomo: true,
     timerIsRunning: false,
     pomodoroIsActive: false,
     minutes: 0,
@@ -119,14 +120,17 @@ let pomodoro = {
         this.resetVariablesDefault(true);
         this.dropDownDeactivate();
         this.pomodoroIsActive = true;
+        this.shouldAddPomo = true;
     },
 
     startShortBreak: function () {
         this.resetVariables(this.originalBreakMin, 0, true);
+        this.shouldAddPomo = false;
     },
 
     startLongBreak: function () {
         this.resetVariables(this.originalLongBreakMin, 0, true);
+        this.shouldAddPomo = false;
     },
 
     stopTimer: function () {
@@ -175,7 +179,10 @@ let pomodoro = {
         this.timerIsRunning = false;
         this.pomodoroIsActive = false;
         this.fillerHeight = 0;
-        util.addPomo(this.originalMin * 60 + this.originalSec);
+        if (this.shouldAddPomo) {
+            util.addPomo(this.originalMin * 60 + this.originalSec);
+        }
+        util.playGongMusic();
         this.resetVariablesDefault(false);
         this.updateDom();
     },
@@ -306,9 +313,11 @@ let util = {
         return num;
     },
 
-    addPomo: function (duration) {
+    playGongMusic: function () {
         gongMusic.play();
+    },
 
+    addPomo: function (duration) {
         $.post({
             url: addPomoUrl +
             '?length=' + duration
