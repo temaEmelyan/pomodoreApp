@@ -38,6 +38,10 @@ let pomodoro = {
         }, 250 / timerSpeed);
 
         $('#work').click(function () {
+            if ($('#tasksDropDown').val() < 0) {
+                errorNoty("Please select a task");
+                return;
+            }
             if (!self.pomodoroIsActive) {
                 self.startWork.apply(self);
                 $('#work').text('Pause');
@@ -191,19 +195,21 @@ let pomodoro = {
 
     dropDownActivate: function () {
         $('#projectsDropDown').prop('disabled', false);
+        $('#tasksDropDown').prop('disabled', false);
     },
 
     dropDownDeactivate: function () {
         $('#projectsDropDown').prop('disabled', 'disabled');
+        $('#tasksDropDown').prop('disabled', 'disabled');
     }
 };
 
-let failedNote;
+let lastNoty;
 
 function closeNoty() {
-    if (failedNote) {
-        failedNote.close();
-        failedNote = undefined;
+    if (lastNoty) {
+        lastNoty.close();
+        lastNoty = undefined;
     }
 }
 
@@ -211,10 +217,36 @@ function failNoty(jqXHR) {
     closeNoty();
     // https://stackoverflow.com/questions/48229776
     let errorInfo = JSON.parse(jqXHR.responseText);
-    failedNote = new Noty({
-        text: "<span class='glyphicon glyphicon-exclamation-sign'></span> &nbsp;" + "error status" + ": " + jqXHR.status + "<br>" + errorInfo.type + "<br>" + errorInfo.detail,
+    lastNoty = new Noty({
+        text: "<span class='fas fa-exclamation-circle'></span>"
+        + "error status" + ": " + jqXHR.status + "<br>" + errorInfo.error + "<br>"
+        + errorInfo.message,
         type: "error",
         layout: "bottomRight"
+    }).show();
+}
+
+function errorNoty(text) {
+    closeNoty();
+    // https://stackoverflow.com/questions/48229776
+    lastNoty = new Noty({
+        text: "<i class='fas fa-exclamation-circle'></i>"
+        + ' ' + text,
+        type: "error",
+        layout: "bottomRight"
+    }).show();
+}
+
+function doneNoty(text) {
+    closeNoty();
+    // https://stackoverflow.com/questions/48229776
+    lastNoty = new Noty({
+        text: "<i class='fas fa-check-square'></i>"
+        + ' ' + text,
+        type: "success",
+        timeout: 3000,
+        layout: "bottomRight",
+        textSize: 50
     }).show();
 }
 
@@ -364,6 +396,7 @@ let util = {
             util.fetchProjects(nameOfTheNewProjectInput.val());
             nameOfTheNewProjectInput.val('');
             $('#addNewProjModal').modal('hide');
+            $('.optionTaskName').remove();
         });
     },
 
@@ -413,12 +446,15 @@ let util = {
         $.post({
             url: addPomoUrl +
             '?length=' + duration
-            + '&projectId=' + $('#projectsDropDown').val()
+            + '&taskId=' + $('#tasksDropDown').val()
             + '&clientTimeZone=' + timeZoneOffset,
             error: function (xhr, desc, err) {
                 console.log(xhr);
                 console.log('Details: ' + desc + '\nError:' + err);
-            }
+            },
+
+        }).done(function () {
+            doneNoty("New Pomo added!")
         });
     },
 };
