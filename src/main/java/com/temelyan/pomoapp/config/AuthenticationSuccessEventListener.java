@@ -16,18 +16,18 @@ import javax.servlet.http.HttpSession;
  */
 @Component
 public class AuthenticationSuccessEventListener implements ApplicationListener<AuthenticationSuccessEvent> {
-    private HttpServletRequest httpRequest;
+    private final HttpServletRequest httpRequest;
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    public void setHttpRequest(HttpServletRequest httpRequest) {
+    public AuthenticationSuccessEventListener(HttpServletRequest httpRequest) {
         this.httpRequest = httpRequest;
     }
 
     @Override
     public void onApplicationEvent(AuthenticationSuccessEvent e) {
         HttpSession session = httpRequest.getSession();
-        int interval = 60 * 60 * 24 * 7;//7 days
+        int interval = 60 * 60 * 24 * 3;//7 days
         session.setMaxInactiveInterval(interval);
         logger.info("session max inactive interval is: " + session.getMaxInactiveInterval());
     }

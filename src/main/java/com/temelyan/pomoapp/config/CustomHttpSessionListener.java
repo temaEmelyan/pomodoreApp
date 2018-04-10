@@ -8,6 +8,9 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Event listener class triggered when a session is created or destroyed
@@ -31,8 +34,15 @@ public class CustomHttpSessionListener implements HttpSessionListener {
 
     @Override
     public void sessionDestroyed(HttpSessionEvent event) {
-        logger.info("session {} destroyed. Session max inactive interval was {}"
+        logger.info("session {} destroyed. Session max inactive interval was {}, session was accessed last @{}"
                 , event.getSession()
-                , event.getSession().getMaxInactiveInterval());
+                , event.getSession().getMaxInactiveInterval()
+                , LocalDateTime.ofEpochSecond(
+                        event.getSession().getLastAccessedTime() / 1_000,
+                        0,
+                        ZoneOffset.UTC)
+                        .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                        .replace("T", " ")
+        );
     }
 }
