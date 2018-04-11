@@ -1,7 +1,6 @@
 package com.temelyan.pomoapp.model;
 
 import javax.persistence.*;
-import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -14,7 +13,7 @@ public class Project extends AbstractEntity {
     private String name;
 
     @OneToMany(mappedBy = "project")
-    private List<Pomo> pomo;
+    private List<Task> tasks;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -33,14 +32,6 @@ public class Project extends AbstractEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<Pomo> getPomo() {
-        return pomo == null ? Collections.emptyList() : pomo;
-    }
-
-    public void setPomo(List<Pomo> pomo) {
-        this.pomo = pomo;
     }
 
     public User getUser() {
