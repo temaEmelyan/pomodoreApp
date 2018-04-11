@@ -1,7 +1,6 @@
 package com.temelyan.pomoapp.web.project;
 
 import com.temelyan.pomoapp.model.Project;
-import com.temelyan.pomoapp.to.ProjectTo;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +19,7 @@ public class ProjectRestController extends AbstractProjectController {
     }
 
     @GetMapping(path = "get", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ProjectTo> getAllProjects() {
+    public List<Project> getAllProjects() {
         return super.getAll();
     }
 }

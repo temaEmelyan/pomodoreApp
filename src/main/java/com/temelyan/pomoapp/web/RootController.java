@@ -1,7 +1,7 @@
 package com.temelyan.pomoapp.web;
 
 import com.temelyan.pomoapp.AuthorizedUser;
-import com.temelyan.pomoapp.model.User;
+import com.temelyan.pomoapp.service.ProjectService;
 import com.temelyan.pomoapp.service.UserService;
 import com.temelyan.pomoapp.to.UserTo;
 import com.temelyan.pomoapp.util.UserUtil;
@@ -26,23 +26,26 @@ public class RootController extends AbstractUserController {
 
     private final UserValidator userValidator;
     private final UserService userService;
+    private final ProjectService projectService;
     private final UserUpdateValidator userUpdateValidator;
 
     @Autowired
     public RootController(UserValidator userValidator,
                           UserUpdateValidator userUpdateValidator,
-                          UserService userService
-    ) {
+                          UserService userService,
+                          ProjectService projectService) {
         this.userValidator = userValidator;
         this.userUpdateValidator = userUpdateValidator;
         this.userService = userService;
+        this.projectService = projectService;
     }
 
     @GetMapping("/")
     public String root(Model model) {
         logger.info("redirect from root to pomo.html");
-        User withProjects = userService.getWithProjects(AuthorizedUser.id());
-        model.addAttribute("user", withProjects);
+        UserTo userTo = AuthorizedUser.get().getUserTo();
+        userTo.setProjects(projectService.getAllForUser(userTo.getId()));
+        model.addAttribute("user", userTo);
         return "pomo";
     }
 

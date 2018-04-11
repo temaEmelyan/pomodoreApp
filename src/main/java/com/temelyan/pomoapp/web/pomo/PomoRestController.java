@@ -1,6 +1,6 @@
 package com.temelyan.pomoapp.web.pomo;
 
-import com.temelyan.pomoapp.to.ProjectTo;
+import com.temelyan.pomoapp.model.Pomo;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +17,7 @@ public class PomoRestController extends AbstractPomoController {
     }
 
     @GetMapping(path = "get", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ProjectTo> getPomosInDateRange(@RequestParam("from") String from, @RequestParam("to") String to) {
+    public List<Pomo> getPomosInDateRange(@RequestParam("from") String from, @RequestParam("to") String to) {
         return super.getInDateRange(from, to);
     }
 }

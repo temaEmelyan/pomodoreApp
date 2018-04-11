@@ -3,9 +3,6 @@ package com.temelyan.pomoapp.web.pomo;
 import com.temelyan.pomoapp.AuthorizedUser;
 import com.temelyan.pomoapp.model.Pomo;
 import com.temelyan.pomoapp.service.PomoService;
-import com.temelyan.pomoapp.service.ProjectService;
-import com.temelyan.pomoapp.to.PomoTo;
-import com.temelyan.pomoapp.to.ProjectTo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +21,6 @@ public abstract class AbstractPomoController {
     @Autowired
     private PomoService pomoService;
 
-    @Autowired
-    private ProjectService projectService;
-
-    List<PomoTo> getAll() {
-        int userId = AuthorizedUser.id();
-        logger.info("getAll for User {}", userId);
-        return pomoService.getAllForUser(userId);
-    }
-
     void add(int length, int projecId, int clientTimeZone) {
         logger.info("add Pomo with the length {}", length);
 
@@ -50,12 +38,12 @@ public abstract class AbstractPomoController {
         pomoService.add(new Pomo(clientsTime, length), projecId);
     }
 
-    List<ProjectTo> getInDateRange(String from, String to) {
+    List<Pomo> getInDateRange(String from, String to) {
         logger.info("fetching entries for between {} and {}", from, to);
 
         LocalDate fromDate = LocalDate.parse(from, DateTimeFormatter.ISO_LOCAL_DATE);
         LocalDate toDate = LocalDate.parse(to, DateTimeFormatter.ISO_LOCAL_DATE);
 
-        return projectService.getAllWithPomosInDateRange(fromDate, toDate, AuthorizedUser.id());
+        return pomoService.getAllForUserInDateRange(fromDate, toDate, AuthorizedUser.id());
     }
 }
