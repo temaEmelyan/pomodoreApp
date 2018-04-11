@@ -14,7 +14,8 @@ import java.util.List;
 public class ProjectRestController extends AbstractProjectController {
 
     @PostMapping(path = "add")
-    public void addProject(Project project) {
+    public void addProject(String name) {
+        Project project = new Project(name);
         super.create(project);
     }
 

@@ -20,7 +20,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
-@Sql(statements = {"DELETE FROM PROJECTS", "DELETE FROM USERS"})
+@Sql(statements = {"DELETE FROM POMOS", "DELETE FROM TASKS", "DELETE FROM PROJECTS", "DELETE FROM USERS"})
 @ActiveProfiles("test")
 @SpringBootTest
 public class UserRepositoryTests {

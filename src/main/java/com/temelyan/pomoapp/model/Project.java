@@ -1,6 +1,11 @@
 package com.temelyan.pomoapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,6 +15,9 @@ import java.util.Objects;
                 columnNames = {"name", "user_id"},
                 name = "project_unique_name_user"))
 public class Project extends AbstractEntity {
+    @NotBlank
+    @NotEmpty
+    @NotNull
     @Column(name = "name")
     private String name;
 
@@ -42,6 +50,7 @@ public class Project extends AbstractEntity {
         this.name = name;
     }
 
+    @JsonIgnore
     public User getUser() {
         return user;
     }

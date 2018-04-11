@@ -11,9 +11,9 @@ import java.util.List;
 public class PomoRestController extends AbstractPomoController {
     @PostMapping(path = "add")
     public void addPomo(@RequestParam("length") int length,
-                        @RequestParam("projectId") int projectId,
+                        @RequestParam("taskId") int taskId,
                         @RequestParam("clientTimeZone") int clientTimeZone) {
-        super.add(length, projectId, clientTimeZone);
+        super.add(length, taskId, clientTimeZone);
     }
 
     @GetMapping(path = "get", produces = MediaType.APPLICATION_JSON_VALUE)

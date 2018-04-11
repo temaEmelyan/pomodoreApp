@@ -10,19 +10,19 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "POMOS",
+        indexes = @Index(columnList = "finish"),
         uniqueConstraints = @UniqueConstraint(
                 columnNames = {"finish", "task_id"},
                 name = "pomos_unique_task_datetime"))
 public class Pomo extends AbstractEntity {
 
     @Column(name = "duration", nullable = false)
-    private
-    Integer duration;
+    private Integer duration;
 
     @Column(name = "finish", nullable = false)
     private LocalDateTime finish;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "task_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
