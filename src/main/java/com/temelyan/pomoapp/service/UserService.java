@@ -6,25 +6,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.util.List;
-
 public interface UserService extends UserDetailsService {
     void update(UserTo userTo);
-
-    User get(int id);
 
     void update(User user);
 
     void create(User user);
 
-    List<User> getAll();
-
     @Override
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 
     User loadByEmail(String email);
-
-    User getWithProjects(int id);
 
     User findUserByResetToken(String token);
 }

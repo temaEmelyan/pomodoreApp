@@ -3,15 +3,10 @@ package com.temelyan.pomoapp.repository.dataJpa;
 import com.temelyan.pomoapp.model.User;
 import com.temelyan.pomoapp.repository.UserRepopsitory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public class DataJpaUserRepositoryImpl implements UserRepopsitory {
-    private static final Sort SORT_EMAIL = new Sort("email");
-
     private final CrudUserRepository crudRepository;
 
     @Autowired
@@ -25,27 +20,17 @@ public class DataJpaUserRepositoryImpl implements UserRepopsitory {
     }
 
     @Override
-    public boolean delete(int id) {
-        return false;
-    }
-
-    @Override
     public User get(int id) {
-        return crudRepository.findById(id).orElse(null);
+        return crudRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 
     @Override
     public User getByEmail(String email) {
-        return crudRepository.getByEmail(email);
+        return crudRepository.getByEmail(email).orElseThrow(RuntimeException::new);
     }
 
     @Override
     public User findUserByResetToken(String token) {
-        return crudRepository.findByResetToken(token);
-    }
-
-    @Override
-    public List<User> getAll() {
-        return crudRepository.findAll(SORT_EMAIL);
+        return crudRepository.findByResetToken(token).orElseThrow(RuntimeException::new);
     }
 }
