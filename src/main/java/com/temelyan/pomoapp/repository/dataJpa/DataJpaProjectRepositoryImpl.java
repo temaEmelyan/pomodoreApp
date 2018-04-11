@@ -11,24 +11,18 @@ import java.util.List;
 public class DataJpaProjectRepositoryImpl implements ProjectRepository {
     private final CrudProjectRepository crudProjectRepository;
 
-    private final CrudUserRepository crudUserRepository;
-
     @Autowired
-    public DataJpaProjectRepositoryImpl(
-            CrudProjectRepository crudProjectRepository,
-            CrudUserRepository crudUserRepository
-    ) {
+    public DataJpaProjectRepositoryImpl(CrudProjectRepository crudProjectRepository) {
         this.crudProjectRepository = crudProjectRepository;
-        this.crudUserRepository = crudUserRepository;
-    }
-
-    @Override
-    public List<Project> getAll(Integer userId) {
-        return crudProjectRepository.findAllByUserOrderByName(crudUserRepository.getOne(userId));
     }
 
     @Override
     public Project save(Project project) {
         return crudProjectRepository.save(project);
+    }
+
+    @Override
+    public List<Project> getAllForUser(Integer userId) {
+        return crudProjectRepository.findAllByUserIdOrderByName(userId);
     }
 }
