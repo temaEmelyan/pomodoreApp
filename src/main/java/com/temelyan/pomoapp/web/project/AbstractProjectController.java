@@ -17,11 +17,8 @@ public abstract class AbstractProjectController {
     private ProjectService projectService;
 
     void create(Project project) {
-        int id = AuthorizedUser.id();
-        logger.info("creating new project {} for User with id", project, id);
-        User user = new User();
-        user.setId(id);
-        project.setUser(user);
+        project.setUser(new User(AuthorizedUser.get().getUserTo()));
+        logger.info("creating new project {} for User with id", project, project.getUser().getId());
         projectService.save(project);
     }
 

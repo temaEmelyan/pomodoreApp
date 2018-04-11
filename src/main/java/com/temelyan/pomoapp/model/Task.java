@@ -12,7 +12,7 @@ import java.util.Objects;
 public class Task extends AbstractEntity {
     private String name;
 
-    @OneToMany(mappedBy = "task")
+    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
     private List<Pomo> pomos;
 
     @ManyToOne
@@ -24,6 +24,11 @@ public class Task extends AbstractEntity {
 
     public Task(String name) {
         this.name = name;
+    }
+
+    public Task(String name, Project project) {
+        this.name = name;
+        this.project = project;
     }
 
     public String getName() {

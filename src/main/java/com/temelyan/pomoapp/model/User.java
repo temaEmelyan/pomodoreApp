@@ -1,14 +1,17 @@
 package com.temelyan.pomoapp.model;
 
 
+import com.temelyan.pomoapp.to.UserTo;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
-@Table(name = "USERS", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
+@Table(name = "USERS", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User extends AbstractEntity {
     @Email
     @NotBlank
@@ -33,6 +36,10 @@ public class User extends AbstractEntity {
         super(id);
         this.email = email;
         this.password = password;
+    }
+
+    public User(UserTo userTo) {
+        this(userTo.getId(), userTo.getEmail(), userTo.getPassword());
     }
 
     public String getResetToken() {
@@ -65,5 +72,22 @@ public class User extends AbstractEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        if (!super.equals(o)) return false;
+        User user = (User) o;
+        return Objects.equals(email, user.email) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(projects, user.projects) &&
+                Objects.equals(resetToken, user.resetToken);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), email, password, projects, resetToken);
     }
 }

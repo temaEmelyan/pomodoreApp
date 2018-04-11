@@ -7,6 +7,8 @@ public interface UserRepopsitory {
 
     User get(int id);
 
+    User getWithProjects(int id);
+
     User getByEmail(String email);
 
     User findUserByResetToken(String token);

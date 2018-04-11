@@ -20,10 +20,14 @@ public class DataJpaTaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public void add(String name, int projectId) {
-        Task task = new Task(name);
+    public Task save(Task task) {
+        return crudRepository.save(task);
+    }
+
+    @Override
+    public Task save(Task task, int projectId) {
         task.setProject(crudProjectRepository.getOne(projectId));
-        crudRepository.save(task);
+        return save(task);
     }
 
     @Override
