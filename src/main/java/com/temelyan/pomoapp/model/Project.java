@@ -41,4 +41,12 @@ public class Project extends AbstractEntity {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
 }

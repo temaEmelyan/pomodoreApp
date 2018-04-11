@@ -20,11 +20,13 @@ public class Task extends AbstractEntity {
     private Project project;
 
     public Task() {
-        super();
+    }
+
+    public Task(String name) {
+        this.name = name;
     }
 
     public String getName() {
-
         return name;
     }
 
