@@ -6,11 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface PomoRepository {
-    Pomo save(Pomo pomo, int projectId);
-
-    List<Pomo> getAll(int projectId);
-
-    List<Pomo> getAllForUser(int projectId);
+    Pomo save(Pomo pomo, int taskId);
 
     List<Pomo> getAllForUserInDateRange(LocalDate fromDate, LocalDate toDate, int userId);
 }

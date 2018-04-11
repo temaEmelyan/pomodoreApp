@@ -1,18 +1,12 @@
 package com.temelyan.pomoapp.service;
 
 import com.temelyan.pomoapp.model.Pomo;
-import com.temelyan.pomoapp.to.PomoTo;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface PomoService {
+    void add(Pomo pomo, int taskId);
 
-    void add(Pomo pomo, int projectId);
-
-    List<PomoTo> getAll(int projectId);
-
-    List<PomoTo> getAllForUser(int userId);
-
-    List<PomoTo> getAllForUserInDateRange(LocalDate fromDate, LocalDate toDate, int id);
+    List<Pomo> getAllForUserInDateRange(LocalDate fromDate, LocalDate toDate, int userId);
 }
