@@ -237,8 +237,7 @@ $(window).on('load', function () {
         if ($(this).val() === "-1") {
             $('#addNewProjModal').modal('show');
         } else {
-            let projectId = $(this).val();
-            fetchTasksForProject(projectId);//todo implement this
+            taskUtil.fetchTasks('');//todo implement this
         }
     });
 
@@ -274,7 +273,7 @@ $(window).on('load', function () {
     });
     taskNameInput.onkeydown = function (e) {
         if (e.keyCode === 13) {
-            util.saveTask();
+            taskUtil.saveTask();
         }
     }
 });
@@ -285,6 +284,70 @@ $(window).on('beforeunload', function (e) {
         this.resetVariablesDefault(false);
     }
 });
+
+//to autofocus on modals
+//https://stackoverflow.com/questions/14940423
+$('.modal').on('shown.bs.modal', function () {
+    $(this).find('[autofocus]').focus();
+});
+
+let taskUtil = {
+    saveTask: function () {
+        let serialize = $('#addTaskForm').serialize();
+        let projectId = $('#projectsDropDown').val();
+        serialize += '&projectId=' + projectId;
+        $.post({
+            url: addTaskUrl,
+            data: serialize,
+            error: function (xhr, desc, err) {
+                console.log(xhr);
+                console.log('Details: ' + desc + '\nError:' + err);
+            }
+        }).done(function () {
+            let nameOfTheNewTaskInput = $('#task-name');
+            taskUtil.fetchTasks(nameOfTheNewTaskInput.val());
+            nameOfTheNewTaskInput.val('');
+            $('#addNewTaskModal').modal('hide');
+        });
+    },
+
+    fetchTasks: function (nameOfTheNewTask) {
+        $.get({
+            url: getTasksUrl + '?projectId=' + $('#projectsDropDown').val(),
+            success: function (tasks) {
+                taskUtil.updateTaskSelectWithNewData(tasks, nameOfTheNewTask);
+            },
+            error: function (xhr, desc, err) {
+                console.log(xhr);
+                console.log('Details: ' + desc + '\nError:' + err);
+            }
+        });
+    },
+
+    updateTaskSelectWithNewData: function (data, nameOfTheNewTask) {
+        let dropDown = $('#tasksDropDown');
+        $('.optionTaskName').remove();
+        data.reverse().forEach(value => {
+            dropDown.prepend($('<option>', {
+                class: 'optionTaskName',
+                value: value.id,
+                text: value.name
+            }));
+        });
+
+        if (nameOfTheNewTask === '') {
+            $('.optionTaskName').filter(function () {
+                return $(this).index() === 0
+            }).attr('selected', 'selected')
+        } else {
+            $('.optionTaskName').filter(function () {
+                // noinspection EqualityComparisonWithCoercionJS
+                return $(this).html() == nameOfTheNewTask
+            }).attr('selected', 'selected')
+        }
+    },
+};
+
 
 let util = {
     saveProject: function () {
@@ -331,56 +394,6 @@ let util = {
         $('.optionProjectName').filter(function () {
             // noinspection EqualityComparisonWithCoercionJS
             return $(this).html() == nameOfTheNewProject
-        }).attr('selected', 'selected')
-    },
-
-
-    saveTask: function () {
-        let serialize = $('#addTaskForm').serialize();
-        let projectId = $('#projectsDropDown').val();
-        serialize += '&projectId=' + projectId;
-        $.post({
-            url: addTaskUrl,
-            data: serialize,
-            error: function (xhr, desc, err) {
-                console.log(xhr);
-                console.log('Details: ' + desc + '\nError:' + err);
-            }
-        }).done(function () {
-            let nameOfTheNewTaskInput = $('#task-name');
-            util.fetchTasks(nameOfTheNewTaskInput.val());
-            nameOfTheNewTaskInput.val('');
-            $('#addNewTaskModal').modal('hide');
-        });
-    },
-
-    fetchTasks: function (nameOfTheNewTask) {
-        $.get({
-            url: getTasksUrl + '?projectId=' + $('#projectsDropDown').val(),
-            success: function (tasks) {
-                util.updateTaskSelectWithNewData(tasks, nameOfTheNewTask);
-            },
-            error: function (xhr, desc, err) {
-                console.log(xhr);
-                console.log('Details: ' + desc + '\nError:' + err);
-            }
-        });
-    },
-
-    updateTaskSelectWithNewData: function (data, nameOfTheNewTask) {
-        let dropDown = $('#tasksDropDown');
-        $('.optionTaskName').remove();
-        data.reverse().forEach(value => {
-            dropDown.prepend($('<option>', {
-                class: 'optionTaskName',
-                value: value.id,
-                text: value.name
-            }));
-        });
-
-        $('.optionTaskName').filter(function () {
-            // noinspection EqualityComparisonWithCoercionJS
-            return $(this).html() == nameOfTheNewTask
         }).attr('selected', 'selected')
     },
 
