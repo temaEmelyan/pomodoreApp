@@ -1,8 +1,8 @@
 package com.temelyan.pomoapp.web;
 
 import com.temelyan.pomoapp.AuthorizedUser;
+import com.temelyan.pomoapp.model.Project;
 import com.temelyan.pomoapp.service.ProjectService;
-import com.temelyan.pomoapp.service.UserService;
 import com.temelyan.pomoapp.to.UserTo;
 import com.temelyan.pomoapp.util.UserUtil;
 import com.temelyan.pomoapp.validator.UserUpdateValidator;
@@ -20,23 +20,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.support.SessionStatus;
 
+import java.util.List;
+
 @SuppressWarnings("SameReturnValue")
 @Controller
 public class RootController extends AbstractUserController {
 
     private final UserValidator userValidator;
-    private final UserService userService;
     private final ProjectService projectService;
     private final UserUpdateValidator userUpdateValidator;
 
     @Autowired
     public RootController(UserValidator userValidator,
                           UserUpdateValidator userUpdateValidator,
-                          UserService userService,
                           ProjectService projectService) {
         this.userValidator = userValidator;
         this.userUpdateValidator = userUpdateValidator;
-        this.userService = userService;
         this.projectService = projectService;
     }
 
@@ -44,8 +43,10 @@ public class RootController extends AbstractUserController {
     public String root(Model model) {
         logger.info("redirect from root to pomo.html");
         UserTo userTo = AuthorizedUser.get().getUserTo();
-        userTo.setProjects(projectService.getAllForUser(userTo.getId()));
+        List<Project> allForUser = projectService.getAllForUser(userTo.getId());
+        userTo.setProjects(allForUser);
         model.addAttribute("user", userTo);
+        model.addAttribute("project", allForUser.get(0));
         return "pomo";
     }
 

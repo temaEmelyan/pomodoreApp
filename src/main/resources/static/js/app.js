@@ -3,6 +3,8 @@ const addPomoUrl = ajaxUrl + 'pomo/add';
 const projectUrl = ajaxUrl + 'project/';
 const addProjectUrl = projectUrl + 'add';
 const getProjectsUrl = projectUrl + 'get';
+const addTaskUrl = ajaxUrl + 'task/add';
+const getTasksUrl = ajaxUrl + 'task/get';
 const timerSpeed = 1;
 const timeZoneOffset = -new Date().getTimezoneOffset() / 60;
 const gongMusic = document.getElementById("myAudio");
@@ -223,12 +225,6 @@ $(window).on('load', function () {
         failNoty(jqXHR);
     });
 
-    $('#projectsDropDown').change(function () {
-        if ($(this).val() === "-1") {
-            $('#addNewProjModal').modal('show');
-        }
-    });
-
     $(function () {
         let token = $("meta[name='_csrf']").attr("content");
         let header = $("meta[name='_csrf_header']").attr("content");
@@ -237,16 +233,48 @@ $(window).on('load', function () {
         });
     });
 
+    $('#projectsDropDown').change(function () {
+        if ($(this).val() === "-1") {
+            $('#addNewProjModal').modal('show');
+        } else {
+            let projectId = $(this).val();
+            fetchTasksForProject(projectId);//todo implement this
+        }
+    });
+
+    let $tasksDropDown = $('#tasksDropDown');
+    $tasksDropDown.change(function () {
+        if ($(this).val() === "-1") {
+            $('#addNewTaskModal').modal('show');
+        }
+    });
+    $tasksDropDown.click(function () {
+        if ($(this).val() === "-1") {
+            $('#addNewTaskModal').modal('show');
+        }
+    });
+
     let projectNameInput = $('#project-name')[0];
     projectNameInput.addEventListener('keypress', function (event) {
         if (event.keyCode === 13) {
             event.preventDefault();
         }
     });
-
     projectNameInput.onkeydown = function (e) {
         if (e.keyCode === 13) {
             util.saveProject();
+        }
+    };
+
+    let taskNameInput = $('#task-name')[0];
+    taskNameInput.addEventListener('keypress', function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+        }
+    });
+    taskNameInput.onkeydown = function (e) {
+        if (e.keyCode === 13) {
+            util.saveTask();
         }
     }
 });
@@ -276,11 +304,11 @@ let util = {
         });
     },
 
-    fetchProjects: function (nameOfTheNewProject) {
+    fetchProjects: function (nameOfTheNewProjectInput) {
         $.get({
             url: getProjectsUrl,
             success: function (projects) {
-                util.updateSelectWithNewData(projects, nameOfTheNewProject);
+                util.updateProjectSelectWithNewData(projects, nameOfTheNewProjectInput);
             },
             error: function (xhr, desc, err) {
                 console.log(xhr);
@@ -289,7 +317,7 @@ let util = {
         });
     },
 
-    updateSelectWithNewData: function (data, nameOfTheNewProject) {
+    updateProjectSelectWithNewData: function (data, nameOfTheNewProject) {
         let dropDown = $('#projectsDropDown');
         $('.optionProjectName').remove();
         data.reverse().forEach(value => {
@@ -305,6 +333,57 @@ let util = {
             return $(this).html() == nameOfTheNewProject
         }).attr('selected', 'selected')
     },
+
+
+    saveTask: function () {
+        let serialize = $('#addTaskForm').serialize();
+        let projectId = $('#projectsDropDown').val();
+        serialize += '&projectId=' + projectId;
+        $.post({
+            url: addTaskUrl,
+            data: serialize,
+            error: function (xhr, desc, err) {
+                console.log(xhr);
+                console.log('Details: ' + desc + '\nError:' + err);
+            }
+        }).done(function () {
+            let nameOfTheNewTaskInput = $('#task-name');
+            util.fetchTasks(nameOfTheNewTaskInput.val());
+            nameOfTheNewTaskInput.val('');
+            $('#addNewTaskModal').modal('hide');
+        });
+    },
+
+    fetchTasks: function (nameOfTheNewTask) {
+        $.get({
+            url: getTasksUrl + '?projectId=' + $('#projectsDropDown').val(),
+            success: function (tasks) {
+                util.updateTaskSelectWithNewData(tasks, nameOfTheNewTask);
+            },
+            error: function (xhr, desc, err) {
+                console.log(xhr);
+                console.log('Details: ' + desc + '\nError:' + err);
+            }
+        });
+    },
+
+    updateTaskSelectWithNewData: function (data, nameOfTheNewTask) {
+        let dropDown = $('#tasksDropDown');
+        $('.optionTaskName').remove();
+        data.reverse().forEach(value => {
+            dropDown.prepend($('<option>', {
+                class: 'optionTaskName',
+                value: value.id,
+                text: value.name
+            }));
+        });
+
+        $('.optionTaskName').filter(function () {
+            // noinspection EqualityComparisonWithCoercionJS
+            return $(this).html() == nameOfTheNewTask
+        }).attr('selected', 'selected')
+    },
+
 
     toDoubleDigit: function (num) {
         if (num < 10) {
