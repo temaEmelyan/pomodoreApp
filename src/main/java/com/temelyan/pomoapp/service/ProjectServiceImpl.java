@@ -22,6 +22,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public Project save(Project project, int userId) {
+        return projectRepository.save(project, userId);
+    }
+
+    @Override
     public List<Project> getAllForUser(int userId) {
         return projectRepository.getAllForUser(userId);
     }

@@ -29,7 +29,6 @@ public class CustomHttpSessionListener implements HttpSessionListener {
 
     @Override
     public void sessionCreated(HttpSessionEvent se) {
-        logger.info("new session created {}", se.getSession());
     }
 
     @Override

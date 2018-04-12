@@ -5,6 +5,8 @@ import com.temelyan.pomoapp.model.User;
 import com.temelyan.pomoapp.repository.ProjectRepository;
 import com.temelyan.pomoapp.repository.UserRepopsitory;
 import com.temelyan.pomoapp.util.exception.NotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -13,16 +15,18 @@ import java.util.List;
 @Repository
 public class DataJpaUserRepositoryImpl implements UserRepopsitory {
     private final CrudUserRepository crudRepository;
-    @Autowired
-    private ProjectRepository projectRepository;
+    private final ProjectRepository projectRepository;
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    public DataJpaUserRepositoryImpl(CrudUserRepository crudRepository) {
+    public DataJpaUserRepositoryImpl(CrudUserRepository crudRepository, ProjectRepository projectRepository) {
         this.crudRepository = crudRepository;
+        this.projectRepository = projectRepository;
     }
 
     @Override
     public User save(User user) {
+        logger.info("Saving user {} to the database", user);
         return crudRepository.save(user);
     }
 

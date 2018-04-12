@@ -1,5 +1,6 @@
 package com.temelyan.pomoapp.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -22,6 +23,7 @@ public class Pomo extends AbstractEntity {
     @Column(name = "finish", nullable = false)
     private LocalDateTime finish;
 
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "task_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)

@@ -22,9 +22,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
@@ -110,5 +108,25 @@ public class PomoRepositoryTests {
         Assertions.assertThat(
                 allForUserInDateRange.get(0).getTask().getProject().getUser())
                 .isEqualToIgnoringGivenFields(user, "projects");
+    }
+
+    @Test
+    public void test2() {
+        resetTimeInstance();
+        User save = userRepopsitory.save(new User(null, "test@gmail.com", "password"));
+        Project work = projectRepository.save(new Project("work"), save.getId());
+        Task workTask = taskRepository.save(new Task("work task"), work.getId());
+        LocalDateTime nextTimeInstance = getNextTimeInstance();
+        List<Pomo> pomos = new ArrayList<>();
+        pomos.add(pomoRepository.save(new Pomo(nextTimeInstance, 60), workTask.getId()));
+        pomos.add(pomoRepository.save(new Pomo(nextTimeInstance.plusMinutes(1), 60), workTask.getId()));
+        List<Pomo> allForUserInDateRange = pomoRepository.getAllForUserInDateRange(
+                nextTimeInstance.toLocalDate(),
+                nextTimeInstance.toLocalDate(),
+                save.getId());
+
+        pomos.sort(Comparator.comparing(Pomo::getFinish).reversed());
+
+        Assertions.assertThat(pomos).isEqualTo(allForUserInDateRange);
     }
 }

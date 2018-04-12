@@ -81,7 +81,6 @@ public class UserTo extends BaseTo implements Serializable {
         return "UserTo{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
                 '}';
     }
 }

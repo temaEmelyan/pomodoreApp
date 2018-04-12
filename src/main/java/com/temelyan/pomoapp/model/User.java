@@ -1,6 +1,7 @@
 package com.temelyan.pomoapp.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.temelyan.pomoapp.to.UserTo;
 
 import javax.persistence.*;
@@ -23,6 +24,7 @@ public class User extends AbstractEntity {
     @Size(min = 1)
     private String password;
 
+    @JsonBackReference
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<Project> projects;
 
@@ -89,5 +91,19 @@ public class User extends AbstractEntity {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), email, password, projects, resetToken);
+    }
+
+    String shallowToString() {
+        return "User{" +
+                "email='" + email + '\'' +
+                "} " + super.toString();
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "email='" + email + '\'' +
+                ", projects=" + projects +
+                "} " + super.toString();
     }
 }

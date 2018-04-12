@@ -4,27 +4,34 @@ import com.temelyan.pomoapp.AuthorizedUser;
 import com.temelyan.pomoapp.model.Project;
 import com.temelyan.pomoapp.model.Task;
 import com.temelyan.pomoapp.model.User;
+import com.temelyan.pomoapp.repository.ProjectRepository;
+import com.temelyan.pomoapp.repository.TaskRepository;
 import com.temelyan.pomoapp.repository.UserRepopsitory;
 import com.temelyan.pomoapp.to.UserTo;
 import com.temelyan.pomoapp.util.UserUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-
 import static com.temelyan.pomoapp.util.UserUtil.prepareToSave;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
-
     private final UserRepopsitory userRepopsitory;
+    private final ProjectRepository projectRepository;
+    private final TaskRepository taskRepository;
+
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    public UserServiceImpl(UserRepopsitory userRepopsitory) {
+    public UserServiceImpl(UserRepopsitory userRepopsitory, ProjectRepository projectRepository, TaskRepository taskRepository) {
         this.userRepopsitory = userRepopsitory;
+        this.projectRepository = projectRepository;
+        this.taskRepository = taskRepository;
     }
 
     @Override
@@ -42,15 +49,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(User user) {
-        userRepopsitory.save(user);
+    public User update(User user) {
+        return userRepopsitory.save(user);
     }
 
     @Transactional
     @Override
-    public void update(UserTo userTo) {
+    public User update(UserTo userTo) {
         User user = get(userTo.getId());
-        userRepopsitory.save(prepareToSave(UserUtil.updateFromTo(user, userTo)));
+        return userRepopsitory.save(prepareToSave(UserUtil.updateFromTo(user, userTo)));
     }
 
     @Override
@@ -59,14 +66,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void create(User user) {
-        Project project = new Project("Work");
-        project.setUser(user);
-        user.setProjects(Collections.singletonList(project));
-        Task task = new Task("Do work");
-        task.setProject(project);
-        project.setTasks(Collections.singletonList(task));
+    public User create(User user) {
         userRepopsitory.save(prepareToSave(user));
+        Project project = new Project("Work");
+        projectRepository.save(project, user.getId());
+        Task task = new Task("Do work");
+        taskRepository.save(task, project.getId());
+        logger.info("New user {} created", user);
+        return user;
     }
 
     private User get(int id) {
