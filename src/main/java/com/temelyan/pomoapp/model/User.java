@@ -15,7 +15,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "USERS",
         uniqueConstraints = @UniqueConstraint(columnNames = "email"),
-        indexes = @Index(columnList = "id", unique = true))
+        indexes = {@Index(columnList = "id", unique = true),
+                @Index(columnList = "email", unique = true)})
 public class User extends AbstractEntity {
     @Email
     @NotBlank

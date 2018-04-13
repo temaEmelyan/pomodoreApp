@@ -2,6 +2,7 @@ package com.temelyan.pomoapp.repository.dataJpa;
 
 import com.temelyan.pomoapp.model.Project;
 import com.temelyan.pomoapp.model.User;
+import com.temelyan.pomoapp.repository.ProjectRepository;
 import com.temelyan.pomoapp.repository.UserRepopsitory;
 import com.temelyan.pomoapp.util.exception.NotFoundException;
 import org.assertj.core.api.Assertions;
@@ -27,6 +28,8 @@ public class UserRepositoryTests {
 
     @Autowired
     private UserRepopsitory userRepository;
+    @Autowired
+    private ProjectRepository projectRepository;
 
     private static void assertMatch(User one, User another) {
         Assertions.assertThat(one)
@@ -80,17 +83,22 @@ public class UserRepositoryTests {
     }
 
     @Test
-    public void test5() {
+    public void saveUserSaveProject_testGetUserWithProjects() {
         String email = "test@gmail.com";
         User user = new User(null, email, "password");
 
-        Project project = new Project(null, "Work", Collections.emptyList(), user);
-        Project project1 = new Project(null, "PhD", Collections.emptyList(), user);
-        Project project2 = new Project(null, "Paper", Collections.emptyList(), user);
+        Project p0 = new Project(null, "Work", Collections.emptyList(), user);
+        Project p1 = new Project(null, "PhD", Collections.emptyList(), user);
+        Project p2 = new Project(null, "Paper", Collections.emptyList(), user);
+        Project p3 = new Project(null, "Paper2", Collections.emptyList(), user);
+        Project p4 = new Project(null, "Paper3", Collections.emptyList(), user);
 
-        user.setProjects(Arrays.asList(project, project1, project2));
+        user.setProjects(Arrays.asList(p0, p1, p2, p3, p4));
 
         userRepository.save(user);
+
+        user.getProjects().forEach(p -> projectRepository.save(p, p.getUser().getId()));
+
         User one = userRepository.getWithProjects(user.getId());
         assertMatch(one, user);
 
