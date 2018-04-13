@@ -13,7 +13,9 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "USERS", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+@Table(name = "USERS",
+        uniqueConstraints = @UniqueConstraint(columnNames = "email"),
+        indexes = @Index(columnList = "id", unique = true))
 public class User extends AbstractEntity {
     @Email
     @NotBlank
@@ -27,7 +29,7 @@ public class User extends AbstractEntity {
     private String password;
 
     @JsonBackReference
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.PERSIST)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Project> projects;
 
     @Column(name = "reset_token")

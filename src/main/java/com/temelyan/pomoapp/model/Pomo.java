@@ -1,8 +1,6 @@
 package com.temelyan.pomoapp.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,10 +9,11 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "POMOS",
-        indexes = @Index(columnList = "finish"),
         uniqueConstraints = @UniqueConstraint(
                 columnNames = {"finish", "task_id"},
-                name = "pomos_unique_task_datetime"))
+                name = "pomos_unique_task_datetime"),
+        indexes = {@Index(columnList = "finish"),
+                @Index(columnList = "task_id, id", unique = true)})
 public class Pomo extends AbstractEntity {
 
     @Column(name = "duration", nullable = false)
@@ -26,7 +25,6 @@ public class Pomo extends AbstractEntity {
     @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "task_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     private Task task;
 

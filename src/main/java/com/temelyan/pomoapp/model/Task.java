@@ -11,7 +11,8 @@ import java.util.Objects;
 @Table(name = "TASKS",
         uniqueConstraints = @UniqueConstraint(
                 columnNames = {"name", "project_id"},
-                name = "task_unique_name_project"))
+                name = "task_unique_name_project"),
+        indexes = @Index(columnList = "project_id, id", unique = true))
 public class Task extends AbstractEntity {
     private String name;
 
