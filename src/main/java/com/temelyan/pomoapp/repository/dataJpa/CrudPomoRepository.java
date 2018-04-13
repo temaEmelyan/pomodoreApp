@@ -12,9 +12,10 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface CrudPomoRepository extends JpaRepository<Pomo, Integer> {
 
-    @Query("SELECT p FROM Pomo p WHERE (p.task.project.user.id=:userId) " +
-            "AND (p.finish BETWEEN :from_date AND :to) ORDER BY p.task.project.name, p.finish DESC")
+    @Query("SELECT p FROM Pomo p WHERE (p.task.project.user.id=:user_id) " +
+            "AND (p.finish BETWEEN :from_date AND :to) " +
+            "ORDER BY p.task.project.name, p.task.name, p.finish DESC")
     List<Pomo> getAllForUserInDateRange(@Param("from_date") LocalDateTime fromDate,
                                         @Param("to") LocalDateTime toDate,
-                                        @Param("userId") int userId);
+                                        @Param("user_id") int userId);
 }

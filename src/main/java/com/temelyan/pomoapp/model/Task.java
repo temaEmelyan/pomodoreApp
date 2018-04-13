@@ -66,14 +66,18 @@ public class Task extends AbstractEntity {
         if (!(o instanceof Task)) return false;
         if (!super.equals(o)) return false;
         Task task = (Task) o;
-        return Objects.equals(name, task.name) &&
-                Objects.equals(pomos, task.pomos) &&
-                Objects.equals(project.getId(), task.project.getId());
+        return Objects.equals(name, task.name);
     }
 
     @Override
     public int hashCode() {
+        return Objects.hash(super.hashCode(), name);
+    }
 
-        return Objects.hash(super.hashCode(), name, pomos, project.getId());
+    @Override
+    public String toString() {
+        return "Task{" +
+                "name='" + name + '\'' +
+                "} " + super.toString();
     }
 }

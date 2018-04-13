@@ -74,12 +74,19 @@ public class Pomo extends AbstractEntity {
         if (!super.equals(o)) return false;
         Pomo pomo = (Pomo) o;
         return Objects.equals(duration, pomo.duration) &&
-                Objects.equals(finish, pomo.finish) &&
-                Objects.equals(task.getId(), pomo.task.getId());
+                Objects.equals(finish, pomo.finish);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), duration, finish, task.getId());
+        return Objects.hash(super.hashCode(), duration, finish);
+    }
+
+    @Override
+    public String toString() {
+        return "Pomo{" +
+                "duration=" + duration +
+                ", finish=" + finish +
+                "} " + super.toString();
     }
 }

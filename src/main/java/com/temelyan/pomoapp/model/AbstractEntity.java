@@ -32,11 +32,6 @@ public abstract class AbstractEntity implements HasId {
     }
 
     @Override
-    public String toString() {
-        return String.format("%s id = %s", getClass().getSimpleName(), getId());
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof AbstractEntity)) return false;
@@ -47,5 +42,10 @@ public abstract class AbstractEntity implements HasId {
     @Override
     public int hashCode() {
         return (getId() == null) ? 0 : getId();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s id = %s", getClass().getSimpleName(), getId());
     }
 }

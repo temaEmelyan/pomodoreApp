@@ -75,22 +75,18 @@ public class Project extends AbstractEntity {
         if (!(o instanceof Project)) return false;
         if (!super.equals(o)) return false;
         Project project = (Project) o;
-        return Objects.equals(name, project.name) &&
-                Objects.equals(tasks, project.tasks) &&
-                Objects.equals(user.getId(), project.user.getId());
+        return Objects.equals(name, project.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, tasks, user.getId());
+        return Objects.hash(super.hashCode(), name);
     }
 
     @Override
     public String toString() {
         return "Project{" +
                 "name='" + name + '\'' +
-                ", tasks=" + tasks +
-                ", user=" + (user == null ? "null" : user.shallowToString()) +
                 "} " + super.toString();
     }
 }
