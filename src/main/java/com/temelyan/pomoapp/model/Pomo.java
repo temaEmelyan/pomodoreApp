@@ -23,7 +23,7 @@ public class Pomo extends AbstractEntity {
     private LocalDateTime finish;
 
     @JsonManagedReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_id", nullable = false)
     @NotNull
     private Task task;

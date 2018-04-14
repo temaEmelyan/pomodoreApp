@@ -21,7 +21,7 @@ public class Task extends AbstractEntity {
     private List<Pomo> pomos;
 
     @JsonManagedReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
