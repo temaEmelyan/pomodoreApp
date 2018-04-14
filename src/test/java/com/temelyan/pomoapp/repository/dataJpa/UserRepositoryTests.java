@@ -17,8 +17,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @RunWith(SpringRunner.class)
 @Sql(statements = {"DELETE FROM POMOS", "DELETE FROM TASKS", "DELETE FROM PROJECTS", "DELETE FROM USERS"})
@@ -66,8 +66,8 @@ public class UserRepositoryTests {
     public void test3() {
         String email = "test@gmail.com";
         User user = new User(null, email, "password");
-        Project project = new Project(null, "Work", Collections.emptyList(), user);
-        user.setProjects(Collections.singletonList(project));
+        Project project = new Project(null, "Work", Collections.emptySet(), user);
+        user.setProjects(Collections.singleton(project));
         userRepository.save(user);
         User one = userRepository.get(user.getId());
         assertMatch(one, user);
@@ -87,13 +87,13 @@ public class UserRepositoryTests {
         String email = "test@gmail.com";
         User user = new User(null, email, "password");
 
-        Project p0 = new Project(null, "Work", Collections.emptyList(), user);
-        Project p1 = new Project(null, "PhD", Collections.emptyList(), user);
-        Project p2 = new Project(null, "Paper", Collections.emptyList(), user);
-        Project p3 = new Project(null, "Paper2", Collections.emptyList(), user);
-        Project p4 = new Project(null, "Paper3", Collections.emptyList(), user);
+        Project p0 = new Project(null, "Work", Collections.emptySet(), user);
+        Project p1 = new Project(null, "PhD", Collections.emptySet(), user);
+        Project p2 = new Project(null, "Paper", Collections.emptySet(), user);
+        Project p3 = new Project(null, "Paper2", Collections.emptySet(), user);
+        Project p4 = new Project(null, "Paper3", Collections.emptySet(), user);
 
-        user.setProjects(Arrays.asList(p0, p1, p2, p3, p4));
+        user.setProjects(new HashSet<>(Arrays.asList(p0, p1, p2, p3, p4)));
 
         userRepository.save(user);
 
@@ -102,13 +102,11 @@ public class UserRepositoryTests {
         User one = userRepository.getWithProjects(user.getId());
         assertMatch(one, user);
 
-        List<Project> projects = one.getProjects();
-        List<Project> projects1 = user.getProjects();
+        Set<Project> projects = one.getProjects();
+        Set<Project> projects1 = user.getProjects();
 
-        projects1.sort(Comparator.comparing(Project::getName));
-
-        Assertions.assertThat(projects)
+        Assertions.assertThat(new HashSet<>(projects))
                 .usingElementComparatorIgnoringFields("tasks", "user")
-                .isEqualTo(projects1);
+                .isEqualTo(new HashSet<>(projects1));
     }
 }
