@@ -5,7 +5,7 @@ import com.temelyan.pomoapp.to.UserTo;
 
 public class UserUtil {
     public static UserTo asTo(User user) {
-        return new UserTo(user.getId(), user.getEmail(), user.getPassword(), user.getProjects());
+        return new UserTo(user.getId(), user.getEmail(), user.getPassword());
     }
 
     public static User updateFromTo(User user, UserTo userTo) {

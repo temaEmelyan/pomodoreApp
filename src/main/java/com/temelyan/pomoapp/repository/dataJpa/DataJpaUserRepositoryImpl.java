@@ -8,10 +8,10 @@ import com.temelyan.pomoapp.util.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.util.Set;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Repository
 public class DataJpaUserRepositoryImpl implements UserRepopsitory {
