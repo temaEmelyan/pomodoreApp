@@ -1,6 +1,7 @@
 package com.temelyan.pomoapp.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -15,6 +16,7 @@ import java.util.Set;
                 columnNames = {"name", "user_id"},
                 name = "project_unique_name_user"),
         indexes = @Index(columnList = "user_id, id", unique = true))
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Project extends AbstractEntity {
     @NotBlank
     @NotEmpty

@@ -1,6 +1,7 @@
 package com.temelyan.pomoapp.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -12,6 +13,7 @@ import java.util.Set;
                 columnNames = {"name", "project_id"},
                 name = "task_unique_name_project"),
         indexes = @Index(columnList = "project_id, id", unique = true))
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Task extends AbstractEntity {
     private String name;
 

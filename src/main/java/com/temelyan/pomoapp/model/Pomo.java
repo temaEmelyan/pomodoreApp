@@ -1,6 +1,7 @@
 package com.temelyan.pomoapp.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,6 +15,7 @@ import java.util.Objects;
                 name = "pomos_unique_task_datetime"),
         indexes = {@Index(columnList = "finish"),
                 @Index(columnList = "task_id, id", unique = true)})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Pomo extends AbstractEntity {
 
     @Column(name = "duration", nullable = false)
