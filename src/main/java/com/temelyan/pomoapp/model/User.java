@@ -9,8 +9,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "USERS",
@@ -31,7 +31,7 @@ public class User extends AbstractEntity {
 
     @JsonBackReference
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private List<Project> projects;
+    private Set<Project> projects;
 
     @Column(name = "reset_token")
     @JsonIgnore
@@ -66,11 +66,11 @@ public class User extends AbstractEntity {
         this.email = email;
     }
 
-    public List<Project> getProjects() {
+    public Set<Project> getProjects() {
         return projects;
     }
 
-    public void setProjects(List<Project> projects) {
+    public void setProjects(Set<Project> projects) {
         this.projects = projects;
     }
 
@@ -88,14 +88,12 @@ public class User extends AbstractEntity {
         if (!(o instanceof User)) return false;
         if (!super.equals(o)) return false;
         User user = (User) o;
-        return Objects.equals(email, user.email) &&
-                Objects.equals(password, user.password) &&
-                Objects.equals(resetToken, user.resetToken);
+        return Objects.equals(email, user.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), email, password, resetToken);
+        return Objects.hash(super.hashCode(), email);
     }
 
     @Override

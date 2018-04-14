@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "TASKS",
@@ -18,7 +18,7 @@ public class Task extends AbstractEntity {
 
     @JsonBackReference
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
-    private List<Pomo> pomos;
+    private Set<Pomo> pomos;
 
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
@@ -45,11 +45,11 @@ public class Task extends AbstractEntity {
         this.name = name;
     }
 
-    public List<Pomo> getPomos() {
+    public Set<Pomo> getPomos() {
         return pomos;
     }
 
-    public void setPomos(List<Pomo> pomos) {
+    public void setPomos(Set<Pomo> pomos) {
         this.pomos = pomos;
     }
 

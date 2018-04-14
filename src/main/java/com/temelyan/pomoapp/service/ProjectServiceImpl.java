@@ -5,7 +5,7 @@ import com.temelyan.pomoapp.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Set;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -27,7 +27,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<Project> getAllForUser(int userId) {
+    public Set<Project> getAllForUser(int userId) {
         return projectRepository.getAllForUser(userId);
     }
 }

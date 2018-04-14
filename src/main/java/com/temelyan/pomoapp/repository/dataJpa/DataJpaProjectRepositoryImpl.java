@@ -5,7 +5,7 @@ import com.temelyan.pomoapp.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Set;
 
 @Repository
 public class DataJpaProjectRepositoryImpl implements ProjectRepository {
@@ -30,7 +30,7 @@ public class DataJpaProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public List<Project> getAllForUser(Integer userId) {
+    public Set<Project> getAllForUser(Integer userId) {
         return crudProjectRepository.findAllByUserIdOrderByName(userId);
     }
 }

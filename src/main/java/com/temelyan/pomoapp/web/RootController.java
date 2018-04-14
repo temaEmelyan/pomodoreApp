@@ -20,7 +20,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.support.SessionStatus;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
 
 @SuppressWarnings("SameReturnValue")
 @Controller
@@ -43,10 +44,10 @@ public class RootController extends AbstractUserController {
     public String root(Model model) {
         logger.info("redirect from root to pomo.html");
         UserTo userTo = AuthorizedUser.get().getUserTo();
-        List<Project> allForUser = projectService.getAllForUser(userTo.getId());
+        Set<Project> allForUser = projectService.getAllForUser(userTo.getId());
         userTo.setProjects(allForUser);
         model.addAttribute("user", userTo);
-        model.addAttribute("project", allForUser.get(0));
+        model.addAttribute("project", new ArrayList<>(allForUser).get(0));
         return "pomo";
     }
 

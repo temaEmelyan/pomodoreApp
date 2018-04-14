@@ -7,8 +7,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "PROJECTS",
@@ -25,7 +25,7 @@ public class Project extends AbstractEntity {
 
     @JsonBackReference
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
-    private List<Task> tasks;
+    private Set<Task> tasks;
 
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
@@ -39,7 +39,7 @@ public class Project extends AbstractEntity {
         this.name = name;
     }
 
-    public Project(Integer id, String name, List<Task> tasks, User user) {
+    public Project(Integer id, String name, Set<Task> tasks, User user) {
         super(id);
         this.name = name;
         this.tasks = tasks;
@@ -62,11 +62,11 @@ public class Project extends AbstractEntity {
         this.user = user;
     }
 
-    public List<Task> getTasks() {
+    public Set<Task> getTasks() {
         return tasks;
     }
 
-    public void setTasks(List<Task> tasks) {
+    public void setTasks(Set<Task> tasks) {
         this.tasks = tasks;
     }
 
