@@ -17,6 +17,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 import static com.temelyan.pomoapp.util.UserUtil.prepareToSave;
 
 @Service("userService")
@@ -78,5 +80,10 @@ public class UserServiceImpl implements UserService {
 
     private User get(int id) {
         return userRepopsitory.get(id);
+    }
+
+    @Override
+    public User getByIdWithPomosInDateRange(int userId, LocalDateTime from, LocalDateTime to) {
+        return userRepopsitory.getByIdWithPomosInDateRange(userId, from, to);
     }
 }

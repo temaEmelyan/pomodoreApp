@@ -6,6 +6,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.time.LocalDateTime;
+
 public interface UserService extends UserDetailsService {
     User update(UserTo userTo);
 
@@ -19,4 +21,6 @@ public interface UserService extends UserDetailsService {
     User loadByEmail(String email);
 
     User findUserByResetToken(String token);
+
+    User getByIdWithPomosInDateRange(int userId, LocalDateTime from, LocalDateTime to);
 }

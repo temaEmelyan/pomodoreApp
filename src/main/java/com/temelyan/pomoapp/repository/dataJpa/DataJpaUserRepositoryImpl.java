@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Repository
 public class DataJpaUserRepositoryImpl implements UserRepopsitory {
@@ -53,5 +53,10 @@ public class DataJpaUserRepositoryImpl implements UserRepopsitory {
     @Override
     public User findUserByResetToken(String token) {
         return crudRepository.findByResetToken(token).orElseThrow(RuntimeException::new);
+    }
+
+    @Override
+    public User getByIdWithPomosInDateRange(int userId, LocalDateTime from, LocalDateTime to) {
+        return crudRepository.getUserByIdCompleteGraphForPomosInDateRange(from, to, userId);
     }
 }
