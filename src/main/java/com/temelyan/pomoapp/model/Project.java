@@ -1,7 +1,6 @@
 package com.temelyan.pomoapp.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -23,11 +22,10 @@ public class Project extends AbstractEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @JsonBackReference
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
     private Set<Task> tasks;
 
-    @JsonManagedReference
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

@@ -1,7 +1,6 @@
 package com.temelyan.pomoapp.model;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.temelyan.pomoapp.to.UserTo;
 
@@ -29,7 +28,6 @@ public class User extends AbstractEntity {
     @JsonIgnore
     private String password;
 
-    @JsonBackReference
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<Project> projects;
 
