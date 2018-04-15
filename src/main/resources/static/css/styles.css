@@ -142,3 +142,11 @@ body {
 .has-error {
     color: red;
 }
+
+.project-name {
+    padding: 20px;
+}
+
+.task-container {
+    font-size: 12px;
+}
