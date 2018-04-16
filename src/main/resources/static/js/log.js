@@ -7,6 +7,7 @@ function fetchPomos(startStr, endStr) {
     $.get({
         url: getPomosUrl + '?from=' + startStr + '&to=' + endStr,
         success: function (data) {
+            $('.project-container').remove();
             if (data) {
                 processUserJson(data)
             }
@@ -15,49 +16,52 @@ function fetchPomos(startStr, endStr) {
 }
 
 function processUserJson(data) {
-    data.projects.forEach(project => addProjectToThePage(project))
+    let overallLength = 0;
+    data.projects.forEach(project => {
+        overallLength += addProjectToThePage(project);
+    });
+
+    $('.durationElement').text(toHHMMSS(overallLength));
 }
 
 function addProjectToThePage(project) {
     let prjContainer = $('<div>', {class: 'project-container', id: 'project-container' + project.id});
-    let projectNameDiv = $('<div>', {
-        class: 'project-name row',
-    }).append($('<div>', {
-        class: 'col',
-        text: project.name
-    }));
+    let projectNameDiv = $('<div>', {class: 'project-name row',})
+        .append($('<div>', {class: 'col', text: project.name}))
+        .append($('<div>', {class: 'col', text: ''}))
+        .append($('<div>', {class: 'col', text: ''}))
+        .append($('<div>', {class: 'col project-duration-col', text: ''}));
+
     prjContainer.append(projectNameDiv);
     $('.pomo-log-table').append(prjContainer);
-    project.tasks.forEach(task => addTaskToThePage(task, prjContainer))
+    let overalDuration = 0;
+    project.tasks.forEach(task => {
+        overalDuration += addTaskToThePage(task, prjContainer)
+    });
+
+    prjContainer.find('.project-duration-col').text(toHHMMSS(overalDuration));
+    return overalDuration;
 }
 
 function addTaskToThePage(task, projectContainer) {
-
     let tskContainer = $('<div>', {class: 'task-container', id: 'task-container' + task.id});
-
     let $div = $('<div>', {class: 'row'});
-
-
-    $div.append($('<div>', {
-        class: 'col',
-        text: task.name
-    }));
-
-    $div.append($('<div>', {
-        class: 'col',
-        text: task.pomos.length + 'pomos'
-    }));
-
-    $div.append($('<div>', {
-        class: 'col',
-        text: 'paceholder for length'
-    }));
-
+    $div.append($('<div>', {class: 'col', text: task.name}));
+    $div.append($('<div>', {class: 'col', text: ''}));
+    $div.append($('<div>', {class: 'col', text: task.pomos.length + 'pomos'}));
+    $div.append($('<div>', {class: 'col task-duration-col', text: 'paceholder for length'}));
     tskContainer.append($div);
-
     projectContainer.append(tskContainer);
 
-    task.pomos.forEach(pomo => addPomoToThePage(pomo, tskContainer))
+    let overalTaskLength = 0;
+
+    task.pomos.forEach(pomo => {
+        addPomoToThePage(pomo, tskContainer);
+        overalTaskLength += pomo.duration;
+    });
+
+    tskContainer.find('.task-duration-col').text(toHHMMSS(overalTaskLength));
+    return overalTaskLength;
 }
 
 function addPomoToThePage(pomo, tskContainer) {
