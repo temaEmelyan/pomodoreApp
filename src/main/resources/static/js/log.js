@@ -8,6 +8,7 @@ function fetchPomos(startStr, endStr) {
         url: getPomosUrl + '?from=' + startStr + '&to=' + endStr,
         success: function (data) {
             $('.project-container').remove();
+            $('.durationElement').text(toHHMMSS(0));
             if (data) {
                 processUserJson(data)
             }
@@ -20,14 +21,13 @@ function processUserJson(data) {
     data.projects.forEach(project => {
         overallLength += addProjectToThePage(project);
     });
-
     $('.durationElement').text(toHHMMSS(overallLength));
 }
 
 function addProjectToThePage(project) {
     let prjContainer = $('<div>', {class: 'project-container', id: 'project-container' + project.id});
     let projectNameDiv = $('<div>', {class: 'project-name row',})
-        .append($('<div>', {class: 'col', text: project.name}))
+        .append($('<div>', {class: 'project-name-col col', text: project.name}))
         .append($('<div>', {class: 'col', text: ''}))
         .append($('<div>', {class: 'col', text: ''}))
         .append($('<div>', {class: 'col project-duration-col', text: ''}));
@@ -46,31 +46,37 @@ function addProjectToThePage(project) {
 function addTaskToThePage(task, projectContainer) {
     let tskContainer = $('<div>', {class: 'task-container', id: 'task-container' + task.id});
     let $div = $('<div>', {class: 'row'});
-    $div.append($('<div>', {class: 'col', text: task.name}));
-    $div.append($('<div>', {class: 'col', text: ''}));
-    $div.append($('<div>', {class: 'col', text: task.pomos.length + 'pomos'}));
+    $div.append($('<div>', {class: 'task-name col-6', text: task.name}));
+    $div.append($('<div>', {class: 'col', text: task.pomos.length + ' pomos'}));
     $div.append($('<div>', {class: 'col task-duration-col', text: 'paceholder for length'}));
     tskContainer.append($div);
-    projectContainer.append(tskContainer);
 
-    let overalTaskLength = 0;
-
-    task.pomos.forEach(pomo => {
-        addPomoToThePage(pomo, tskContainer);
-        overalTaskLength += pomo.duration;
+    tskContainer.click(function () {
+        tskContainer.find('.pomo-togglable-row').toggle();
     });
-
+    let overalTaskLength = 0;
+    task.pomos.forEach(pomo => {
+        overalTaskLength += appendAPomo(pomo, tskContainer);
+    });
     tskContainer.find('.task-duration-col').text(toHHMMSS(overalTaskLength));
+    projectContainer.append(tskContainer);
     return overalTaskLength;
 }
 
-function addPomoToThePage(pomo, tskContainer) {
-    console.log(pomo)
+function appendAPomo(pomo, tskContainer) {
+    let row = $('<div>', {class: 'row pomo-togglable-row'});
+    row.append($('<div>', {class: 'col'}))
+        .append($('<div>', {class: 'col'}))
+        .append($('<div>', {class: 'col', text: dropYearFromStringIfItIsCurrentYeat(toPrettyDate(pomo.finish))}))
+        .append($('<div>', {class: 'col', text: toHHMMSS(pomo.duration)}));
+    row.toggle();
+    tskContainer.append(row);
+    return pomo.duration;
 }
 
 function dropYearFromStringIfItIsCurrentYeat(date) {
     if (date.split(' ')[2] === today.year().toString()) {
-        return date.split(' ')[0] + ' ' + date.split(' ')[1];
+        return date.split(' ').splice(0, 2).join(' ');
     } else {
         return date;
     }
@@ -112,6 +118,13 @@ $(window).on('load', function () {
 
     callBack(today, today);
 });
+
+const toPrettyDate =
+    dateTime => new Date(dateTime)
+        .toUTCString()
+        .split(' ')
+        .splice(1, 3)
+        .join(' ');
 
 const toHHMMSS = (secs) => {
     let sec_num = parseInt(secs, 10);
