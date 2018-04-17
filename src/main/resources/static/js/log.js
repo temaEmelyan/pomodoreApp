@@ -7,68 +7,76 @@ function fetchPomos(startStr, endStr) {
     $.get({
         url: getPomosUrl + '?from=' + startStr + '&to=' + endStr,
         success: function (data) {
-            $('.pomo-table-row-container').remove();
-
-            let newDuration = 0;
-            data.reverse().forEach(project => {
-                let projectDuration = 0;
-
-                project.pomoTos.forEach(pomoTo => {
-                    projectDuration += pomoTo.duration;
-                });
-
-                let newRowContainer = $('<div>', {class: 'pomo-table-row-container', id: project.id});
-                let newRow = $('<div>', {class: 'pomo-table-row row'});
-                newRow.append($('<div>', {class: 'col', text: project.name}));
-                newRow.append($('<div>', {class: 'col', text: project.pomoTos.length + ' pom'}));
-                newRow.append($('<div>', {class: 'col', text: ''}));
-                newRow.append($('<div>', {class: 'col', text: toHHMMSS(projectDuration)}));
-
-                newRowContainer.append(newRow);
-                $('.pomo-log-table').prepend(newRowContainer);
-
-                let projectTableRowContainer = $('#' + project.id + '.pomo-table-row-container');
-                projectTableRowContainer.hiddenData = project.pomoTos;
-                projectTableRowContainer.shown = false;
-                projectTableRowContainer[0].onclick = function () {
-                    expandTableRow(projectTableRowContainer);
-                };
-
-                newDuration += projectDuration;
-            });
-
-            $('.durationElement').html(toHHMMSS(newDuration));
+            $('.project-container').remove();
+            $('.durationElement').text(toHHMMSS(0));
+            if (data) {
+                processUserJson(data)
+            }
         }
     })
 }
 
-function expandTableRow(projectTableRowContainer) {
-    projectTableRowContainer.shown = !projectTableRowContainer.shown;
+function processUserJson(data) {
+    let overallLength = 0;
+    data.projects.forEach(project => {
+        overallLength += addProjectToThePage(project);
+    });
+    $('.durationElement').text(toHHMMSS(overallLength));
+}
 
-    if (projectTableRowContainer.shown) {
-        let expandedContainer = $('<div>', {class: 'pomo-table-row-expanded-container'});
+function addProjectToThePage(project) {
+    let prjContainer = $('<div>', {class: 'project-container', id: 'project-container' + project.id});
+    let projectNameDiv = $('<div>', {class: 'project-name row',})
+        .append($('<div>', {class: 'project-name-col col', text: project.name}))
+        .append($('<div>', {class: 'col', text: ''}))
+        .append($('<div>', {class: 'col', text: ''}))
+        .append($('<div>', {class: 'col project-duration-col', text: ''}));
 
-        projectTableRowContainer.hiddenData.forEach(pomoTo => {
-            let newExpandedRow = $('<div>', {class: 'row pomo-table-row-expanded'});
-            newExpandedRow.append($('<div>', {class: 'col', text: ''}));
-            newExpandedRow.append($('<div>', {
-                class: 'col',
-                text: dropYearFromStringIfItIsCurrentYeat(pomoTo.finishDate)
-            }));
-            newExpandedRow.append($('<div>', {class: 'col', text: pomoTo.finishTime}));
-            newExpandedRow.append($('<div>', {class: 'col', text: toHHMMSS(pomoTo.duration)}));
-            expandedContainer.append(newExpandedRow);
-        });
+    prjContainer.append(projectNameDiv);
+    $('.pomo-log-table').append(prjContainer);
+    let overalDuration = 0;
+    project.tasks.forEach(task => {
+        overalDuration += addTaskToThePage(task, prjContainer)
+    });
 
-        projectTableRowContainer.append(expandedContainer);
-    } else {
-        projectTableRowContainer.find('.pomo-table-row-expanded-container').remove();
-    }
+    prjContainer.find('.project-duration-col').text(toHHMMSS(overalDuration));
+    return overalDuration;
+}
+
+function addTaskToThePage(task, projectContainer) {
+    let tskContainer = $('<div>', {class: 'task-container', id: 'task-container' + task.id});
+    let $div = $('<div>', {class: 'row'});
+    $div.append($('<div>', {class: 'task-name col-6', text: task.name}));
+    $div.append($('<div>', {class: 'col', text: task.pomos.length + ' pomos'}));
+    $div.append($('<div>', {class: 'col task-duration-col', text: 'paceholder for length'}));
+    tskContainer.append($div);
+
+    tskContainer.click(function () {
+        tskContainer.find('.pomo-togglable-row').toggle();
+    });
+    let overalTaskLength = 0;
+    task.pomos.forEach(pomo => {
+        overalTaskLength += appendAPomo(pomo, tskContainer);
+    });
+    tskContainer.find('.task-duration-col').text(toHHMMSS(overalTaskLength));
+    projectContainer.append(tskContainer);
+    return overalTaskLength;
+}
+
+function appendAPomo(pomo, tskContainer) {
+    let row = $('<div>', {class: 'row pomo-togglable-row'});
+    row.append($('<div>', {class: 'col'}))
+        .append($('<div>', {class: 'col'}))
+        .append($('<div>', {class: 'col', text: dropYearFromStringIfItIsCurrentYeat(toPrettyDate(pomo.finish))}))
+        .append($('<div>', {class: 'col', text: toHHMMSS(pomo.duration)}));
+    row.toggle();
+    tskContainer.append(row);
+    return pomo.duration;
 }
 
 function dropYearFromStringIfItIsCurrentYeat(date) {
     if (date.split(' ')[2] === today.year().toString()) {
-        return date.split(' ')[0] + ' ' + date.split(' ')[1];
+        return date.split(' ').splice(0, 2).join(' ');
     } else {
         return date;
     }
@@ -110,6 +118,13 @@ $(window).on('load', function () {
 
     callBack(today, today);
 });
+
+const toPrettyDate =
+    dateTime => new Date(dateTime)
+        .toUTCString()
+        .split(' ')
+        .splice(1, 3)
+        .join(' ');
 
 const toHHMMSS = (secs) => {
     let sec_num = parseInt(secs, 10);

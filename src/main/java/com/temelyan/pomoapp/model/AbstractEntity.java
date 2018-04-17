@@ -1,9 +1,9 @@
 package com.temelyan.pomoapp.model;
 
 import com.temelyan.pomoapp.HasId;
-import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @MappedSuperclass
 @Access(AccessType.FIELD)
@@ -32,24 +32,20 @@ public abstract class AbstractEntity implements HasId {
     }
 
     @Override
-    public String toString() {
-        return String.format("Entity %s (%s)", getClass().getName(), getId());
-    }
-
-    @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || !getClass().equals(Hibernate.getClass(o))) {
-            return false;
-        }
+        if (this == o) return true;
+        if (!(o instanceof AbstractEntity)) return false;
         AbstractEntity that = (AbstractEntity) o;
-        return getId() != null && getId().equals(that.getId());
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
         return (getId() == null) ? 0 : getId();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s id = %s", getClass().getSimpleName(), getId());
     }
 }

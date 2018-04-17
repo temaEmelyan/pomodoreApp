@@ -2,10 +2,12 @@ package com.temelyan.pomoapp.repository;
 
 import com.temelyan.pomoapp.model.Project;
 
-import java.util.List;
+import java.util.Set;
 
 public interface ProjectRepository {
-    List<Project> getAll(Integer userId);
-
     Project save(Project project);
+
+    Project save(Project project, Integer userId);
+
+    Set<Project> getAllForUser(Integer userId);
 }

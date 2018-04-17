@@ -1,11 +1,10 @@
 package com.temelyan.pomoapp.repository.dataJpa;
 
 import com.temelyan.pomoapp.model.Project;
-import com.temelyan.pomoapp.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import java.util.Set;
 
 public interface CrudProjectRepository extends JpaRepository<Project, Integer> {
-    List<Project> findAllByUserOrderByName(User user);
+    Set<Project> findAllByUserIdOrderByName(int userId);
 }

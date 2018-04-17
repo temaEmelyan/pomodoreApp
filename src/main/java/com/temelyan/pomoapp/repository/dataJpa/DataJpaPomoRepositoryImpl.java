@@ -1,7 +1,7 @@
 package com.temelyan.pomoapp.repository.dataJpa;
 
 import com.temelyan.pomoapp.model.Pomo;
-import com.temelyan.pomoapp.model.Project;
+import com.temelyan.pomoapp.model.Task;
 import com.temelyan.pomoapp.repository.PomoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -15,30 +15,19 @@ import java.util.List;
 public class DataJpaPomoRepositoryImpl implements PomoRepository {
 
     private final CrudPomoRepository crudPomoRepository;
-
-    private final CrudProjectRepository crudProjectRepository;
+    private final CrudTaskRepository crudTaskRepository;
 
     @Autowired
-    public DataJpaPomoRepositoryImpl(CrudPomoRepository crudPomoRepository, CrudProjectRepository crudProjectRepository) {
+    public DataJpaPomoRepositoryImpl(CrudPomoRepository crudPomoRepository, CrudTaskRepository crudTaskRepository) {
         this.crudPomoRepository = crudPomoRepository;
-        this.crudProjectRepository = crudProjectRepository;
+        this.crudTaskRepository = crudTaskRepository;
     }
 
     @Override
-    public Pomo save(Pomo pomo, int projectId) {
-        Project one = crudProjectRepository.getOne(projectId);
-        pomo.setProject(one);
+    public Pomo save(Pomo pomo, int taskId) {
+        Task one = crudTaskRepository.getOne(taskId);
+        pomo.setTask(one);
         return crudPomoRepository.save(pomo);
-    }
-
-    @Override
-    public List<Pomo> getAll(int projectId) {
-        return crudPomoRepository.getAll(projectId);
-    }
-
-    @Override
-    public List<Pomo> getAllForUser(int userId) {
-        return crudPomoRepository.getAllForUser(userId);
     }
 
     @Override

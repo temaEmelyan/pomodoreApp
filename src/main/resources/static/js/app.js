@@ -3,15 +3,21 @@ const addPomoUrl = ajaxUrl + 'pomo/add';
 const projectUrl = ajaxUrl + 'project/';
 const addProjectUrl = projectUrl + 'add';
 const getProjectsUrl = projectUrl + 'get';
+const addTaskUrl = ajaxUrl + 'task/add';
+const getTasksUrl = ajaxUrl + 'task/get';
 const timerSpeed = 1;
+const timeZoneOffset = -new Date().getTimezoneOffset() / 60;
+const gongMusic = document.getElementById("myAudio");
 
 let pomodoro = {
+    shouldAddPomo: true,
     timerIsRunning: false,
     pomodoroIsActive: false,
     minutes: 0,
     seconds: 0,
     fillerHeight: 0,
     fillerIncrement: 0,
+    startedAt: null,
     interval: null,
     minutesDom: null,
     secondsDom: null,
@@ -19,6 +25,8 @@ let pomodoro = {
 
     originalMin: 25,
     originalSec: 0,
+    originalBreakMin: 5,
+    originalLongBreakMin: 25,
 
     init: function () {
         let self = this;
@@ -27,9 +35,13 @@ let pomodoro = {
         this.fillerDom = $('#filler');
         this.interval = setInterval(function () {
             self.intervalCallback.apply(self);
-        }, 1000 / timerSpeed);
+        }, 250 / timerSpeed);
 
         $('#work').click(function () {
+            if ($('#tasksDropDown').val() < 0) {
+                errorNoty("Please select a task");
+                return;
+            }
             if (!self.pomodoroIsActive) {
                 self.startWork.apply(self);
                 $('#work').text('Pause');
@@ -38,15 +50,20 @@ let pomodoro = {
                 $('#work').text('Resume');
             } else if (!self.timerIsRunning) {
                 self.timerIsRunning = true;
+                self.startedAt = Date.now();
                 $('#work').text('Pause');
             }
         });
 
         $('#shortBreak').click(function () {
-            self.startShortBreak.apply(self);
+            if (!self.timerIsRunning) {
+                self.startShortBreak.apply(self);
+            }
         });
         $('#longBreak').click(function () {
-            self.startLongBreak.apply(self);
+            if (!self.timerIsRunning) {
+                self.startLongBreak.apply(self);
+            }
         });
         $('#stop').click(function () {
             self.stopTimer.apply(self);
@@ -70,20 +87,37 @@ let pomodoro = {
                 $('#minutes').html(pomodoro.originalMin);
             }
         });
+
+        $('#decreaseDurationBrake').click(function () {
+            if (!pomodoro.timerIsRunning) {
+                if (pomodoro.originalBreakMin > 0) {
+                    pomodoro.originalBreakMin--;
+                }
+                $('#durationBreak').html(pomodoro.originalBreakMin);
+            }
+        });
+
+        $('#increaseDurationBrake').click(function () {
+            if (!pomodoro.timerIsRunning) {
+                pomodoro.originalBreakMin++;
+                $('#durationBreak').html(pomodoro.originalBreakMin);
+            }
+        });
     },
 
-    resetVariables: function (mins, secs, timerIsRunning) {
+    resetVariables: function (mins, secs, isTimerRunning) {
         this.minutes = mins;
-        this.originalMin = mins;
+
         this.seconds = secs;
-        this.originalSec = secs;
-        this.timerIsRunning = timerIsRunning;
+
+        this.timerIsRunning = isTimerRunning;
         this.fillerIncrement = 200 / (this.minutes * 60);
         this.fillerHeight = 0;
+        this.startedAt = null;
     },
 
-    resetVariablesDefault: function (started) {
-        this.resetVariables(this.originalMin, this.originalSec, started);
+    resetVariablesDefault: function (isTimerRunning) {
+        this.resetVariables(this.originalMin, this.originalSec, isTimerRunning);
         $('#work').text('Work');
         this.dropDownActivate();
     },
@@ -92,14 +126,17 @@ let pomodoro = {
         this.resetVariablesDefault(true);
         this.dropDownDeactivate();
         this.pomodoroIsActive = true;
+        this.shouldAddPomo = true;
     },
 
     startShortBreak: function () {
-        this.resetVariables(5, 0, true);
+        this.resetVariables(this.originalBreakMin, 0, true);
+        this.shouldAddPomo = false;
     },
 
     startLongBreak: function () {
-        this.resetVariables(15, 0, true);
+        this.resetVariables(this.originalLongBreakMin, 0, true);
+        this.shouldAddPomo = false;
     },
 
     stopTimer: function () {
@@ -124,43 +161,55 @@ let pomodoro = {
         if (!this.timerIsRunning) {
             return false;
         }
-        if (this.seconds === 0) {
-            if (this.minutes === 0) {
-                this.timerComplete();
-                return;
-            }
-            this.seconds = 59;
-            this.minutes--;
-        } else {
-            this.seconds--;
+        if (this.startedAt == null) {
+            this.startedAt = Date.now();
         }
-        this.updateDom();
+        this.elapsedFromStart = Date.now() - this.startedAt;
+        if (this.elapsedFromStart > 1000) {
+            this.startedAt += 1000;
+            if (this.seconds === 0) {
+                if (this.minutes === 0) {
+                    this.timerComplete();
+                    return;
+                }
+                this.seconds = 59;
+                this.minutes--;
+            } else {
+                this.seconds--;
+            }
+            this.updateDom();
+        }
     },
 
     timerComplete: function () {
         this.timerIsRunning = false;
         this.pomodoroIsActive = false;
         this.fillerHeight = 0;
-        util.addPomo(this.originalMin * 60 + this.originalSec);
+        if (this.shouldAddPomo) {
+            util.addPomo(this.originalMin * 60 + this.originalSec);
+        }
+        util.playGongMusic();
         this.resetVariablesDefault(false);
         this.updateDom();
     },
 
     dropDownActivate: function () {
         $('#projectsDropDown').prop('disabled', false);
+        $('#tasksDropDown').prop('disabled', false);
     },
 
     dropDownDeactivate: function () {
         $('#projectsDropDown').prop('disabled', 'disabled');
+        $('#tasksDropDown').prop('disabled', 'disabled');
     }
 };
 
-let failedNote;
+let lastNoty;
 
 function closeNoty() {
-    if (failedNote) {
-        failedNote.close();
-        failedNote = undefined;
+    if (lastNoty) {
+        lastNoty.close();
+        lastNoty = undefined;
     }
 }
 
@@ -168,10 +217,36 @@ function failNoty(jqXHR) {
     closeNoty();
     // https://stackoverflow.com/questions/48229776
     let errorInfo = JSON.parse(jqXHR.responseText);
-    failedNote = new Noty({
-        text: "<span class='glyphicon glyphicon-exclamation-sign'></span> &nbsp;" + "error status" + ": " + jqXHR.status + "<br>" + errorInfo.type + "<br>" + errorInfo.detail,
+    lastNoty = new Noty({
+        text: "<span class='fas fa-exclamation-circle'></span>"
+        + "error status" + ": " + jqXHR.status + "<br>" + errorInfo.error + "<br>"
+        + errorInfo.message,
         type: "error",
         layout: "bottomRight"
+    }).show();
+}
+
+function errorNoty(text) {
+    closeNoty();
+    // https://stackoverflow.com/questions/48229776
+    lastNoty = new Noty({
+        text: "<i class='fas fa-exclamation-circle'></i>"
+        + ' ' + text,
+        type: "error",
+        layout: "bottomRight"
+    }).show();
+}
+
+function doneNoty(text) {
+    closeNoty();
+    // https://stackoverflow.com/questions/48229776
+    lastNoty = new Noty({
+        text: "<i class='fas fa-check-square'></i>"
+        + ' ' + text,
+        type: "success",
+        timeout: 3000,
+        layout: "bottomRight",
+        textSize: 50
     }).show();
 }
 
@@ -182,12 +257,6 @@ $(window).on('load', function () {
         failNoty(jqXHR);
     });
 
-    $('#projectsDropDown').change(function () {
-        if ($(this).val() === "-1") {
-            $('#addNewProjModal').modal('show');
-        }
-    });
-
     $(function () {
         let token = $("meta[name='_csrf']").attr("content");
         let header = $("meta[name='_csrf_header']").attr("content");
@@ -196,16 +265,47 @@ $(window).on('load', function () {
         });
     });
 
+    $('#projectsDropDown').change(function () {
+        if ($(this).val() === "-1") {
+            $('#addNewProjModal').modal('show');
+        } else {
+            taskUtil.fetchTasks('');//todo implement this
+        }
+    });
+
+    let $tasksDropDown = $('#tasksDropDown');
+    $tasksDropDown.change(function () {
+        if ($(this).val() === "-1") {
+            $('#addNewTaskModal').modal('show');
+        }
+    });
+    $tasksDropDown.click(function () {
+        if ($(this).val() === "-1") {
+            $('#addNewTaskModal').modal('show');
+        }
+    });
+
     let projectNameInput = $('#project-name')[0];
     projectNameInput.addEventListener('keypress', function (event) {
         if (event.keyCode === 13) {
             event.preventDefault();
         }
     });
-
     projectNameInput.onkeydown = function (e) {
         if (e.keyCode === 13) {
             util.saveProject();
+        }
+    };
+
+    let taskNameInput = $('#task-name')[0];
+    taskNameInput.addEventListener('keypress', function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+        }
+    });
+    taskNameInput.onkeydown = function (e) {
+        if (e.keyCode === 13) {
+            taskUtil.saveTask();
         }
     }
 });
@@ -216,6 +316,70 @@ $(window).on('beforeunload', function (e) {
         this.resetVariablesDefault(false);
     }
 });
+
+//to autofocus on modals
+//https://stackoverflow.com/questions/14940423
+$('.modal').on('shown.bs.modal', function () {
+    $(this).find('[autofocus]').focus();
+});
+
+let taskUtil = {
+    saveTask: function () {
+        let serialize = $('#addTaskForm').serialize();
+        let projectId = $('#projectsDropDown').val();
+        serialize += '&projectId=' + projectId;
+        $.post({
+            url: addTaskUrl,
+            data: serialize,
+            error: function (xhr, desc, err) {
+                console.log(xhr);
+                console.log('Details: ' + desc + '\nError:' + err);
+            }
+        }).done(function () {
+            let nameOfTheNewTaskInput = $('#task-name');
+            taskUtil.fetchTasks(nameOfTheNewTaskInput.val());
+            nameOfTheNewTaskInput.val('');
+            $('#addNewTaskModal').modal('hide');
+        });
+    },
+
+    fetchTasks: function (nameOfTheNewTask) {
+        $.get({
+            url: getTasksUrl + '?projectId=' + $('#projectsDropDown').val(),
+            success: function (tasks) {
+                taskUtil.updateTaskSelectWithNewData(tasks, nameOfTheNewTask);
+            },
+            error: function (xhr, desc, err) {
+                console.log(xhr);
+                console.log('Details: ' + desc + '\nError:' + err);
+            }
+        });
+    },
+
+    updateTaskSelectWithNewData: function (data, nameOfTheNewTask) {
+        let dropDown = $('#tasksDropDown');
+        $('.optionTaskName').remove();
+        data.reverse().forEach(value => {
+            dropDown.prepend($('<option>', {
+                class: 'optionTaskName',
+                value: value.id,
+                text: value.name
+            }));
+        });
+
+        if (nameOfTheNewTask === '') {
+            $('.optionTaskName').filter(function () {
+                return $(this).index() === 0
+            }).attr('selected', 'selected')
+        } else {
+            $('.optionTaskName').filter(function () {
+                // noinspection EqualityComparisonWithCoercionJS
+                return $(this).html() == nameOfTheNewTask
+            }).attr('selected', 'selected')
+        }
+    },
+};
+
 
 let util = {
     saveProject: function () {
@@ -232,14 +396,15 @@ let util = {
             util.fetchProjects(nameOfTheNewProjectInput.val());
             nameOfTheNewProjectInput.val('');
             $('#addNewProjModal').modal('hide');
+            $('.optionTaskName').remove();
         });
     },
 
-    fetchProjects: function (nameOfTheNewProject) {
+    fetchProjects: function (nameOfTheNewProjectInput) {
         $.get({
             url: getProjectsUrl,
             success: function (projects) {
-                util.updateSelectWithNewData(projects, nameOfTheNewProject);
+                util.updateProjectSelectWithNewData(projects, nameOfTheNewProjectInput);
             },
             error: function (xhr, desc, err) {
                 console.log(xhr);
@@ -248,7 +413,7 @@ let util = {
         });
     },
 
-    updateSelectWithNewData: function (data, nameOfTheNewProject) {
+    updateProjectSelectWithNewData: function (data, nameOfTheNewProject) {
         let dropDown = $('#projectsDropDown');
         $('.optionProjectName').remove();
         data.reverse().forEach(value => {
@@ -265,6 +430,7 @@ let util = {
         }).attr('selected', 'selected')
     },
 
+
     toDoubleDigit: function (num) {
         if (num < 10) {
             return '0' + parseInt(num, 10);
@@ -272,13 +438,23 @@ let util = {
         return num;
     },
 
+    playGongMusic: function () {
+        gongMusic.play();
+    },
+
     addPomo: function (duration) {
         $.post({
-            url: addPomoUrl + '?length=' + duration + '&projectId=' + $('#projectsDropDown').val(),
+            url: addPomoUrl +
+            '?length=' + duration
+            + '&taskId=' + $('#tasksDropDown').val()
+            + '&clientTimeZone=' + timeZoneOffset,
             error: function (xhr, desc, err) {
                 console.log(xhr);
                 console.log('Details: ' + desc + '\nError:' + err);
-            }
+            },
+
+        }).done(function () {
+            doneNoty("New Pomo added!")
         });
     },
 };

@@ -1,6 +1,7 @@
 package com.temelyan.pomoapp.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -16,7 +17,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
 
     @Autowired
-    public WebSecurityConfig(UserDetailsService userDetailsService, PasswordEncoderConfig encoder) {
+    public WebSecurityConfig(@Qualifier("userService") UserDetailsService userDetailsService, PasswordEncoderConfig encoder) {
         this.userDetailsService = userDetailsService;
         this.encoder = encoder;
     }
@@ -30,13 +31,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/css/**", "/js/**").permitAll()
+                .antMatchers("/css/**", "/js/**", "/favicon.ico").permitAll()
                 .antMatchers("/registration", "/forgot", "/reset").anonymous()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
                 .and()
                 .formLogin().loginPage("/login").permitAll()
+                .failureForwardUrl("/fail").permitAll()
                 .and()
                 .logout().permitAll();
     }

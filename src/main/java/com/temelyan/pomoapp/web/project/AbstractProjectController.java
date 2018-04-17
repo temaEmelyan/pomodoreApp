@@ -2,14 +2,12 @@ package com.temelyan.pomoapp.web.project;
 
 import com.temelyan.pomoapp.AuthorizedUser;
 import com.temelyan.pomoapp.model.Project;
-import com.temelyan.pomoapp.model.User;
 import com.temelyan.pomoapp.service.ProjectService;
-import com.temelyan.pomoapp.to.ProjectTo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
+import java.util.Set;
 
 public abstract class AbstractProjectController {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
@@ -18,16 +16,12 @@ public abstract class AbstractProjectController {
     private ProjectService projectService;
 
     void create(Project project) {
-        int id = AuthorizedUser.id();
-        logger.info("creating new project {} for User with id", project, id);
-        User user = new User();
-        user.setId(id);
-        project.setUser(user);
-        projectService.save(project);
+        logger.info("creating new project {} for User {}", project, AuthorizedUser.get());
+        projectService.save(project, AuthorizedUser.id());
     }
 
-    List<ProjectTo> getAll() {
+    Set<Project> getAll() {
         logger.info("fetching all projects for user {}", AuthorizedUser.id());
-        return projectService.getAll(AuthorizedUser.id());
+        return projectService.getAllForUser(AuthorizedUser.id());
     }
 }

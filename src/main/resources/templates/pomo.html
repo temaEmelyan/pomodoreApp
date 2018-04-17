@@ -5,6 +5,8 @@
     <meta name="author" content=""/>
     <title>Work!</title>
     <div th:replace="fragments/header :: header"></div>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css"
+          integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
 </head>
 <body>
 <div th:replace="fragments/navbar::navbar"></div>
@@ -53,17 +55,39 @@
             <button id="longBreak">Long Break</button>
             <button id="stop">Stop</button>
         </div>
-        <div class="row" style="padding-top: 20px">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <label class="input-group-text inverse-dropdown" for="projectsDropDown">Select project</label>
-                </div>
+        <div class="row">
+            <div class="col">
+                <div class="row" style="padding-top: 20px">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text inverse-dropdown" for="projectsDropDown">Select
+                                project</label>
+                        </div>
 
-                <select class="custom-select inverse-dropdown" id="projectsDropDown">
-                    <option class="optionProjectName" th:each="project : ${user.getProjects()}" th:value="${project.id}"
-                            th:text="${project.getName()}"></option>
-                    <option id="addNewProj" value="-1" style="font-weight: bold">add new project</option>
-                </select>
+                        <select class="custom-select inverse-dropdown" id="projectsDropDown">
+                            <option class="optionProjectName" th:each="project : ${user.getProjects()}"
+                                    th:value="${project.id}"
+                                    th:text="${project.getName()}"></option>
+                            <option id="addNewProj" value="-1" style="font-weight: bold">add new project</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row" style="padding-top: 20px">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text inverse-dropdown" for="tasksDropDown">Select task</label>
+                        </div>
+
+                        <select class="custom-select inverse-dropdown" id="tasksDropDown">
+                            <option class="optionTaskName" th:each="task : ${project.getTasks()}"
+                                    th:value="${task.id}"
+                                    th:text="${task.getName()}"></option>
+                            <option id="addNewTask" value="-1" style="font-weight: bold">add new task</option>
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -92,6 +116,35 @@
         </div>
     </div>
 </div>
+
+<div class="modal" id="addNewTaskModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="background-color: #4e555b">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addNewTaskModalLabel">Add new Task</h5>
+                <button type="button" class="close" data-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addTaskForm" autocomplete="off">
+                    <div class="form-group">
+                        <label for="task-name" class="col-form-label">Project Name:</label>
+                        <input type="text" name="name" class="form-control" id="task-name"
+                               autofocus="autofocus"/>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="taskUtil.saveTask()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<audio id="myAudio">
+    <source src="../static/gong.wav" th:src="@{gong.wav}" type="audio/wav">
+    Your browser does not support the audio element.
+</audio>
 
 <div th:replace="fragments/footer :: footer"></div>
 <script src="../static/js/app.js" th:src="@{js/app.js}"></script>

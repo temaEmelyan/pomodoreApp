@@ -1,28 +1,34 @@
 package com.temelyan.pomoapp.model;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
-@Table(name = "POMOS", uniqueConstraints = {@UniqueConstraint(columnNames = {"finish", "project_id"}, name = "pomos_unique_project_datetime_idx")})
+@Table(name = "POMOS",
+        uniqueConstraints = @UniqueConstraint(
+                columnNames = {"finish", "task_id"},
+                name = "pomos_unique_task_datetime"),
+        indexes = {@Index(columnList = "finish"),
+                @Index(columnList = "task_id, id", unique = true)})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Pomo extends AbstractEntity {
 
     @Column(name = "duration", nullable = false)
-    private
-    Integer duration;
+    private Integer duration;
 
     @Column(name = "finish", nullable = false)
     private LocalDateTime finish;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "task_id", nullable = false)
     @NotNull
-    private Project project;
+    private Task task;
 
     public Pomo() {
     }
@@ -31,7 +37,7 @@ public class Pomo extends AbstractEntity {
         this(null, finish, duration);
     }
 
-    public Pomo(Integer id, LocalDateTime finish, int duration) {
+    public Pomo(Integer id, LocalDateTime finish, Integer duration) {
         super(id);
         this.duration = duration;
         this.finish = finish;
@@ -53,11 +59,34 @@ public class Pomo extends AbstractEntity {
         this.finish = finish;
     }
 
-    public Project getProject() {
-        return project;
+    public Task getTask() {
+        return task;
     }
 
-    public void setProject(Project project) {
-        this.project = project;
+    public void setTask(Task task) {
+        this.task = task;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Pomo)) return false;
+        if (!super.equals(o)) return false;
+        Pomo pomo = (Pomo) o;
+        return Objects.equals(duration, pomo.duration) &&
+                Objects.equals(finish, pomo.finish);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), duration, finish);
+    }
+
+    @Override
+    public String toString() {
+        return "Pomo{" +
+                "duration=" + duration +
+                ", finish=" + finish +
+                "} " + super.toString();
     }
 }

@@ -1,22 +1,34 @@
 package com.temelyan.pomoapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
-import java.util.Collections;
-import java.util.List;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "PROJECTS",
         uniqueConstraints = @UniqueConstraint(
                 columnNames = {"name", "user_id"},
-                name = "project_unique_name_user"))
+                name = "project_unique_name_user"),
+        indexes = @Index(columnList = "user_id, id", unique = true))
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Project extends AbstractEntity {
-    @Column(name = "name")
+    @NotBlank
+    @NotEmpty
+    @NotNull
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "project")
-    private List<Pomo> pomo;
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
+    private Set<Task> tasks;
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -27,6 +39,13 @@ public class Project extends AbstractEntity {
         this.name = name;
     }
 
+    public Project(Integer id, String name, Set<Task> tasks, User user) {
+        super(id);
+        this.name = name;
+        this.tasks = tasks;
+        this.user = user;
+    }
+
     public String getName() {
         return name;
     }
@@ -35,19 +54,40 @@ public class Project extends AbstractEntity {
         this.name = name;
     }
 
-    public List<Pomo> getPomo() {
-        return pomo == null ? Collections.emptyList() : pomo;
-    }
-
-    public void setPomo(List<Pomo> pomo) {
-        this.pomo = pomo;
-    }
-
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Set<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Project)) return false;
+        if (!super.equals(o)) return false;
+        Project project = (Project) o;
+        return Objects.equals(name, project.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), name);
+    }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "name='" + name + '\'' +
+                "} " + super.toString();
     }
 }

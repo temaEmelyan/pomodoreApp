@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
 public class UserTo extends BaseTo implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -20,7 +20,7 @@ public class UserTo extends BaseTo implements Serializable {
     private String password;
     private String newPassword;
     private String passwordConfirm;
-    private List<Project> projects;
+    private Set<Project> projects;
 
     public UserTo() {
     }
@@ -29,11 +29,11 @@ public class UserTo extends BaseTo implements Serializable {
         this(id, email, password, null);
     }
 
-    public UserTo(Integer id, String email, String password, List<Project> projects) {
+    public UserTo(Integer id, String email, String password, Set<Project> projects) {
         super(id);
         this.email = email;
         this.password = password;
-        this.projects = projects == null ? Collections.emptyList() : projects;
+        this.projects = projects == null ? Collections.emptySet() : projects;
     }
 
     public String getNewPassword() {
@@ -52,11 +52,11 @@ public class UserTo extends BaseTo implements Serializable {
         this.passwordConfirm = passwordConfirm;
     }
 
-    public List<Project> getProjects() {
+    public Set<Project> getProjects() {
         return projects;
     }
 
-    public void setProjects(List<Project> projects) {
+    public void setProjects(Set<Project> projects) {
         this.projects = projects;
     }
 
@@ -81,7 +81,6 @@ public class UserTo extends BaseTo implements Serializable {
         return "UserTo{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
                 '}';
     }
 }

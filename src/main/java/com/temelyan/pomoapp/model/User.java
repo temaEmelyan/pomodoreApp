@@ -1,14 +1,23 @@
 package com.temelyan.pomoapp.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.temelyan.pomoapp.to.UserTo;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
-@Table(name = "USERS", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
+@Table(name = "USERS",
+        uniqueConstraints = @UniqueConstraint(columnNames = "email"),
+        indexes = {@Index(columnList = "id", unique = true),
+                @Index(columnList = "email", unique = true)})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User extends AbstractEntity {
     @Email
     @NotBlank
@@ -18,12 +27,14 @@ public class User extends AbstractEntity {
     @Column(name = "password", nullable = false)
     @NotBlank
     @Size(min = 1)
+    @JsonIgnore
     private String password;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.PERSIST)
-    private List<Project> projects;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private Set<Project> projects;
 
     @Column(name = "reset_token")
+    @JsonIgnore
     private String resetToken;
 
     public User() {
@@ -33,6 +44,10 @@ public class User extends AbstractEntity {
         super(id);
         this.email = email;
         this.password = password;
+    }
+
+    public User(UserTo userTo) {
+        this(userTo.getId(), userTo.getEmail(), userTo.getPassword());
     }
 
     public String getResetToken() {
@@ -51,11 +66,11 @@ public class User extends AbstractEntity {
         this.email = email;
     }
 
-    public List<Project> getProjects() {
+    public Set<Project> getProjects() {
         return projects;
     }
 
-    public void setProjects(List<Project> projects) {
+    public void setProjects(Set<Project> projects) {
         this.projects = projects;
     }
 
@@ -65,5 +80,26 @@ public class User extends AbstractEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        if (!super.equals(o)) return false;
+        User user = (User) o;
+        return Objects.equals(email, user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), email);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "email='" + email + '\'' +
+                "} " + super.toString();
     }
 }

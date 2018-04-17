@@ -1,15 +1,13 @@
 package com.temelyan.pomoapp.service;
 
 import com.temelyan.pomoapp.model.Project;
-import com.temelyan.pomoapp.to.ProjectTo;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 public interface ProjectService {
     Project save(Project project);
 
-    List<ProjectTo> getAll(int UserId);
+    Project save(Project project, int userId);
 
-    List<ProjectTo> getAllWithPomosInDateRange(LocalDate from, LocalDate to, int UserId);
+    Set<Project> getAllForUser(int userId);
 }
