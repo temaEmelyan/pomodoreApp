@@ -9,8 +9,6 @@
     <meta name="author" content=""/>
     <title>Log</title>
     <div th:replace="fragments/header :: header"></div>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css"
-          integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
 </head>
 <body>
 <div th:replace="fragments/navbar::navbar"></div>
@@ -41,10 +39,9 @@
 </div>
 
 <div th:replace="fragments/footer :: footer"></div>
-<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<link href="../static/css/daterangepicker.css" th:href="@{css/daterangepicker.css}" rel="stylesheet"
-      type="text/css"/>
-<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-<script src="../static/js/log.js" th:src="@{js/log.js}"></script>
+<link th:href="@{css/daterangepicker.css}" rel="stylesheet" type="text/css"/>
+<script th:src="@{webjars/momentjs/min/moment.min.js}"></script>
+<script th:src="@{webjars/bootstrap-daterangepicker/js/bootstrap-daterangepicker.js}"></script>
+<script th:src="@{js/log.js}"></script>
 </body>
 </html>
