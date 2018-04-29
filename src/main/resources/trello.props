@@ -1,0 +1,9 @@
+trello_email=pomodoreapp@gmail.com
+trello_api_key=b25cd167ac9a4a3f3e524dbe04ed2043
+trello_api_secret=b89fe59f53f64a6987272cbc196a4684b263f62dabbeb78bb6f3483d437be12f
+url='https://trello.com/1/authorize?key=b25cd167ac9a4a3f3e524dbe04ed2043&name=pomodoreapp&expiration=30days&response_type=token'
+urll='https://trello.com/1/authorize?key=b25cd167ac9a4a3f3e524dbe04ed2043&name=pomodoreapp&expiration=30days&response_type=token&return_url=localhost:8080/getToken&callback_method=fragment'
+urll='https://trello.com/1/authorize?key=b25cd167ac9a4a3f3e524dbe04ed2043&name=pomodoreapp&expiration=30days&response_type=token&return_url=http://mockbin.org/bin/f9f377d5-0968-41b7-bcaf-9316f4a2e9b3&callback_method=fragment'
+urll='https://trello.com/1/authorize?key=b25cd167ac9a4a3f3e524dbe04ed2043&name=pomodoreapp&expiration=30days&response_type=token&return_url=http://mockbin.org/bin/f9f377d5-0968-41b7-bcaf-9316f4a2e9b3&callback_method=postMessage'
+urll='https://trello.com/1/authorize?key=b25cd167ac9a4a3f3e524dbe04ed2043&name=pomodoreapp&expiration=30days&response_type=token&return_url=http://httpbin.org/post&callback_method=postMessage'
+token='c1b3adbbbcdcf3126b303c7cb8e50c55511ec58c62ba7e43f9ad50202c9e8c3a'
