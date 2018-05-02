@@ -1,3 +1,9 @@
 # pomodoreApp
 
-Simple pomodoro clock with user authentification and log keeping. Built using Spring boot 2. Working version (should) be available at http://pomodoreapp2-dev.ap-southeast-2.elasticbeanstalk.com
+Simple pomodoro clock with user authentification and log keeping. 
+
+Working version (should) is deployed to AWS and should be available at http://pomodoreapp-env.pemcu2h33c.ap-southeast-2.elasticbeanstalk.com/
+
+The app built using Spring-Boot 2, Spring-Security, Spring-Data-JPA, Maven and JQuery on the front-end. 
+
+![alt text](https://i.imgur.com/yYvmHJE.png)
