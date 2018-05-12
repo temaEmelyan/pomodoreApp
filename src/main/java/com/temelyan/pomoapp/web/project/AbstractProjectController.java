@@ -16,12 +16,12 @@ public abstract class AbstractProjectController {
     private ProjectService projectService;
 
     void create(Project project) {
-        logger.info("creating new project {} for User {}", project, AuthorizedUser.get());
+        logger.info("creating new project {} for user {}", project, AuthorizedUser.get());
         projectService.save(project, AuthorizedUser.id());
     }
 
     Set<Project> getAll() {
-        logger.info("fetching all projects for user {}", AuthorizedUser.id());
+        logger.info("fetching all projects for user {}", AuthorizedUser.get());
         return projectService.getAllForUser(AuthorizedUser.id());
     }
 }

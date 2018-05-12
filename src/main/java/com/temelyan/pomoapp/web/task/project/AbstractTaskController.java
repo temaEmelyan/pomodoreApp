@@ -1,5 +1,6 @@
 package com.temelyan.pomoapp.web.task.project;
 
+import com.temelyan.pomoapp.AuthorizedUser;
 import com.temelyan.pomoapp.model.Task;
 import com.temelyan.pomoapp.service.TaskService;
 import org.slf4j.Logger;
@@ -15,12 +16,19 @@ public abstract class AbstractTaskController {
     private TaskService taskService;
 
     void create(Task task, int projectId) {
-        logger.info("creating new task {} for project with id {}", task, projectId);
+        logger.info("creating new task {} for project with id {} for user {}",
+                task,
+                projectId,
+                AuthorizedUser.get());
+
         taskService.save(task, projectId);
     }
 
     List<Task> getAll(int projectId) {
-        logger.info("fetching all tasks for project with id {}", projectId);
+        logger.info("fetching all tasks for project with id {} for user {}",
+                projectId,
+                AuthorizedUser.get());
+
         return taskService.getAllForProject(projectId);
     }
 }

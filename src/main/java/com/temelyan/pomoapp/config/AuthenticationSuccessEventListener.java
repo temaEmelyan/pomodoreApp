@@ -29,6 +29,8 @@ public class AuthenticationSuccessEventListener implements ApplicationListener<A
         HttpSession session = httpRequest.getSession();
         int interval = 60 * 60 * 24 * 3;//3 days
         session.setMaxInactiveInterval(interval);
-        logger.info("User {} authenticated", e.getAuthentication().getName());
+        logger.info("User {} authenticated; session {}",
+                e.getAuthentication().getName(),
+                session.getId());
     }
 }
