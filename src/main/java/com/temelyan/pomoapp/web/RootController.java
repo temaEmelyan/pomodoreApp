@@ -42,7 +42,7 @@ public class RootController extends AbstractUserController {
 
     @GetMapping("/")
     public String root(Model model) {
-        logger.info("redirect from root to pomo.html");
+        logger.info("redirect from root to pomo.html for user {}", AuthorizedUser.get());
         UserTo userTo = AuthorizedUser.get().getUserTo();
         Set<Project> allForUser = projectService.getAllForUser(userTo.getId());
         userTo.setProjects(allForUser);

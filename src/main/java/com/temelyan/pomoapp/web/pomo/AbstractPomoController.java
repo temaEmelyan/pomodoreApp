@@ -24,8 +24,8 @@ public abstract class AbstractPomoController {
     @Autowired
     private UserService userService;
 
-    void add(int length, int projecId, int clientTimeZone) {
-        logger.info("add Pomo with the length {}", length);
+    void add(int length, int projectId, int clientTimeZone) {
+        logger.info("add Pomo with the length {} for user {}", length, AuthorizedUser.get());
 
         LocalDateTime serverTimeNow = LocalDateTime.now();
 
@@ -38,11 +38,11 @@ public abstract class AbstractPomoController {
                 .truncatedTo(ChronoUnit.SECONDS)
                 .plus(clientTimeZone - serverTimeZone, ChronoUnit.HOURS);
 
-        pomoService.add(new Pomo(clientsTime, length), projecId);
+        pomoService.add(new Pomo(clientsTime, length), projectId);
     }
 
     protected User getUserWithPomosInDateRange(String from, String to) {
-        logger.info("fetching pomos for dates between {} and {}", from, to);
+        logger.info("fetching pomos for dates between {} and {} for user {}", from, to, AuthorizedUser.get());
         return userService.getByIdWithPomosInDateRange(
                 AuthorizedUser.id(),
                 LocalDateTime.of(LocalDate.parse(from), LocalTime.MIN),
