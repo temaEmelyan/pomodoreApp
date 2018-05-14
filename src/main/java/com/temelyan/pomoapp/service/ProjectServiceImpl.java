@@ -27,7 +27,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Set<Project> getAllForUser(int userId) {
-        return projectRepository.getAllForUser(userId);
+    public Set<Project> getAllForUserWithTasks(int userId) {
+        return projectRepository.getAllForUserWithTasks(userId);
     }
 }

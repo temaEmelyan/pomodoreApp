@@ -1,5 +1,7 @@
 package com.temelyan.pomoapp.web.project;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.temelyan.pomoapp.JsonViews.ProjectViews;
 import com.temelyan.pomoapp.model.Project;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,7 @@ public class ProjectRestController extends AbstractProjectController {
         super.create(project);
     }
 
+    @JsonView(ProjectViews.IncludeTasks.class)
     @GetMapping(path = "get", produces = MediaType.APPLICATION_JSON_VALUE)
     public Set<Project> getAllProjects() {
         return super.getAll();

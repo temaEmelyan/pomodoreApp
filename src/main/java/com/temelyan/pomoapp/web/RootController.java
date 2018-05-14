@@ -44,7 +44,7 @@ public class RootController extends AbstractUserController {
     public String root(Model model) {
         logger.info("redirect from root to pomo.html for user {}", AuthorizedUser.get());
         UserTo userTo = AuthorizedUser.get().getUserTo();
-        Set<Project> allForUser = projectService.getAllForUser(userTo.getId());
+        Set<Project> allForUser = projectService.getAllForUserWithTasks(userTo.getId());
         userTo.setProjects(allForUser);
         model.addAttribute("user", userTo);
         model.addAttribute("project", new ArrayList<>(allForUser).get(0));

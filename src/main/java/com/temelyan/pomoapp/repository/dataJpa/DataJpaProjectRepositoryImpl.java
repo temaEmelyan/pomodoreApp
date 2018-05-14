@@ -31,6 +31,11 @@ public class DataJpaProjectRepositoryImpl implements ProjectRepository {
 
     @Override
     public Set<Project> getAllForUser(Integer userId) {
-        return crudProjectRepository.findAllByUserIdOrderByName(userId);
+        return crudProjectRepository.findAllByUserId(userId);
+    }
+
+    @Override
+    public Set<Project> getAllForUserWithTasks(int userId) {
+        return crudProjectRepository.findAllByUserIdFetchTasks(userId);
     }
 }

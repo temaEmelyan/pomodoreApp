@@ -2,6 +2,8 @@ package com.temelyan.pomoapp.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.temelyan.pomoapp.JsonViews.ProjectViews;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -18,12 +20,14 @@ import java.util.Set;
         indexes = @Index(columnList = "user_id, id", unique = true))
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Project extends AbstractEntity {
+    @JsonView(ProjectViews.Default.class)
     @NotBlank
     @NotEmpty
     @NotNull
     @Column(name = "name", nullable = false)
     private String name;
 
+    @JsonView(ProjectViews.IncludeTasks.class)
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
     private Set<Task> tasks;
 
@@ -44,6 +48,12 @@ public class Project extends AbstractEntity {
         this.name = name;
         this.tasks = tasks;
         this.user = user;
+    }
+
+    @JsonView(ProjectViews.Default.class)
+    @Override
+    public Integer getId() {
+        return super.getId();
     }
 
     public String getName() {
