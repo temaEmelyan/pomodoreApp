@@ -359,13 +359,16 @@ let taskUtil = {
     updateTaskSelectWithNewData: function (data, nameOfTheNewTask) {
         let dropDown = $('#tasksDropDown');
         $('.optionTaskName').remove();
-        data.reverse().forEach(value => {
-            dropDown.prepend($('<option>', {
-                class: 'optionTaskName',
-                value: value.id,
-                text: value.name
-            }));
-        });
+        data.sort((a, b) => a.name.localeCompare(b.name))
+            .reverse()
+            .forEach(
+                value => {
+                    dropDown.prepend($('<option>', {
+                        class: 'optionTaskName',
+                        value: value.id,
+                        text: value.name
+                    }));
+                });
 
         if (nameOfTheNewTask === '') {
             $('.optionTaskName').filter(function () {
@@ -416,18 +419,28 @@ let util = {
     updateProjectSelectWithNewData: function (data, nameOfTheNewProject) {
         let dropDown = $('#projectsDropDown');
         $('.optionProjectName').remove();
-        data.reverse().forEach(value => {
-            dropDown.prepend($('<option>', {
-                class: 'optionProjectName',
-                value: value.id,
-                text: value.name
-            }));
-        });
+        data.sort((a, b) => a.name.localeCompare(b.name))
+            .reverse()
+            .forEach(
+                value => {
+                    dropDown.prepend($('<option>', {
+                        class: 'optionProjectName',
+                        value: value.id,
+                        text: value.name
+                    }));
+                });
 
-        $('.optionProjectName').filter(function () {
-            // noinspection EqualityComparisonWithCoercionJS
-            return $(this).html() == nameOfTheNewProject
-        }).attr('selected', 'selected')
+        if (nameOfTheNewProject === '') {
+            $('.optionProjectName').filter(function () {
+                return $(this).index() === 0
+            }).attr('selected', 'selected')
+        }
+        else {
+            $('.optionProjectName').filter(function () {
+                // noinspection EqualityComparisonWithCoercionJS
+                return $(this).html() == nameOfTheNewProject
+            }).attr('selected', 'selected')
+        }
     },
 
 

@@ -55,6 +55,7 @@ function addTaskToThePage(task, projectContainer) {
         tskContainer.find('.pomo-togglable-row').toggle();
     });
     let overalTaskLength = 0;
+    task.pomos.sort((a, b) => new Date(a.finish) - new Date(b.finish));
     task.pomos.forEach(pomo => {
         overalTaskLength += appendAPomo(pomo, tskContainer);
     });
@@ -66,7 +67,7 @@ function addTaskToThePage(task, projectContainer) {
 function appendAPomo(pomo, tskContainer) {
     let row = $('<div>', {class: 'row pomo-togglable-row'});
     row.append($('<div>', {class: 'col'}))
-        .append($('<div>', {class: 'col'}))
+        .append($('<div>', {class: 'col', text: toPrettyTime(pomo.finish)}))
         .append($('<div>', {class: 'col', text: dropYearFromStringIfItIsCurrentYeat(toPrettyDate(pomo.finish))}))
         .append($('<div>', {class: 'col', text: toHHMMSS(pomo.duration)}));
     row.toggle();
@@ -121,10 +122,17 @@ $(window).on('load', function () {
 
 const toPrettyDate =
     dateTime => new Date(dateTime)
-        .toUTCString()
+        .toString()
         .split(' ')
         .splice(1, 3)
         .join(' ');
+
+const toPrettyTime =
+    dateTime => new Date(dateTime)
+        .toTimeString()
+        .split(':')
+        .splice(0, 2)
+        .join(':');
 
 const toHHMMSS = (secs) => {
     let sec_num = parseInt(secs, 10);

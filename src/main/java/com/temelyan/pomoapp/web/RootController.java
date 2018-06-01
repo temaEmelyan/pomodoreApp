@@ -2,6 +2,7 @@ package com.temelyan.pomoapp.web;
 
 import com.temelyan.pomoapp.AuthorizedUser;
 import com.temelyan.pomoapp.model.Project;
+import com.temelyan.pomoapp.model.Task;
 import com.temelyan.pomoapp.service.ProjectService;
 import com.temelyan.pomoapp.to.UserTo;
 import com.temelyan.pomoapp.util.UserUtil;
@@ -21,7 +22,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.support.SessionStatus;
 
 import java.util.ArrayList;
-import java.util.Set;
+import java.util.Comparator;
+import java.util.List;
 
 @SuppressWarnings("SameReturnValue")
 @Controller
@@ -43,11 +45,12 @@ public class RootController extends AbstractUserController {
     @GetMapping("/")
     public String root(Model model) {
         logger.info("redirect from root to pomo.html for user {}", AuthorizedUser.get());
-        UserTo userTo = AuthorizedUser.get().getUserTo();
-        Set<Project> allForUser = projectService.getAllForUserWithTasks(userTo.getId());
-        userTo.setProjects(allForUser);
-        model.addAttribute("user", userTo);
-        model.addAttribute("project", new ArrayList<>(allForUser).get(0));
+        List<Project> allForUser = new ArrayList<>(projectService.getAllForUserWithTasks(AuthorizedUser.id()));
+        allForUser.sort(Comparator.comparing(project -> project.getName().toLowerCase()));
+        model.addAttribute("projects", allForUser);
+        List<Task> tasks = new ArrayList<>(allForUser.get(0).getTasks());
+        tasks.sort(Comparator.comparing(task -> task.getName().toLowerCase()));
+        model.addAttribute("tasks", tasks);
         return "pomo";
     }
 
