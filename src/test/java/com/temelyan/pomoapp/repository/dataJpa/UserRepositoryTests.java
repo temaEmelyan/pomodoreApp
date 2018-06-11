@@ -1,5 +1,6 @@
 package com.temelyan.pomoapp.repository.dataJpa;
 
+import com.temelyan.pomoapp.Resolver;
 import com.temelyan.pomoapp.model.Project;
 import com.temelyan.pomoapp.model.User;
 import com.temelyan.pomoapp.repository.ProjectRepository;
@@ -22,7 +23,7 @@ import java.util.Set;
 
 @RunWith(SpringRunner.class)
 @Sql(statements = {"DELETE FROM POMOS", "DELETE FROM TASKS", "DELETE FROM PROJECTS", "DELETE FROM USERS"})
-@ActiveProfiles("test")
+@ActiveProfiles(resolver = Resolver.class)
 @SpringBootTest
 public class UserRepositoryTests {
 

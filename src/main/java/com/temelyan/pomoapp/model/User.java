@@ -26,7 +26,7 @@ public class User extends AbstractEntity {
 
     @Column(name = "password", nullable = false)
     @NotBlank
-    @Size(min = 1)
+    @Size(min = 8)
     @JsonIgnore
     private String password;
 
@@ -40,7 +40,7 @@ public class User extends AbstractEntity {
     public User() {
     }
 
-    public User(Integer id, @Email @NotBlank String email, @NotBlank @Size(min = 1) String password) {
+    public User(Integer id, @Email @NotBlank String email, @NotBlank @Size(min = 8) String password) {
         super(id);
         this.email = email;
         this.password = password;

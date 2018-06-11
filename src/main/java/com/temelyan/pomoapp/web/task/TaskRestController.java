@@ -1,5 +1,7 @@
-package com.temelyan.pomoapp.web.task.project;
+package com.temelyan.pomoapp.web.task;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.temelyan.pomoapp.JsonViews.TaskViews;
 import com.temelyan.pomoapp.model.Task;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +20,7 @@ public class TaskRestController extends AbstractTaskController {
         super.create(new Task(name), projectId);
     }
 
+    @JsonView(TaskViews.Default.class)
     @GetMapping(path = "get", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Task> getAllTasks(int projectId) {
         return super.getAll(projectId);

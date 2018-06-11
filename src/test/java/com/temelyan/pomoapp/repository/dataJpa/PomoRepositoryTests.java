@@ -1,5 +1,6 @@
 package com.temelyan.pomoapp.repository.dataJpa;
 
+import com.temelyan.pomoapp.Resolver;
 import com.temelyan.pomoapp.model.Pomo;
 import com.temelyan.pomoapp.model.Project;
 import com.temelyan.pomoapp.model.Task;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
 @Sql(statements = {"DELETE FROM POMOS", "DELETE FROM TASKS", "DELETE FROM PROJECTS", "DELETE FROM USERS"})
-@ActiveProfiles("test")
+@ActiveProfiles(resolver = Resolver.class)
 @SpringBootTest
 public class PomoRepositoryTests {
     private static LocalDateTime localDateTime =

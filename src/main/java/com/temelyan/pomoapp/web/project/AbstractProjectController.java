@@ -22,6 +22,6 @@ public abstract class AbstractProjectController {
 
     Set<Project> getAll() {
         logger.info("fetching all projects for user {}", AuthorizedUser.get());
-        return projectService.getAllForUser(AuthorizedUser.id());
+        return projectService.getAllForUserWithTasks(AuthorizedUser.id());
     }
 }

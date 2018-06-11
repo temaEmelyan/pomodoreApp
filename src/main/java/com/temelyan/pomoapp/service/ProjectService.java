@@ -9,5 +9,5 @@ public interface ProjectService {
 
     Project save(Project project, int userId);
 
-    Set<Project> getAllForUser(int userId);
+    Set<Project> getAllForUserWithTasks(int userId);
 }

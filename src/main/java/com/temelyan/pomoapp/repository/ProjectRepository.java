@@ -10,4 +10,6 @@ public interface ProjectRepository {
     Project save(Project project, Integer userId);
 
     Set<Project> getAllForUser(Integer userId);
+
+    Set<Project> getAllForUserWithTasks(int userId);
 }

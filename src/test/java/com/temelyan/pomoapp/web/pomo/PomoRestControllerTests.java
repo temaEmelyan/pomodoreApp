@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.temelyan.pomoapp.AuthorizedUser;
+import com.temelyan.pomoapp.Resolver;
 import com.temelyan.pomoapp.WebApplication;
 import com.temelyan.pomoapp.model.Pomo;
 import com.temelyan.pomoapp.model.Project;
@@ -48,7 +49,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = WebApplication.class)
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles(resolver = Resolver.class)
 @Sql("/db/drop_db.sql")
 public class PomoRestControllerTests {
 

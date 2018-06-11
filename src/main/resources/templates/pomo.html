@@ -63,7 +63,7 @@
                         </div>
 
                         <select class="custom-select inverse-dropdown" id="projectsDropDown">
-                            <option class="optionProjectName" th:each="project : ${user.getProjects()}"
+                            <option class="optionProjectName" th:each="project : ${projects}"
                                     th:value="${project.id}"
                                     th:text="${project.getName()}"></option>
                             <option id="addNewProj" value="-1" style="font-weight: bold">add new project</option>
@@ -79,7 +79,7 @@
                         </div>
 
                         <select class="custom-select inverse-dropdown" id="tasksDropDown">
-                            <option class="optionTaskName" th:each="task : ${project.getTasks()}"
+                            <option class="optionTaskName" th:each="task : ${tasks}"
                                     th:value="${task.id}"
                                     th:text="${task.getName()}"></option>
                             <option id="addNewTask" value="-1" style="font-weight: bold">add new task</option>

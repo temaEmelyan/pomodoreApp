@@ -1,4 +1,4 @@
-package com.temelyan.pomoapp.web.task.project;
+package com.temelyan.pomoapp.web.task;
 
 import com.temelyan.pomoapp.AuthorizedUser;
 import com.temelyan.pomoapp.model.Task;

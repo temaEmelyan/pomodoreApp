@@ -40,5 +40,10 @@
     </form>
 </div>
 <div th:replace="fragments/footer :: footer"></div>
+<script>
+    $(window).on('load', function () {
+        $('#navbar-profile').addClass('active');
+    })
+</script>
 </body>
 </html>
