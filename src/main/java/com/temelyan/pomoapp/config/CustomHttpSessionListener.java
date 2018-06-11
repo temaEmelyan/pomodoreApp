@@ -46,7 +46,7 @@ public class CustomHttpSessionListener implements HttpSessionListener {
             event.getSession().setAttribute("ip", ipAddress);
         }
 
-        event.getSession().setMaxInactiveInterval(10);
+        event.getSession().setMaxInactiveInterval(60 * 30);
         logger.info("session {} created ip: {}",
                 event.getSession().getId(),
                 ipAddress

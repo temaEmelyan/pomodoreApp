@@ -43,7 +43,7 @@ public class UserValidator implements Validator {
         if (user.isPresent()) {
             errors.rejectValue("email", "Duplicate.userForm.email");
         }
-        if (userTo.getPassword().length() < 1 || userTo.getPassword().length() > 256) {
+        if (userTo.getPassword().length() < 8 || userTo.getPassword().length() > 256) {
             errors.rejectValue("password", "Size.userForm.password");
         }
         if (!userTo.getPasswordConfirm().equals(userTo.getPassword())) {

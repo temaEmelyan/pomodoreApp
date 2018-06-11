@@ -11,6 +11,12 @@ function fetchPomos(startStr, endStr) {
             $('.durationElement').text(toHHMMSS(0));
             if (data) {
                 processUserJson(data)
+            } else {
+                if ($('#dateSpan').text() === 'Today') {
+                    let prjContainer = $('<div>', {class: 'project-container'});
+                    prjContainer.text('Do some work');
+                    $('.pomo-log-table').append(prjContainer);
+                }
             }
         }
     })
@@ -83,26 +89,28 @@ function dropYearFromStringIfItIsCurrentYeat(date) {
     }
 }
 
-$(window).on('load', function () {
-    function callBack(start, end) {
-        let str;
-        if (start._d.toLocaleDateString() === end._d.toLocaleDateString()) {
-            if (start._d.toLocaleDateString() === today._d.toLocaleDateString()) {
-                str = 'Today';
-            } else if (start._d.toLocaleDateString() === yesterday._d.toLocaleDateString()) {
-                str = 'Yesterday';
-            } else {
-                str = start.format('MMMM D, YYYY');
-            }
+function callBack(start, end) {
+    let str;
+    if (start._d.toLocaleDateString() === end._d.toLocaleDateString()) {
+        if (start._d.toLocaleDateString() === today._d.toLocaleDateString()) {
+            str = 'Today';
+        } else if (start._d.toLocaleDateString() === yesterday._d.toLocaleDateString()) {
+            str = 'Yesterday';
         } else {
-            str = start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
+            str = start.format('MMMM D, YYYY');
         }
-        $('#reportrange').find('span').html(str);
-
-        let startStr = start.format('YYYY-MM-DD');
-        let endStr = end.format('YYYY-MM-DD');
-        fetchPomos(startStr, endStr);
+    } else {
+        str = start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     }
+    $('#reportrange').find('span').html(str);
+
+    let startStr = start.format('YYYY-MM-DD');
+    let endStr = end.format('YYYY-MM-DD');
+    fetchPomos(startStr, endStr);
+}
+
+$(window).on('load', function () {
+    $('#navbar-log').addClass('active');
 
     $('#reportrange').daterangepicker({
         startDate: today,
@@ -136,7 +144,7 @@ const toPrettyTime =
 
 const toHHMMSS = (secs) => {
     let sec_num = parseInt(secs, 10);
-    let hours = Math.floor(sec_num / 3600) % 24 + ' h';
+    let hours = Math.floor(sec_num / 3600) + ' h';
     let minutes = Math.floor(sec_num / 60) % 60 + ' m';
     let seconds = sec_num % 60 + ' s';
     return [hours, minutes, seconds]

@@ -251,6 +251,7 @@ function doneNoty(text) {
 }
 
 $(window).on('load', function () {
+    $('#navbar-timer').addClass('active');
     pomodoro.init();
 
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
