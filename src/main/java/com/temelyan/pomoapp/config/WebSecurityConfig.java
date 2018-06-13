@@ -32,6 +32,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .requiresChannel().anyRequest().requiresSecure()
+                .and()
                 .authorizeRequests()
                 .antMatchers("/css/**", "/js/**", "/webjars/**", "/favicon.ico").permitAll()
                 .antMatchers("/registration", "/forgot", "/reset").anonymous()
