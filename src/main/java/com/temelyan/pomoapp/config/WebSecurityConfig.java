@@ -33,8 +33,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/css/**", "/js/**", "/webjars/**", "/favicon.ico").permitAll()
-                .antMatchers("/registration", "/forgot", "/reset").anonymous()
+                .antMatchers(
+                        "/css/**", "/js/**", "/webjars/**",
+                        "/favicon.ico", "/manifest.json", "/images/**")
+                .permitAll()
+                .antMatchers("/registration", "/forgot", "/reset", "/login").anonymous()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
