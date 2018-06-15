@@ -9,7 +9,6 @@ public class UserUtil {
     }
 
     public static User updateFromTo(User user, UserTo userTo) {
-        user.setEmail(userTo.getEmail().toLowerCase());
         user.setPassword(userTo.getPassword());
         return user;
     }

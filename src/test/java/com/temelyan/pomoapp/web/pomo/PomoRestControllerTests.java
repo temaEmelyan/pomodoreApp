@@ -1,5 +1,6 @@
 package com.temelyan.pomoapp.web.pomo;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -38,6 +39,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
@@ -77,6 +79,19 @@ public class PomoRestControllerTests {
     private static LocalDateTime getNextTimeInstance() {
         localDateTime = localDateTime.plus(6, ChronoUnit.HOURS);
         return localDateTime;
+    }
+
+    private static <T> T fromJSON(final TypeReference<T> type,
+                                  final String jsonPacket) {
+        T data = null;
+        try {
+            data = new ObjectMapper()
+                    .registerModule(new Jdk8Module())
+                    .registerModule(new JavaTimeModule())
+                    .readValue(jsonPacket, type);
+        } catch (Exception ignored) {
+        }
+        return data;
     }
 
     private void populateWIthFakeData(User user) {
@@ -135,20 +150,18 @@ public class PomoRestControllerTests {
                                 new ArrayList<>()))))
                 .andReturn().getResponse().getContentAsString();
 
-        User fromDb = userRepopsitory.getByIdWithPomosInDateRange(
+        Set<Project> fromDb = projectRepository.getAllForUserWithTasksAndPomos(
                 byEmail.getId(),
                 LocalDateTime.of(LocalDate.parse(from), LocalTime.MIN),
                 LocalDateTime.of(LocalDate.parse(until), LocalTime.MAX));
 
-        User fromJSON = new ObjectMapper()
-                .registerModule(new Jdk8Module())
-                .registerModule(new JavaTimeModule())
-                .readValue(contentAsString, User.class);
+        Set<Project> fromJSON = fromJSON(new TypeReference<Set<Project>>() {
+        }, contentAsString);
 
         List<Pomo> pomosFromJson = new ArrayList<>();
         List<Pomo> pomosFromDb = new ArrayList<>();
-        fromDb.getProjects().forEach(project -> project.getTasks().forEach(task -> pomosFromDb.addAll(task.getPomos())));
-        fromJSON.getProjects().forEach(project -> project.getTasks().forEach(task -> pomosFromJson.addAll(task.getPomos())));
+        fromDb.forEach(project -> project.getTasks().forEach(task -> pomosFromDb.addAll(task.getPomos())));
+        fromJSON.forEach(project -> project.getTasks().forEach(task -> pomosFromJson.addAll(task.getPomos())));
 
         Assertions.assertThat(pomosFromDb).isEqualTo(pomosFromJson);
     }

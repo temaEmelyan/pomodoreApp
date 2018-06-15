@@ -9,7 +9,6 @@ import com.temelyan.pomoapp.repository.PomoRepository;
 import com.temelyan.pomoapp.repository.ProjectRepository;
 import com.temelyan.pomoapp.repository.TaskRepository;
 import com.temelyan.pomoapp.repository.UserRepopsitory;
-import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,28 +18,32 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
 @Sql("/db/drop_db.sql")
 @ActiveProfiles(resolver = Resolver.class)
 @SpringBootTest
-public class PomoRepositoryTests {
+public class CrudProjectRepositoryTest {
     private static LocalDateTime localDateTime =
             LocalDateTime.of(2018, Month.JANUARY, 1, 8, 0);
     @Autowired
-    private PomoRepository pomoRepository;
+    CrudProjectRepository crudProjectRepository;
+
     @Autowired
-    private UserRepopsitory userRepopsitory;
+    UserRepopsitory userRepopsitory;
     @Autowired
-    private TaskRepository taskRepository;
+    PomoRepository pomoRepository;
     @Autowired
-    private ProjectRepository projectRepository;
+    ProjectRepository projectRepository;
+    @Autowired
+    TaskRepository taskRepository;
 
     private static void resetTimeInstance() {
         localDateTime =
@@ -81,53 +84,17 @@ public class PomoRepositoryTests {
     }
 
     @Test
-    public void test1() {
+    public void test_GetAllForUserWithTasks() {
         User user = new User(null, "test@gmail.com", "password");
         populateWIthFakeData(user);
         resetTimeInstance();
         User user1 = new User(null, "test1@gmail.com", "password");
         populateWIthFakeData(user1);
 
-        List<Pomo> allForUserInDateRange = pomoRepository.getAllForUserInDateRange(
-                LocalDate.of(2018, 1, 3),
-                LocalDate.of(2018, 1, 6),
-                user.getId()
-        );
-
-        List<Pomo> allForUser1InDateRange = pomoRepository.getAllForUserInDateRange(
-                LocalDate.of(2018, 1, 3),
-                LocalDate.of(2018, 1, 6),
-                user1.getId()
-        );
-
-        Assert.assertEquals(allForUser1InDateRange.size(), 16);
-
-        Assert.assertEquals(
-                allForUser1InDateRange.get(0).getTask().getProject().getUser(),
-                allForUser1InDateRange.get(new Random().nextInt(16)).getTask().getProject().getUser());
-
-        Assertions.assertThat(
-                allForUserInDateRange.get(0).getTask().getProject().getUser())
-                .isEqualToIgnoringGivenFields(user, "projects");
-    }
-
-    @Test
-    public void test2() {
-        resetTimeInstance();
-        User save = userRepopsitory.save(new User(null, "test@gmail.com", "password"));
-        Project work = projectRepository.save(new Project("work"), save.getId());
-        Task workTask = taskRepository.save(new Task("work task"), work.getId());
-        LocalDateTime nextTimeInstance = getNextTimeInstance();
-        List<Pomo> pomos = new ArrayList<>();
-        pomos.add(pomoRepository.save(new Pomo(nextTimeInstance, 60), workTask.getId()));
-        pomos.add(pomoRepository.save(new Pomo(nextTimeInstance.plusMinutes(1), 60), workTask.getId()));
-        List<Pomo> allForUserInDateRange = pomoRepository.getAllForUserInDateRange(
-                nextTimeInstance.toLocalDate(),
-                nextTimeInstance.toLocalDate(),
-                save.getId());
-
-        pomos.sort(Comparator.comparing(Pomo::getFinish).reversed());
-
-        Assertions.assertThat(pomos).isEqualTo(allForUserInDateRange);
+        Set<Project> allPomos = crudProjectRepository.findAllByUserIdFetchWithTasksAndPomosInDateRange(
+                user.getId(),
+                LocalDateTime.of(2018, Month.JANUARY, 1, 8, 0),
+                LocalDateTime.of(2018, Month.APRIL, 1, 8, 0));
+        Assert.assertTrue(allPomos.size() > 0);
     }
 }
