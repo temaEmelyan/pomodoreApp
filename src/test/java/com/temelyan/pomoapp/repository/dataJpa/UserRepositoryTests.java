@@ -22,7 +22,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @RunWith(SpringRunner.class)
-@Sql(statements = {"DELETE FROM POMOS", "DELETE FROM TASKS", "DELETE FROM PROJECTS", "DELETE FROM USERS"})
+@Sql("/db/drop_db.sql")
 @ActiveProfiles(resolver = Resolver.class)
 @SpringBootTest
 public class UserRepositoryTests {
@@ -100,10 +100,8 @@ public class UserRepositoryTests {
 
         user.getProjects().forEach(p -> projectRepository.save(p, p.getUser().getId()));
 
-        User one = userRepository.getWithProjects(user.getId());
-        assertMatch(one, user);
+        Set<Project> projects = projectRepository.getAllForUserWithTasks(user.getId());
 
-        Set<Project> projects = one.getProjects();
         Set<Project> projects1 = user.getProjects();
 
         Assertions.assertThat(new HashSet<>(projects))

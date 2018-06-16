@@ -6,11 +6,11 @@ const yesterday = moment().subtract(1, 'days');
 function fetchPomos(startStr, endStr) {
     $.get({
         url: getPomosUrl + '?from=' + startStr + '&to=' + endStr,
-        success: function (data) {
+        success: function (projects) {
             $('.project-container').remove();
             $('.durationElement').text(toHHMMSS(0));
-            if (data) {
-                processUserJson(data)
+            if (projects) {
+                processProjectsSetJson(projects)
             } else {
                 if ($('#dateSpan').text() === 'Today') {
                     let prjContainer = $('<div>', {class: 'project-container'});
@@ -22,9 +22,10 @@ function fetchPomos(startStr, endStr) {
     })
 }
 
-function processUserJson(data) {
+function processProjectsSetJson(projects) {
     let overallLength = 0;
-    data.projects.forEach(project => {
+    projects.sort((a, b) => a.name.localeCompare(b.name));
+    projects.forEach(project => {
         overallLength += addProjectToThePage(project);
     });
     $('.durationElement').text(toHHMMSS(overallLength));

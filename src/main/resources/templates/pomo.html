@@ -13,26 +13,26 @@
         <div class="row" style="text-align: center;">
             <div class="col" style="align-items: center">
                 <div class="row">
-                    <div class="col">
+                    <div class="col-4">
                         <button id="decreaseDuration" class="btn pl-min-btns">-</button>
                     </div>
-                    <div class="col">
-                        <h3 id="duration" style="color:white; padding: 0 10px 0 10px;">25</h3>
+                    <div class="col-4">
+                        <h3 id="duration" style="color:white">25</h3>
                     </div>
-                    <div class="col">
+                    <div class="col-4">
                         <button id="increaseDuration" class="btn pl-min-btns">+</button>
                     </div>
                 </div>
             </div>
             <div class="col" style="align-items: center">
                 <div class="row">
-                    <div class="col">
+                    <div class="col-4">
                         <button id="decreaseDurationBrake" class="btn pl-min-btns">-</button>
                     </div>
-                    <div class="col">
-                        <h3 id="durationBreak" style="color:white; padding: 0 10px 0 10px;">5</h3>
+                    <div class="col-4">
+                        <h3 id="durationBreak" style="color:white">5</h3>
                     </div>
-                    <div class="col">
+                    <div class="col-4">
                         <button id="increaseDurationBrake" class="btn pl-min-btns">+</button>
                     </div>
                 </div>
@@ -53,11 +53,11 @@
             <button id="longBreak">Long Break</button>
             <button id="stop">Stop</button>
         </div>
-        <div class="row">
-            <div class="col">
-                <div class="row" style="padding-top: 20px">
+        <div class="row" style="padding-top: 20px">
+            <div class="col-md-6">
+                <div class="row">
                     <div class="input-group">
-                        <div class="input-group-prepend">
+                        <div class="input-group-prepend" style="width: 120px">
                             <label class="input-group-text inverse-dropdown" for="projectsDropDown">Select
                                 project</label>
                         </div>
@@ -71,11 +71,12 @@
                     </div>
                 </div>
             </div>
-            <div class="col">
-                <div class="row" style="padding-top: 20px">
+            <div class="col-md-6">
+                <div class="row">
                     <div class="input-group">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text inverse-dropdown" for="tasksDropDown">Select task</label>
+                        <div class="input-group-prepend" style="width: 120px">
+                            <label class="input-group-text inverse-dropdown" for="tasksDropDown" style="width: 120px">Select
+                                task </label>
                         </div>
 
                         <select class="custom-select inverse-dropdown" id="tasksDropDown">
@@ -140,7 +141,7 @@
 </div>
 
 <audio id="myAudio">
-    <source src="../static/gong.wav" th:src="@{gong.wav}" type="audio/wav">
+    <source src="../static/gong.mp3" th:src="@{gong.mp3}" type="audio/mp3">
     Your browser does not support the audio element.
 </audio>
 

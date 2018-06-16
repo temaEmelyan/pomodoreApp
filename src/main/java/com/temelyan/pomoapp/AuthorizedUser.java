@@ -42,7 +42,12 @@ public class AuthorizedUser extends org.springframework.security.core.userdetail
     }
 
     public static int id() {
-        return get().userTo.getId();
+        Integer id = get().userTo.getId();
+        if (id == null) {
+            SecurityContextHolder.getContext().setAuthentication(null);
+            throw new RuntimeException();
+        }
+        return id;
     }
 
     public void update(UserTo newTo) {

@@ -9,15 +9,17 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private final PasswordEncoderConfig encoder;
+    private final PasswordEncoder encoder;
     private final UserDetailsService userDetailsService;
 
     @Autowired
-    public WebSecurityConfig(@Qualifier("userService") UserDetailsService userDetailsService, PasswordEncoderConfig encoder) {
+    public WebSecurityConfig(@Qualifier("userService") UserDetailsService userDetailsService,
+                             PasswordEncoder encoder) {
         this.userDetailsService = userDetailsService;
         this.encoder = encoder;
     }
@@ -31,8 +33,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/css/**", "/js/**", "/webjars/**", "/favicon.ico").permitAll()
-                .antMatchers("/registration", "/forgot", "/reset").anonymous()
+                .antMatchers(
+                        "/css/**", "/js/**", "/webjars/**",
+                        "/favicon.ico", "/manifest.json", "/images/**")
+                .permitAll()
+                .antMatchers("/registration", "/forgot", "/reset", "/login").anonymous()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
@@ -45,6 +50,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(encoder.passwordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(encoder);
     }
 }

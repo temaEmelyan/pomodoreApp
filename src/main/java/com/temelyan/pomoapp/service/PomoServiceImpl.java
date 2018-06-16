@@ -5,9 +5,6 @@ import com.temelyan.pomoapp.repository.PomoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.List;
-
 @Service
 public class PomoServiceImpl implements PomoService {
     private final PomoRepository pomoRepository;
@@ -18,12 +15,7 @@ public class PomoServiceImpl implements PomoService {
     }
 
     @Override
-    public void add(Pomo pomo, int taskId) {
+    public void add(Pomo pomo, int taskId, int userId) {
         pomoRepository.save(pomo, taskId);
-    }
-
-    @Override
-    public List<Pomo> getAllForUserInDateRange(LocalDate fromDate, LocalDate toDate, int userId) {
-        return pomoRepository.getAllForUserInDateRange(fromDate, toDate, userId);
     }
 }

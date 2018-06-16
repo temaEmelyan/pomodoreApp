@@ -5,6 +5,7 @@ import com.temelyan.pomoapp.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Repository
@@ -19,23 +20,18 @@ public class DataJpaProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public Project save(Project project) {
+    public Project save(Project project, int userId) {
+        project.setUser(crudUserRepository.getOne(userId));
         return crudProjectRepository.save(project);
     }
 
     @Override
-    public Project save(Project project, Integer userId) {
-        project.setUser(crudUserRepository.getOne(userId));
-        return save(project);
-    }
-
-    @Override
-    public Set<Project> getAllForUser(Integer userId) {
-        return crudProjectRepository.findAllByUserId(userId);
-    }
-
-    @Override
     public Set<Project> getAllForUserWithTasks(int userId) {
-        return crudProjectRepository.findAllByUserIdFetchTasks(userId);
+        return crudProjectRepository.findAllByUserIdFetchWithTasks(userId);
+    }
+
+    @Override
+    public Set<Project> getAllForUserWithTasksAndPomos(int userId, LocalDateTime from, LocalDateTime to) {
+        return crudProjectRepository.findAllByUserIdFetchWithTasksAndPomosInDateRange(userId, from, to);
     }
 }

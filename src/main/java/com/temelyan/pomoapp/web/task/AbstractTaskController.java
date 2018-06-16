@@ -21,7 +21,7 @@ public abstract class AbstractTaskController {
                 projectId,
                 AuthorizedUser.get());
 
-        taskService.save(task, projectId);
+        taskService.save(task, projectId, AuthorizedUser.id());
     }
 
     List<Task> getAll(int projectId) {

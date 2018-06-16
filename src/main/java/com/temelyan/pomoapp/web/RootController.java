@@ -99,7 +99,7 @@ public class RootController extends AbstractUserController {
         } else {
             super.create(UserUtil.createNewFromTo(userTo));
             status.setComplete();
-            return "redirect:login";
+            return "redirect:/login?username=" + userTo.getEmail();
         }
     }
 

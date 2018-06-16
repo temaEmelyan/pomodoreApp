@@ -1,8 +1,6 @@
 package com.temelyan.pomoapp.repository.dataJpa;
 
-import com.temelyan.pomoapp.model.Project;
 import com.temelyan.pomoapp.model.User;
-import com.temelyan.pomoapp.repository.ProjectRepository;
 import com.temelyan.pomoapp.repository.UserRepopsitory;
 import com.temelyan.pomoapp.util.exception.NotFoundException;
 import org.slf4j.Logger;
@@ -10,19 +8,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
-import java.util.Set;
-
 @Repository
 public class DataJpaUserRepositoryImpl implements UserRepopsitory {
     private final CrudUserRepository crudRepository;
-    private final ProjectRepository projectRepository;
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    public DataJpaUserRepositoryImpl(CrudUserRepository crudRepository, ProjectRepository projectRepository) {
+    public DataJpaUserRepositoryImpl(CrudUserRepository crudRepository) {
         this.crudRepository = crudRepository;
-        this.projectRepository = projectRepository;
     }
 
     @Override
@@ -38,14 +31,6 @@ public class DataJpaUserRepositoryImpl implements UserRepopsitory {
     }
 
     @Override
-    public User getWithProjects(int id) {
-        Set<Project> allForUser = projectRepository.getAllForUser(id);
-        User user = get(id);
-        user.setProjects(allForUser);
-        return user;
-    }
-
-    @Override
     public User getByEmail(String email) {
         return crudRepository.getByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User with this email does not exist"));
@@ -54,10 +39,5 @@ public class DataJpaUserRepositoryImpl implements UserRepopsitory {
     @Override
     public User findUserByResetToken(String token) {
         return crudRepository.findByResetToken(token).orElseThrow(RuntimeException::new);
-    }
-
-    @Override
-    public User getByIdWithPomosInDateRange(int userId, LocalDateTime from, LocalDateTime to) {
-        return crudRepository.getUserByIdCompleteGraphForPomosInDateRange(from, to, userId);
     }
 }
