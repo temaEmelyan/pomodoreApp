@@ -8,6 +8,6 @@ Create projects you are working on and add tasks for them. Track the time you sp
 
 ![alt text](https://i.imgur.com/yYvmHJE.png)
 
-![alt text](https://i.imgur.com/eV2RhZI.png)
+![alt text](https://i.imgur.com/ivndAqM.png)
 
 The app built using Spring-Boot 2, Spring-Security, Spring-Data-JPA, Maven and JQuery on the front-end. 
