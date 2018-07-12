@@ -15,13 +15,13 @@ public abstract class AbstractTaskController {
     @Autowired
     private TaskService taskService;
 
-    void create(Task task, int projectId) {
+    void create(String taskName, int projectId) {
         logger.info("creating new task {} for project with id {} for user {}",
-                task,
+                taskName,
                 projectId,
                 AuthorizedUser.get());
 
-        taskService.save(task, projectId, AuthorizedUser.id());
+        taskService.save(taskName, projectId, AuthorizedUser.id());
     }
 
     List<Task> getAll(int projectId) {
@@ -29,6 +29,6 @@ public abstract class AbstractTaskController {
                 projectId,
                 AuthorizedUser.get());
 
-        return taskService.getAllForProject(projectId);
+        return taskService.getAllForProject(projectId, AuthorizedUser.id());
     }
 }

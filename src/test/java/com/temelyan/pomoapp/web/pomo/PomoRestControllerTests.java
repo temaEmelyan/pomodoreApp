@@ -33,7 +33,6 @@ import org.springframework.web.context.WebApplicationContext;
 import javax.servlet.Filter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.Month;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -152,8 +151,8 @@ public class PomoRestControllerTests {
 
         Set<Project> fromDb = projectRepository.getAllForUserWithTasksAndPomos(
                 byEmail.getId(),
-                LocalDateTime.of(LocalDate.parse(from), LocalTime.MIN),
-                LocalDateTime.of(LocalDate.parse(until), LocalTime.MAX));
+                LocalDate.parse(from),
+                LocalDate.parse(until));
 
         Set<Project> fromJSON = fromJSON(new TypeReference<Set<Project>>() {
         }, contentAsString);

@@ -2,7 +2,7 @@ package com.temelyan.pomoapp.repository;
 
 import com.temelyan.pomoapp.model.Project;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Set;
 
 public interface ProjectRepository {
@@ -10,5 +10,7 @@ public interface ProjectRepository {
 
     Set<Project> getAllForUserWithTasks(int userId);
 
-    Set<Project> getAllForUserWithTasksAndPomos(int userId, LocalDateTime from, LocalDateTime to);
+    Set<Project> getAllForUserWithTasksAndPomos(int userId, LocalDate from, LocalDate to);
+
+    Project getByIdWithUser(int projectId);
 }

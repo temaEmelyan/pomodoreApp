@@ -28,7 +28,9 @@ public class UserServiceImpl implements UserService {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    public UserServiceImpl(UserRepopsitory userRepopsitory, ProjectRepository projectRepository, TaskRepository taskRepository) {
+    public UserServiceImpl(UserRepopsitory userRepopsitory,
+                           ProjectRepository projectRepository,
+                           TaskRepository taskRepository) {
         this.userRepopsitory = userRepopsitory;
         this.projectRepository = projectRepository;
         this.taskRepository = taskRepository;
@@ -70,8 +72,7 @@ public class UserServiceImpl implements UserService {
         userRepopsitory.save(prepareToSave(user));
         Project project = new Project("Work");
         projectRepository.save(project, user.getId());
-        Task task = new Task("Do work");
-        taskRepository.save(task, project.getId());
+        taskRepository.save(new Task("Do work", project));
         logger.info("New user {} created", user);
         return user;
     }

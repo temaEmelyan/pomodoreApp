@@ -2,7 +2,6 @@ package com.temelyan.pomoapp;
 
 import com.temelyan.pomoapp.model.User;
 import com.temelyan.pomoapp.to.UserTo;
-import com.temelyan.pomoapp.util.UserUtil;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -11,9 +10,8 @@ import java.util.ArrayList;
 import static java.util.Objects.requireNonNull;
 
 public class AuthorizedUser extends org.springframework.security.core.userdetails.User {
-    private static final long serialVersionUID = 1L;
 
-    private UserTo userTo;
+    private User user;
 
     public AuthorizedUser(User user) {
         super(user.getEmail(),
@@ -23,7 +21,7 @@ public class AuthorizedUser extends org.springframework.security.core.userdetail
                 true,
                 true,
                 new ArrayList<>());
-        this.userTo = UserUtil.asTo(user);
+        this.user = user;
     }
 
     public static AuthorizedUser safeGet() {
@@ -41,25 +39,20 @@ public class AuthorizedUser extends org.springframework.security.core.userdetail
         return user;
     }
 
-    public static int id() {
-        Integer id = get().userTo.getId();
-        if (id == null) {
-            SecurityContextHolder.getContext().setAuthentication(null);
-            throw new RuntimeException();
-        }
-        return id;
+    public static Integer id() {
+        return get().getUser().getId();
     }
 
-    public void update(UserTo newTo) {
-        userTo = newTo;
+    public void update(UserTo user) {
+        this.user = new User(user);
     }
 
-    public UserTo getUserTo() {
-        return userTo;
+    public User getUser() {
+        return user;
     }
 
     @Override
     public String toString() {
-        return userTo.toString();
+        return user.toString();
     }
 }

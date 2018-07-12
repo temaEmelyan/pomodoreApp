@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("develop")
+@Profile("mockdata")
 public class StartupComponent implements CommandLineRunner {
     private final UserService userService;
 
@@ -20,5 +20,6 @@ public class StartupComponent implements CommandLineRunner {
     @Override
     public void run(String... args) {
         userService.create(new User(null, "test@gmail.com", "qwerqwer"));
+        userService.create(new User(null, "tema.emelyan@gmail.com", "qwerqwer"));
     }
 }

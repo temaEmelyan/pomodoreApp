@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
@@ -46,7 +45,8 @@ public abstract class AbstractPomoController {
         logger.info("fetching pomos for dates between {} and {} for user {}", from, to, AuthorizedUser.get());
         return projectService.getAllForUserWithTasksAndPomos(
                 AuthorizedUser.id(),
-                LocalDateTime.of(LocalDate.parse(from), LocalTime.MIN),
-                LocalDateTime.of(LocalDate.parse(to), LocalTime.MAX));
+                LocalDate.parse(from),
+                LocalDate.parse(to)
+        );
     }
 }

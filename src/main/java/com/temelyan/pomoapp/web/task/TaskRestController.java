@@ -15,12 +15,12 @@ import java.util.List;
 @RequestMapping("/ajax/task/")
 public class TaskRestController extends AbstractTaskController {
 
-    @PostMapping(path = "add")
+    @PostMapping(path = "add")//todo secure data from other users
     public void addTask(String name, int projectId) {
-        super.create(new Task(name), projectId);
+        super.create(name, projectId);
     }
 
-    @JsonView(TaskViews.Default.class)
+    @JsonView(TaskViews.Default.class)//todo secure data from other users
     @GetMapping(path = "get", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Task> getAllTasks(int projectId) {
         return super.getAll(projectId);

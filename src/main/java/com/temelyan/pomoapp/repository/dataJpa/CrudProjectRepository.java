@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Set;
 
 public interface CrudProjectRepository extends JpaRepository<Project, Integer> {
@@ -23,4 +24,9 @@ public interface CrudProjectRepository extends JpaRepository<Project, Integer> {
             @Param("from_date") LocalDateTime from,
             @Param("to_date") LocalDateTime to
     );
+
+    @Query("select p from Project p " +
+            "left join fetch p.user u " +
+            "where p.id = ?1")
+    Optional<Project> findByIdFetchWithUser(int projectId);
 }

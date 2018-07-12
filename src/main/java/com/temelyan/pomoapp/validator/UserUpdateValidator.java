@@ -44,7 +44,7 @@ public class UserUpdateValidator implements Validator {
             errors.rejectValue("passwordConfirm", "Diff.userForm.passwordConfirm");
         }
 
-        User user = userService.loadByEmail(AuthorizedUser.get().getUserTo().getEmail());
+        User user = userService.loadByEmail(AuthorizedUser.get().getUser().getEmail());
 
         if (!passwordEncoder.matches(userTo.getPassword(), user.getPassword())) {
             errors.rejectValue("password", "Diff.userForm.originalPassword");

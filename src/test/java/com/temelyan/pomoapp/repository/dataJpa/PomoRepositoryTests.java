@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
@@ -88,27 +89,27 @@ public class PomoRepositoryTests {
         User user1 = new User(null, "test1@gmail.com", "password");
         populateWIthFakeData(user1);
 
-        List<Pomo> allForUserInDateRange = pomoRepository.getAllForUserInDateRange(
+        Collection<Project> allForUserInDateRange = projectRepository.getAllForUserWithTasksAndPomos(
+                user.getId(),
                 LocalDate.of(2018, 1, 3),
-                LocalDate.of(2018, 1, 6),
-                user.getId()
+                LocalDate.of(2018, 1, 6)
         );
 
-        List<Pomo> allForUser1InDateRange = pomoRepository.getAllForUserInDateRange(
+        Collection<Project> allForUser1InDateRange = projectRepository.getAllForUserWithTasksAndPomos(
+                user1.getId(),
                 LocalDate.of(2018, 1, 3),
-                LocalDate.of(2018, 1, 6),
-                user1.getId()
+                LocalDate.of(2018, 1, 6)
         );
 
-        Assert.assertEquals(allForUser1InDateRange.size(), 16);
+        Function<Collection<Project>, Long> numberOfPomos = projects -> projects.stream()
+                .map(Project::getTasks)
+                .flatMap(Collection::stream)
+                .map(Task::getPomos)
+                .mapToLong(Collection::size)
+                .sum();
 
-        Assert.assertEquals(
-                allForUser1InDateRange.get(0).getTask().getProject().getUser(),
-                allForUser1InDateRange.get(new Random().nextInt(16)).getTask().getProject().getUser());
-
-        Assertions.assertThat(
-                allForUserInDateRange.get(0).getTask().getProject().getUser())
-                .isEqualToIgnoringGivenFields(user, "projects");
+        Assert.assertEquals(numberOfPomos.apply(allForUser1InDateRange), new Long(16));
+        Assert.assertEquals(numberOfPomos.apply(allForUserInDateRange), new Long(16));
     }
 
     @Test
@@ -116,7 +117,7 @@ public class PomoRepositoryTests {
         resetTimeInstance();
         User save = userRepopsitory.save(new User(null, "test@gmail.com", "password"));
         Project work = projectRepository.save(new Project("work"), save.getId());
-        Task workTask = taskRepository.save(new Task("work task"), work.getId());
+        Task workTask = taskRepository.save(new Task("work task", work));
         LocalDateTime nextTimeInstance = getNextTimeInstance();
         List<Pomo> pomos = new ArrayList<>();
         pomos.add(pomoRepository.save(new Pomo(nextTimeInstance, 60), workTask.getId()));
