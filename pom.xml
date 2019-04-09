@@ -120,7 +120,8 @@
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <version>2.4.0</version>
-            <scope>test</scope>
+            <!--todo make this db test only by uncommenting the line below after setting up postgres-->
+            <!--            <scope>test</scope>-->
         </dependency>
 
         <dependency>
