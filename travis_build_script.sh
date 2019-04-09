@@ -3,9 +3,20 @@ set -e
 mvn package
 
 if [ "$TRAVIS_BRANCH" == "master" ]; then
-    aws ecs update-service --cluster pomodoro-prod --service pomodoro-prod --force-new-deployment #todo create this cluster
+    export CLUSTER=pomodoro-prod #todo create this cluster
+    export SERVICE=pomodoro-prod
+    export POMO_PROFILE=default
 elif [ "$TRAVIS_BRANCH" == "develop" ]; then
-    aws ecs update-service --cluster pomodoro-dev --service pomodoro-dev --force-new-deployment #todo create this cluster
+    export CLUSTER=pomodoro-dev #todo create this cluster
+    export SERVICE=pomodoro-dev
+    export POMO_PROFILE=default
 else
-    aws ecs update-service --cluster pomodoro --service pomodoro --force-new-deployment #todo rename cluster to sandbox
+    export CLUSTER=pomodoro     #todo rename cluster to sandbox
+    export SERVICE=pomodoro
+    export POMO_PROFILE=default
 fi
+docker build -t pomodoro-dev .
+docker tag pomodoro-dev:latest ${AWS_ACCOUNT_ID}.dkr.ecr.ap-southeast-2.amazonaws.com/pomodoro-dev:latest
+eval $(aws ecr get-login --region ap-southeast-2)
+docker push ${AWS_ACCOUNT_ID}.dkr.ecr.ap-southeast-2.amazonaws.com/pomodoro-dev:latest
+aws ecs update-service --cluster ${CLUSTER} --service ${SERVICE} --force-new-deployment
