@@ -17,6 +17,6 @@ else
 fi
 docker build -t pomodoro-dev .
 docker tag pomodoro-dev:latest ${AWS_ACCOUNT_ID}.dkr.ecr.ap-southeast-2.amazonaws.com/pomodoro-dev:latest
-eval $(aws ecr get-login --region ap-southeast-2)
+eval $(aws ecr get-login --no-include-email --region ap-southeast-2)
 docker push ${AWS_ACCOUNT_ID}.dkr.ecr.ap-southeast-2.amazonaws.com/pomodoro-dev:latest
 aws ecs update-service --cluster ${CLUSTER} --service ${SERVICE} --force-new-deployment
