@@ -16,6 +16,7 @@
 <div class="container login-register-container center-block text-center">
     <form method="POST" action="#" th:action="@{/login}" class="form-signin">
         <h2 class="form-heading">Log in</h2>
+        <h2 class="form-heading">ci works</h2>
         <span class="has-error" th:text="${errorMessage} "></span>
         <input name="username" type="text" class="form-control" placeholder="Username"
                th:autofocus="${param.username==null}" th:value="${param.username}"/>
