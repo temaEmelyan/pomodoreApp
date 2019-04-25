@@ -1,4 +1,4 @@
-const ajaxUrl = 'ajax/';
+const ajaxUrl = 'api/';
 const addPomoUrl = ajaxUrl + 'pomo/add';
 const projectUrl = ajaxUrl + 'project/';
 const addProjectUrl = projectUrl + 'add';
@@ -219,8 +219,8 @@ function failNoty(jqXHR) {
     let errorInfo = JSON.parse(jqXHR.responseText);
     lastNoty = new Noty({
         text: "<span class='fas fa-exclamation-circle'></span>"
-        + "error status" + ": " + jqXHR.status + "<br>" + errorInfo.error + "<br>"
-        + errorInfo.message,
+            + "error status" + ": " + jqXHR.status + "<br>" + errorInfo.error + "<br>"
+            + errorInfo.message,
         type: "error",
         layout: "bottomRight"
     }).show();
@@ -231,7 +231,7 @@ function errorNoty(text) {
     // https://stackoverflow.com/questions/48229776
     lastNoty = new Noty({
         text: "<i class='fas fa-exclamation-circle'></i>"
-        + ' ' + text,
+            + ' ' + text,
         type: "error",
         layout: "bottomRight"
     }).show();
@@ -242,7 +242,7 @@ function doneNoty(text) {
     // https://stackoverflow.com/questions/48229776
     lastNoty = new Noty({
         text: "<i class='fas fa-check-square'></i>"
-        + ' ' + text,
+            + ' ' + text,
         type: "success",
         timeout: 3000,
         layout: "bottomRight",
@@ -256,14 +256,6 @@ $(window).on('load', function () {
 
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(jqXHR);
-    });
-
-    $(function () {
-        let token = $("meta[name='_csrf']").attr("content");
-        let header = $("meta[name='_csrf_header']").attr("content");
-        $(document).ajaxSend(function (e, xhr, options) {
-            xhr.setRequestHeader(header, token);
-        });
     });
 
     $('#projectsDropDown').change(function () {
@@ -330,6 +322,7 @@ let taskUtil = {
         let projectId = $('#projectsDropDown').val();
         serialize += '&projectId=' + projectId;
         $.post({
+            beforeSend: util.setAuth,
             url: addTaskUrl,
             data: serialize,
             error: function (xhr, desc, err) {
@@ -346,6 +339,7 @@ let taskUtil = {
 
     fetchTasks: function (nameOfTheNewTask) {
         $.get({
+            beforeSend: util.setAuth,
             url: getTasksUrl + '?projectId=' + $('#projectsDropDown').val(),
             success: function (tasks) {
                 taskUtil.updateTaskSelectWithNewData(tasks, nameOfTheNewTask);
@@ -386,9 +380,13 @@ let taskUtil = {
 
 
 let util = {
+    setAuth: function (request) {
+        request.setRequestHeader("authorization", 'Bearer ' + Cookies.get('pomodoro-token'));
+    },
     saveProject: function () {
         let serialize = $('#addProjectForm').serialize();
         $.post({
+            beforeSend: this.setAuth,
             url: addProjectUrl,
             data: serialize,
             error: function (xhr, desc, err) {
@@ -406,6 +404,7 @@ let util = {
 
     fetchProjects: function (nameOfTheNewProjectInput) {
         $.get({
+            beforeSend: this.setAuth,
             url: getProjectsUrl,
             success: function (projects) {
                 util.updateProjectSelectWithNewData(projects, nameOfTheNewProjectInput);
@@ -435,8 +434,7 @@ let util = {
             $('.optionProjectName').filter(function () {
                 return $(this).index() === 0
             }).attr('selected', 'selected')
-        }
-        else {
+        } else {
             $('.optionProjectName').filter(function () {
                 // noinspection EqualityComparisonWithCoercionJS
                 return $(this).html() == nameOfTheNewProject
@@ -458,10 +456,11 @@ let util = {
 
     addPomo: function (duration) {
         $.post({
+            beforeSend: this.setAuth,
             url: addPomoUrl +
-            '?length=' + duration
-            + '&taskId=' + $('#tasksDropDown').val()
-            + '&clientTimeZone=' + timeZoneOffset,
+                '?length=' + duration
+                + '&taskId=' + $('#tasksDropDown').val()
+                + '&clientTimeZone=' + timeZoneOffset,
             error: function (xhr, desc, err) {
                 console.log(xhr);
                 console.log('Details: ' + desc + '\nError:' + err);

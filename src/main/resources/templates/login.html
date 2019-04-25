@@ -22,7 +22,7 @@
         <input name="password" type="password" class="form-control" placeholder="Password"
                th:autofocus="${param.username!=null}"/>
         <input type="hidden" name="" th:name="${_csrf.parameterName}" value="" th:value="${_csrf.token}"/>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Log In</button>
+        <button id="form-button" class="btn btn-lg btn-primary btn-block" type="button">Log In</button>
         <h4 class="text-center">
             <a href="registration.html" th:href="@{/registration}">Create an account</a>
         </h4>
@@ -31,5 +31,8 @@
         </h4>
     </form>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+<script th:src="@{webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{js/loginPage.js}"></script>
 </body>
 </html>

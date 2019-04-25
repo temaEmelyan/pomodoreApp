@@ -16,6 +16,7 @@ import com.temelyan.pomoapp.repository.ProjectRepository;
 import com.temelyan.pomoapp.repository.TaskRepository;
 import com.temelyan.pomoapp.repository.UserRepopsitory;
 import org.assertj.core.api.Assertions;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,10 +37,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
@@ -141,7 +139,7 @@ public class PomoRestControllerTests {
         User byEmail = userRepopsitory.getByEmail("test@gmail.com");
         String from = "2018-01-03";
         String until = "2018-04-11";
-        String contentAsString = mvc.perform(get("/ajax/pomo/get?from=" + from + "&to=" + until)
+        String contentAsString = mvc.perform(get("/api/pomo/get?from=" + from + "&to=" + until)
                 .with(csrf())
                 .with(authentication(
                         new UsernamePasswordAuthenticationToken(
@@ -163,6 +161,14 @@ public class PomoRestControllerTests {
         fromDb.forEach(project -> project.getTasks().forEach(task -> pomosFromDb.addAll(task.getPomos())));
         fromJSON.forEach(project -> project.getTasks().forEach(task -> pomosFromJson.addAll(task.getPomos())));
 
-        Assertions.assertThat(pomosFromDb).isEqualTo(pomosFromJson);
+        Set<Task> collect = getTasks(fromDb);
+        Set<Task> collect1 = getTasks(fromJSON);
+
+        Assertions.assertThat(collect).isEqualTo(collect1);
+    }
+
+    @NotNull
+    private Set<Task> getTasks(Set<Project> projects) {
+        return projects.stream().flatMap(project -> Objects.requireNonNull(project.getTasks()).stream()).collect(Collectors.toSet());
     }
 }

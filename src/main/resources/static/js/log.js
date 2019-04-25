@@ -1,10 +1,15 @@
-const ajaxUrl = 'ajax/';
+const ajaxUrl = 'api/';
 const getPomosUrl = ajaxUrl + 'pomo/get';
 const today = moment();
 const yesterday = moment().subtract(1, 'days');
 
+const setAuth = function (request) {
+    request.setRequestHeader("authorization", 'Bearer ' + Cookies.get('pomodoro-token'));
+};
+
 function fetchPomos(startStr, endStr) {
     $.get({
+        beforeSend: setAuth,
         url: getPomosUrl + '?from=' + startStr + '&to=' + endStr,
         success: function (projects) {
             $('.project-container').remove();
