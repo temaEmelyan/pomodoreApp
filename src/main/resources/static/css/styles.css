@@ -1,5 +1,5 @@
 body {
-    background-color: #333333 !important;
+    background-color: #171616 !important;
     font-family: Ubuntu, "Source Code Pro", monospace;
     color: #fff;
 }
@@ -84,7 +84,7 @@ body {
 }
 
 #buttons button#stop {
-    background: #f00;
+    background: rgb(127, 13, 13);
 }
 
 .inverse-dropdown {
