@@ -17,7 +17,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: managed-nfs-storage
+  storageClassName: default
   resources:
     requests:
       storage: 2Gi
@@ -68,7 +68,7 @@ metadata:
     nginx.org/proxy-read-timeout: "3600"
 spec:
   rules:
-  - host: pomodoreapp.freshbrewed.science
+  - host: pomodoreapp.example.com
     http:
       paths:
       - pathType: Prefix
@@ -80,5 +80,5 @@ spec:
               number: 80
   tls:
   - hosts:
-    - pomodoreapp.freshbrewed.science
+    - pomodoreapp.example.com
     secretName: pomodoreapp-tls
