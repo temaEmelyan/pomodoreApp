@@ -39,6 +39,9 @@ spec:
       containers:
       - name: pomodoreapp
         image: idjohnson/pomodoreapp:0.0.3
+        env:
+        - name: POMO_PROFILE
+          value: "default"
         ports:
         - containerPort: 8080
         volumeMounts:

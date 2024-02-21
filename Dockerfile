@@ -26,7 +26,8 @@ COPY --from=build /app/target/*.jar /app.jar
 ENV JAVA_OPTS=""
 
 # Set the POMO_PROFILE environment variable
-ENV POMO_PROFILE="default"
+ARG pomoprofile="default"
+ENV POMO_PROFILE=$pomoprofile
 
 # Run the jar file when the container launches
 ENTRYPOINT exec java $JAVA_OPTS -jar /app.jar --spring.profiles.active=$POMO_PROFILE

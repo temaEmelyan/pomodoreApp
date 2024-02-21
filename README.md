@@ -20,11 +20,12 @@ The Dockerfile now will build the app locally.  This makes it easy for local dev
 $ docker build -t pomodoreapp:latest .
 $ docker run -p 8888:8080 pomodoreapp:latest
 ```
-Change the line in the Dockerfile to switch between profiles (e.g. default, develop, postgres).  A future enhancement will be to parameterize these
 
+You can change profiles by passing in an environment variable
 ```
-ENV POMO_PROFILE="default"
+$ docker run -p 8899:8080 pomodoreapp:latest -e POMO_PROFILE=postgres
 ```
+
 
 # Kubernetes Manifest
 
